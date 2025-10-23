@@ -36,7 +36,7 @@ end
 function user_setup()
     state.OffenseMode:options('None', 'Normal', 'Acc')
     state.CastingMode:options('Normal', 'Resistant')
-    state.IdleMode:options('Normal', 'DT', 'MEva')
+    state.IdleMode:options('MEva', 'DT', 'Normal')
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
 	
@@ -212,7 +212,8 @@ function job_state_change(field, newValue, oldValue)
 	
     if field == 'Offense Mode' then
         if newValue ~= 'None' then
-			if state.CombatForm == 'DW' then
+			--if state.CombatForm == 'DW' then
+			if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 				equip(sets.Locked_Main_Sub_DW)
 			else
 				equip(sets.Locked_Main_Sub)
@@ -273,7 +274,7 @@ function customize_idle_set(idleSet)
 	end	
 
 	if state.DefenseMode.current == 'None' then 
-		if player.mpp < 51 then
+		if player.mpp < 51 and state.IdleMode.current == 'Normal' then
 			idleSet = set_combine(idleSet, sets.latent_refresh)
 		end
 		if state.Buff["Reive Mark"] then
@@ -540,13 +541,24 @@ function get_casting_style(spell, action, spellMap, eventArgs)
 	equip(equipSet)
 end
 
+-- i added this
+--function update_offense_mode()
+   -- if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
+   --     state.CombatForm:set('DW')
+  --  else
+      --  state.CombatForm:reset()
+    --end
+--end
+
 -- Examine equipment to determine what our current TP weapon is.
 function update_combat_form()
-	state.CombatForm:reset()
-	if DW == true then
+	--if DW == true then
+    if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 		state.CombatForm:set('DW')
 	elseif H2H == true then
 		state.CombatForm:set('H2H')
+	else
+		state.CombatForm:reset()
 	end
 end
 

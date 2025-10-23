@@ -30,10 +30,12 @@ function define_global_sets()
 	Serenity			={ name="Serenity", augments={'MP+50','Enha.mag. skill +10','"Cure" potency +5%','"Cure" spellcasting time -10%',}}
 	
 	-- Armor
+	Chironic_head_TP 	={ name="Nibiru Harp", augments={'Mag. Evasion+20','Phys. dmg. taken -3','Magic dmg. taken -3',}}
+
 	Chironic_hands_DT	={ name="Chironic Gloves", augments={'Pet: STR+6','Attack+26','Damage taken-4%','Accuracy+8 Attack+8',}}
 	
-	Chironic_hands_MAB 	={name="Chironic Gloves", augments={'STR+7','"Mag.Atk.Bns."+30','Mag. Acc.+15 "Mag.Atk.Bns."+15',}}
-	Chironic_feet_MAB 	={name="Chironic Slippers", augments={'Mag. Acc.+22 "Mag.Atk.Bns."+22','Haste+1','Mag. Acc.+12','"Mag.Atk.Bns."+15',}}
+	Chironic_hands_MAB 	={ name="Chironic Gloves", augments={'STR+7','"Mag.Atk.Bns."+30','Mag. Acc.+15 "Mag.Atk.Bns."+15',}}
+	Chironic_feet_MAB 	={ name="Chironic Slippers", augments={'Mag. Acc.+22 "Mag.Atk.Bns."+22','Haste+1','Mag. Acc.+12','"Mag.Atk.Bns."+15',}}
 	
 	Chironic_legs_Macc	={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}}
 	
@@ -175,18 +177,26 @@ end
 	end
 
 	-- Default Status Healing HotKeys
-    send_command('bind !b input /ma "Blindna" <stal>')
-    send_command('bind !c input /ma "Cursna" <stal>')
-    send_command('bind !e input /ma "Erase" <stal>')
-    --send_command('bind ! input /ma "Esuna" <me>')
-    send_command('bind !p input /ma "Paralyna" <stal>')
-    --send_command('bind ! input /ma "Poisona" <stal>')
-    --send_command('bind ! input /ma "Sacrifice" <stal>')
-    --send_command('bind ! input /ma "Silena" <stal>')
-    send_command('bind !s input /ma "Stona" <stal>')
-    send_command('bind !v input /ma "Viruna" <stal>')
+    send_command('bind @b input /ma "Blindna" <stal>')
+    send_command('bind @c input /ma "Cursna" <stal>')
+    send_command('bind @e input /ma "Erase" <stal>')
+    --send_command('bind @ input /ma "Esuna" <me>')
+    send_command('bind @p input /ma "Paralyna" <stal>')
+    --send_command('bind @ input /ma "Poisona" <stal>')
+    --send_command('bind @ input /ma "Sacrifice" <stal>')
+    send_command('bind @x input /ma "Silena" <stal>')
+    send_command('bind @s input /ma "Stona" <stal>')
+    send_command('bind @v input /ma "Viruna" <stal>')
 
-    
+     -- Default Item HotKeys
+    --send_command('bind @a input /item "Antidote" <me>')
+    send_command('bind @d input /item "Echo Drops" <me>')
+    --send_command('bind @ input /item "Eye Drops" <me>')
+    send_command('bind @h input /item "Holy Water" <me>')
+    send_command('bind @r input /item "Remedy" <me>')
+    --send_command('bind @ input /item "Panacea" <me>')
+    --send_command('bind @ input /item "Vile Elixir +1" <me>')
+    --send_command('bind @ input /item "Vile Elixir" <me>')
 
     -- Default Status Enfeebling HotKeys
 	if player.main_job:upper() == 'RDM' then
@@ -221,10 +231,12 @@ end
 	
 	-- Default Enhancing HotKeys	
 	if player.main_job:upper() == 'RDM' then
-    	send_command('bind !b input /ma "Blink" <me>')
     	send_command('bind !p input /ma "Phalanx II" <stal>')
     	send_command('bind !h input /ma "Haste II" <stal>')
     	send_command('bind !r input /ma "Refresh II" <stal>')
+	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
+		send_command('bind !b input /ma "utsusemi: ni" <me>')
+		send_command('bind !n input /ma "utsusemi: ichi" <me>')
 	else
     	send_command('bind !a input /ma "Aquaveil" <me>')
     	send_command('bind !b input /ma "Blink" <me>')
@@ -234,15 +246,6 @@ end
     	send_command('bind !r input /ma "Refresh" <stal>')
 	end
 
-    -- Default Item HotKeys
-    send_command('bind @a input /item "Antidote" <me>')
-    send_command('bind @e input /item "Echo Drops" <me>')
-    --send_command('bind @numpad9 input /item "Eye Drops" <me>')
-    send_command('bind @h input /item "Holy Water" <me>')
-    send_command('bind @r input /item "Remedy" <me>')
-    send_command('bind @p input /item "Panacea" <me>')
-    send_command('bind @v input /item "Vile Elixir +1" <me>')
-    send_command('bind @c input /item "Vile Elixir" <me>')
 
 -- Function to re-bind Spellcast binds when unloading GearSwap.
 function binds_on_unload()

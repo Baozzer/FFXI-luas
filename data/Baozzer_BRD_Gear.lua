@@ -139,6 +139,11 @@ function init_gear_sets()
 		})
 	-- Total 80% FC | 7% QM
 
+	sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {
+		ammo='Sapience Orb',  -- 2%
+		})
+		-- Total 76% FC | 6% QM
+
     sets.precast.FC.Daurdabla = {range='Daurdabla',}
 
     -- Waltz set (chr and vit)
@@ -177,7 +182,7 @@ function init_gear_sets()
 
     sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {
         })
-
+	--TP Bonus > WSDMG  > DA > STR
     sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
         })
     
@@ -242,7 +247,7 @@ function init_gear_sets()
 		back=JSE_back_FC,waist="Witful Belt",legs="Inyanga Shalwar +2",feet=AF_feet
 		}		
 	-- Macc
-	sets.midcast['Debuff'].Resistant = set_combine(sets.midcast.SongEnfeeble, {
+	sets.midcast['Debuff'].Resistant = set_combine(sets.midcast['Debuff'], {
 		ear1="Digni. Earring",ear2="Regal Earring",
 		ring1="Stikini Ring",ring2="Stikini Ring",
 		waist="Luminary Sash",
@@ -251,50 +256,61 @@ function init_gear_sets()
 	sets.midcast['Debuff']['Macc-Lullaby']  = set_combine(sets.midcast['Debuff'].Resistant, {})
 	-- Macc
 	sets.midcast['Debuff']['Macc-Lullaby'].Resistant = set_combine(sets.midcast['Debuff'].Resistant, {})
-	-- String Skill then Macc. Only For Horde II
-	sets.midcast['Debuff']['StringSkill-Lullaby'] = {
-        --ear1="Gersemi Earring",
-        --ear2="Darkside Earring",
-        --ring1={name="Stikini Ring +1", bag="wardrobe5"},
-        }
-	-- Macc
-	sets.midcast['Debuff']['StringSkill-Lullaby'].Resistant			= set_combine(sets.midcast['Debuff'].Resistant, {})
+	-- String Skill for range then Macc. Only For Horde II 486 skill
+	sets.midcast['Debuff']['StringSkill-Lullaby'] = set_combine(sets.midcast['Debuff'].Resistant, {
+		range="Daurdabla",
+		--af head
+        ear1="Gersemi Earring",ear2="Darkside Earring",
+		waist=="Harfner's Sash",
+        })
+		-- 475 skill
+	-- Macc. No range
+	sets.midcast['Debuff']['StringSkill-Lullaby'].Resistant	= set_combine(sets.midcast['Debuff'].Resistant, {})
      
     -- Dummy song with Daurdabla; minimize duration to make it easy to overwrite.
     sets.midcast['Dummy'] = set_combine(sets.midcast.SongEnhancing, {range=info.ExtraSongInstrument})
 
 
     -- Other general spells and classes.
-
-	--sets.midcast.SpellInterrupt = {
-       -- --ammo="Staunch Tathlum +1", --11
-       -- --body="Ros. Jaseran +1", --25
-       -- --hands=gear.Chironic_WSD_hands, --20
-        ----legs="Querkening Brais" --15
-        ----neck="Loricate Torque +1", --5
-        ----ear1="Halasz Earring", --5
-        ----ear2="Magnetic Earring", --8
-        ----ring2="Evanescence Ring", --5
-        ----waist="Rumination Sash", --10
-        --}
-
-    --sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
+	
+	-- 101% Merits is 10%
+	sets.midcast.SpellInterrupt = {
+		sub="Culminus", --10
+        ammo="Staunch Tathlum", --10
+        body="Ros. Jaseran +1", --25
+    	hands=Chironic_hands_DT, --20
+    	legs="Querkening Brais", --15
+        --neck="Loricate Torque +1", --5 unity aug
+        ear1="Halasz Earring", --5
+        ring2="Evanescence Ring", --5
+		--back="Fi Follet Cape +2", -- unity aug
+        waist="Emphatikos Rope", --12
+        }
+		--72% 
+    sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 				
 	sets.midcast['Enfeebling Magic'] = {
 		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
 		head=Vanya_head,neck="Orunmila's Torque",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Telch_Feet_Enh
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_Macc,feet=Telch_Feet_Enh
         }
 		
 	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
-		--waist="Shinjutsu-no-Obi +1"
+		--waist="Shinjutsu-no-Obi +1" -- unity aug
 		})
 		
 	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Enfeebling Magic'],{
 		main=Taming_Sari_TH,sub="Genmei Shield",
 		head="Wh. Rarab Cap +1",
 		waist="Chaac Belt",})
+
+	sets.midcast['Banish II'] = set_combine(sets.midcast['Debuff'].Resistant, {
+		--head="Ipoca Beret",
+		neck="Jokushu Chain",
+		--ring1="Fenian Ring",
+		--back="Disperser's Cape",
+		})
 
    sets.midcast.Cure = {
 		ammo="Pemphredo Tathlum", -- 4 CMP
@@ -323,12 +339,7 @@ function init_gear_sets()
 	
 	sets.midcast['Cure day / weather'] = set_combine(sets.midcast.Cure, {waist="Hachirin-no-Obi"})
         
-    sets.midcast.Curaga = set_combine(sets.midcast.Cure, {
-        --neck="Nuna Gorget +1",
-        --ring1={name="Stikini Ring +1", bag="wardrobe5"},
-        --ring2="Metamor. Ring +1",
-        --waist="Luminary Sash",
-        })
+    sets.midcast.Curaga = set_combine(sets.midcast.Cure, {})
 		
 	sets.midcast.StatusRemoval = {
         --head="Vanya Hood",
@@ -346,35 +357,49 @@ function init_gear_sets()
 		main="Prelatic Pole",
 		--sub="Curatio Grip",
 		neck="Debilis Medallion",
+		--ear1="Meili Earring",
+		--ear2="Beatific Earring",
 		hands="Hieros Mittens",
+		--back="Oretan. Cape +1",
 		ring1="Menelaus's Ring",
 		ring2="Haoma's Ring",
 		feet=Gende_feet,
         })
 	
+	-- Skill+ for bar spells
 	sets.midcast['Enhancing Magic'] = set_combine(sets.midcast.FastRecast, {
-		main="Mafic Cudgel",sub="Ammurapi Shield",
-		head=Telch_head_Enh,neck="Incanter's Torque",ear1='Andoaa Earring',
+		main=Grioavolr_Enh,sub="Fulcio Grip",
+		head=Telch_head_Enh,
 		body=Telch_body_Enh,hands=Telch_hands_Enh,
 		--back='Merciful Cape',
-		waist="Olympus Sash",legs=Telch_legs_Enh,feet=Telch_Feet_Enh
-        })
+		legs=Telch_legs_Enh,feet=Telch_Feet_Enh})
 	
 	sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {
-		--main=Grioavolr_Enh,
-		--sub="Fulcio Grip",
-		--head="Inyanga Tiara +2",
+		main=Grioavolr_Enh, sub="Fulcio Grip",
+		head="Inyanga Tiara +2",
 		--back="Grapevine Cape",
-		--waist="Gishdubar Sash"
 		})
 
 	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {
-		--waist="Emphatikos Rope"
+		head=Chironic_head_TP,
+		waist="Emphatikos Rope",
+		legs="Shedir Seraweels",
 			})
 	
     sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {
-		neck="Nodens Gorget", waist="Siegel Sash"
+		neck="Nodens Gorget", ear1="Earthcry Earring",
+		waist="Siegel Sash", legs="Shedir Seraweels",
 		})
+
+	sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {
+		main=Grioavolr_Enh,sub="Fulcio Grip",ammo="Pemphredo Tathlum",
+		head="Umuthi Hat",neck="Incanter's Torque",ear1='Andoaa Earring',
+		--ear2="Mimir Earring",
+		body=Telch_body_Enh,hands="Inyan. Dastanas +2",ring1="Stikini Ring", ring2="Stikini Ring",
+		back='Fi Follet Cape +1',waist="Olympus Sash",legs="Shedir Seraweels",feet=Telch_Feet_Enh
+        })
+	
+	sets.midcast.bar_status	= sets.midcast.BarElement
     
 	-- no skill bassed buffs
     sets.midcast['Haste'] = set_combine(sets.midcast['Enhancing Magic'], {})
@@ -382,7 +407,7 @@ function init_gear_sets()
 	sets.midcast['Sneak'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Invisible'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
-		--waist="Gishdubar Sash", back="Grapevine Cape"
+		waist="Gishdubar Sash", back="Grapevine Cape"
 		})
 	
 	sets.midcast.Protect = set_combine(sets.midcast['Enhancing Magic'], {ring1="Sheltered Ring"})
@@ -477,7 +502,7 @@ function init_gear_sets()
 			}
 	
 	sets.engaged.DW = {
-			--main="Taming Sari",sub={name="Carnwenhan",priority=-1},range=TP_Linos,
+			main="Kaja Sword",sub="Carnwenhan",range=Linos_TP,
 			--head="Highwing Helm",neck="Asperity Necklace",ear1="Brutal Earring",ear2="Eabani Earring",
 			--body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Ilabrat Ring",ring2="Petrov Ring",
 			--back=TP_back,waist="Reiki Yotai",legs="Jokushu Haidate",feet="Ayanmo Gambieras +2"
@@ -497,7 +522,7 @@ function init_gear_sets()
 	sets.warp = {ring2='Warp Ring'}
 	
 	sets.Locked_Main_Sub = {main="Carnwenhan",sub="Genmei Shield"}
-	sets.Locked_Main_Sub_DW = {main=TamingSari_TH,sub="Carnwenhan"}
+	sets.Locked_Main_Sub_DW = {main="Kaja Sword",sub="Carnwenhan"}
 		
 end
  
