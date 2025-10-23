@@ -1,18 +1,5 @@
 -------------------------------------------------------------------------------------------------------------------
--- Tables and functions for commonly-referenced gear that job files may need, but
--- doesn't belong in the global Mote-Include file since they'd get clobbered on each
--- update.
--- Creates the 'gear' table for reference in other files.
---
--- Note: Function and table definitions should be added to user, but references to
--- the contained tables via functions (such as for the obi function, below) use only
--- the 'gear' table.
--------------------------------------------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------------------------------------------
--- Modify the sets table.  Any gear sets that are added to the sets table need to
--- be defined within this function, because sets isn't available until after the
--- include is complete.  It is called at the end of basic initialization in Mote-Include.
+-- ALL YOUR JOBS NEED OR SHARE THESE
 -------------------------------------------------------------------------------------------------------------------
 
 print('Baozzer_Globals.lua Loaded')
@@ -26,85 +13,68 @@ function define_global_sets()
 	-- Augmented Universal Gear
 
 	-- Weapons
-	Grioavolr_Enh		={ name="Grioavolr", augments={'Enh. Mag. eff. dur. +9','MP+88','Magic Damage +8',}}
-	Serenity			={ name="Serenity", augments={'MP+50','Enha.mag. skill +10','"Cure" potency +5%','"Cure" spellcasting time -10%',}}
+	Grioavolr_Enh			={ name="Grioavolr", augments={'Enh. Mag. eff. dur. +9','MP+88','Magic Damage +8',}}
+	Serenity				={ name="Serenity", augments={'MP+50','Enha.mag. skill +10','"Cure" potency +5%','"Cure" spellcasting time -10%',}}
 	
 	-- Armor
-	Chironic_head_TP 	={ name="Nibiru Harp", augments={'Mag. Evasion+20','Phys. dmg. taken -3','Magic dmg. taken -3',}}
+	Chironic_head_TP 		={ name="Nibiru Harp", augments={'Mag. Evasion+20','Phys. dmg. taken -3','Magic dmg. taken -3',}}
 
-	Chironic_hands_DT	={ name="Chironic Gloves", augments={'Pet: STR+6','Attack+26','Damage taken-4%','Accuracy+8 Attack+8',}}
+	Chironic_hands_DT		={ name="Chironic Gloves", augments={'Pet: STR+6','Attack+26','Damage taken-4%','Accuracy+8 Attack+8',}}
 	
-	Chironic_hands_MAB 	={ name="Chironic Gloves", augments={'STR+7','"Mag.Atk.Bns."+30','Mag. Acc.+15 "Mag.Atk.Bns."+15',}}
-	Chironic_feet_MAB 	={ name="Chironic Slippers", augments={'Mag. Acc.+22 "Mag.Atk.Bns."+22','Haste+1','Mag. Acc.+12','"Mag.Atk.Bns."+15',}}
+	Chironic_hands_MAB 		={ name="Chironic Gloves", augments={'STR+7','"Mag.Atk.Bns."+30','Mag. Acc.+15 "Mag.Atk.Bns."+15',}}
+	Chironic_feet_MAB 		={ name="Chironic Slippers", augments={'Mag. Acc.+22 "Mag.Atk.Bns."+22','Haste+1','Mag. Acc.+12','"Mag.Atk.Bns."+15',}}
 	
-	Chironic_legs_Macc	={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}}
+	Chironic_legs_Macc		={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}}
 	
 	Chironic_hands_Refresh	={ name="Chironic Gloves", augments={'Accuracy+7','Haste+1','"Refresh"+2','Accuracy+19 Attack+19',}}
 	
-	Chironic_hands_TP	={ name="Chironic Gloves", augments={'Pet: Accuracy+18 Pet: Rng. Acc.+18','"Mag.Atk.Bns."+11','Quadruple Attack +1',}}
+	Chironic_hands_TP		={ name="Chironic Gloves", augments={'Pet: Accuracy+18 Pet: Rng. Acc.+18','"Mag.Atk.Bns."+11','Quadruple Attack +1',}}
 	
-	Gende_hands_Cure	={ name="Gende. Gages +1", augments={'Phys. dmg. taken -3%','Magic dmg. taken -3%','"Cure" spellcasting time -4%',}}
-	Gende_hands_Song	={ name="Gendewitha Gages", augments={'Phys. dmg. taken -3%','Song spellcasting time -4%',}}
-    Gende_legs			={ name="Gende. Spats +1", augments={'Phys. dmg. taken -3%','Song spellcasting time -4%',}}
-    Gende_feet			={ name="Gende. Galosh. +1", augments={'Phys. dmg. taken -3%','Magic dmg. taken -3%','"Cure" potency +4%',}}
+	Gende_hands_Cure		={ name="Gende. Gages +1", augments={'Phys. dmg. taken -3%','Magic dmg. taken -3%','"Cure" spellcasting time -4%',}}
+	Gende_hands_Song		={ name="Gendewitha Gages", augments={'Phys. dmg. taken -3%','Song spellcasting time -4%',}}
+    Gende_legs				={ name="Gende. Spats +1", augments={'Phys. dmg. taken -3%','Song spellcasting time -4%',}}
+    Gende_feet				={ name="Gende. Galosh. +1", augments={'Phys. dmg. taken -3%','Magic dmg. taken -3%','"Cure" potency +4%',}}
 	
-	Leyline_hands		={ name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
+	Leyline_hands			={ name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}}
 	
-    Lustratio_legs		={ name="Lustratio Subligar", augments={'Accuracy+15','DEX+5','Crit. hit rate+2%',}}
-    Lustratio_feet		={ name="Lustratio Leggings", augments={'HP+50','STR+10','DEX+10',}}
+    Lustratio_legs			={ name="Lustratio Subligar", augments={'Accuracy+15','DEX+5','Crit. hit rate+2%',}}
+    Lustratio_feet			={ name="Lustratio Leggings", augments={'HP+50','STR+10','DEX+10',}}
 	
-	Mediums_feet		={ name="Medium's Sabots", augments={'MP+50','MND+10','"Conserve MP"+7','"Cure" potency +5%',}}
+	Mediums_feet			={ name="Medium's Sabots", augments={'MP+50','MND+10','"Conserve MP"+7','"Cure" potency +5%',}}
 	
-	Telch_head_Enh		={ name="Telchine Cap", augments={'Mag. Evasion+21','"Fast Cast"+2','Enh. Mag. eff. dur. +8',}}
-	Telch_body_Enh		={ name="Telchine Chas.", augments={'Mag. Evasion+23','"Fast Cast"+5','Enh. Mag. eff. dur. +8',}}
-    Telch_hands_Enh		={ name="Telchine Gloves", augments={'Mag. Evasion+25','"Cure" potency +3%','Enh. Mag. eff. dur. +10',}}
-	Telch_legs_Enh		={ name="Telchine Braconi", augments={'Mag. Evasion+24','"Conserve MP"+3','Enh. Mag. eff. dur. +10',}}
-	Telch_Feet_Enh		={ name="Telchine Pigaches", augments={'Mag. Evasion+25','"Fast Cast"+5','Enh. Mag. eff. dur. +10',}}
+	Telch_head_Enh			={ name="Telchine Cap", augments={'Mag. Evasion+21','"Fast Cast"+2','Enh. Mag. eff. dur. +8',}}
+	Telch_body_Enh			={ name="Telchine Chas.", augments={'Mag. Evasion+23','"Fast Cast"+5','Enh. Mag. eff. dur. +8',}}
+    Telch_hands_Enh			={ name="Telchine Gloves", augments={'Mag. Evasion+25','"Cure" potency +3%','Enh. Mag. eff. dur. +10',}}
+	Telch_legs_Enh			={ name="Telchine Braconi", augments={'Mag. Evasion+24','"Conserve MP"+3','Enh. Mag. eff. dur. +10',}}
+	Telch_Feet_Enh			={ name="Telchine Pigaches", augments={'Mag. Evasion+25','"Fast Cast"+5','Enh. Mag. eff. dur. +10',}}
 	
-	Vanya_head			={ name="Vanya Hood", augments={'MP+50','"Fast Cast"+10','Haste+2%',}}
-	Vanya_body			={ name="Vanya Robe", augments={'MND+10','Spell interruption rate down +15%','"Conserve MP"+6',}}
-	Vanya_feet			={ name="Vanya Clogs", augments={'Healing magic skill +20','"Cure" spellcasting time -7%','Magic dmg. taken -3',}}
+	Vanya_head				={ name="Vanya Hood", augments={'MP+50','"Fast Cast"+10','Haste+2%',}}
+	Vanya_body				={ name="Vanya Robe", augments={'MND+10','Spell interruption rate down +15%','"Conserve MP"+6',}}
+	Vanya_feet				={ name="Vanya Clogs", augments={'Healing magic skill +20','"Cure" spellcasting time -7%','Magic dmg. taken -3',}}
 	
 	-- Accesories
-	Dark_Ring			={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
+	Dark_Ring				={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
+	CP_back 				={ name="Mecistopins Mantle"}
 end
-
--------------------------------------------------------------------------------------------------------------------
--- Functions to set user-specified binds, generally on load and unload.
--- Kept separate from the main include so as to not get clobbered when the main is updated.
--------------------------------------------------------------------------------------------------------------------
 
 -- Function to bind GearSwap binds when loading a GS script.
 function global_on_load()
-	-- ctrl = ^
-	-- alt = !
-	-- windows key = @
 	
 -------------------------------------------------------------------------------------------------------------------	
-	-- send_command('bind f9 gs c cycle OffenseMode')
-	-- send_command('bind ^f9 gs c cycle DefenseMode')
-	-- send_command('bind !f9 gs c cycle WeaponskillMode')
-	-- send_command('bind f10 gs c activate PhysicalDefense')
-	-- send_command('bind ^f10 gs c cycle PhysicalDefenseMode')
-	-- send_command('bind !f10 gs c toggle kiting')
-	-- send_command('bind f11 gs c activate MagicalDefense')
-	-- send_command('bind ^f11 gs c cycle CastingMode')
-	-- send_command('bind !f11 gs c set CastingMode Dire')
-	-- send_command('bind f12 gs c update user')
-	-- send_command('bind ^f12 gs c cycle IdleMode')
-	-- send_command('bind !f12 gs c reset defense')
-	-- send_command('bind [ gs c toggle PhysicalDefense')
-	-- send_command('bind ] gs c toggle MagicalDefense')
-	
 	-- send_command('bind ^- gs c toggle selectnpctargets')
 	-- send_command('bind ^= gs c cycle pctargetmode')
 -------------------------------------------------------------------------------------------------------------------	
 
 -------------------------------------------------------------------------------------------------------------------
---  Global Mode Keybinds
+--  Global Keybinds
 -------------------------------------------------------------------------------------------------------------------
-	-- @ doesnt work with f keys
-	
+	-- ctrl = ^
+	-- alt = !
+	-- windows key = @
+		-- @ doesnt work with f keys
+
+	-- Functions
+
 	-- Summons all Trusts
 	send_command('bind f8 input //tru 1')
 	-- Remove all Trusts
@@ -116,6 +86,8 @@ function global_on_load()
 	send_command('bind ^[ gs c cycle OffenseMode')
 	-- Some DT pieces
 	send_command('bind ![ gs c cycle HybridMode')
+	-- Targets npc in crowded areas
+	send_command('bind @[ gs c toggle selectnpctargets')
 
 	-- MDT
 	send_command('bind ] gs c toggle MagicalDefense')
@@ -128,15 +100,96 @@ function global_on_load()
 	send_command('bind @] gs c cycle CP')
 
 
-	--send_command('bind ^ gs c cycle DefenseMode')
+	-- Cure Map
+	if player.main_job:upper() == 'WHM' then
+   		send_command('bind @1 input /ma "Cure V" <stal>')
+    	send_command('bind @2 input /ma "Cure III" <stal>')
+    	send_command('bind @3 input /ma "Curaga III" <stal>')
+	else
+   		send_command('bind @1 input /ma "Cure IV" <stal>')
+    	send_command('bind @2 input /ma "Cure III" <stal>')
+    	send_command('bind @3 input /ma "Curaga II" <stal>')
+	end
 
--------------------------------------------------------------------------------------------------------------------
---  Global Keybinds
--------------------------------------------------------------------------------------------------------------------
+	-- Default Status Healing HotKeys
+	-- For easy memorization Priority goes to alpha key, shared letter goes to another keystroke.
+    send_command('bind @b input /ma "Blindna" <stal>')
+    send_command('bind @c input /ma "Cursna" <stal>')
+    send_command('bind @e input /ma "Erase" <stal>')
+    --send_command('bind @w input /ma "Esuna" <me>') --*** Maybe Macro for WHM
+    send_command('bind @p input /ma "Paralyna" <stal>')
+    send_command('bind @o input /ma "Poisona" <stal>') --***
+    --send_command('bind @a input /ma "Sacrifice" <stal>') --*** Maybe Macro for WHM
+    send_command('bind @x input /ma "Silena" <stal>') --***
+    send_command('bind @s input /ma "Stona" <stal>')
+    send_command('bind @v input /ma "Viruna" <stal>')
+
+    -- Default Item HotKeys
+    --send_command('bind @a input /item "Antidote" <me>')
+    send_command('bind @d input /item "Echo Drops" <me>')
+    --send_command('bind @ input /item "Eye Drops" <me>')
+    send_command('bind @h input /item "Holy Water" <me>')
+    send_command('bind @r input /item "Remedy" <me>')
+    --send_command('bind @ input /item "Panacea" <me>')
+    --send_command('bind @ input /item "Vile Elixir +1" <me>')
+    --send_command('bind @ input /item "Vile Elixir" <me>')
+
+    -- Default Status Enfeebling HotKeys
+	if player.main_job:upper() == 'RDM' then
+    	send_command('bind ^a input /ma "Addle II" <stnpc>')
+    	send_command('bind ^v input /ma "Blind II" <stnpc>') --***
+    	send_command('bind ^e input /ma "Dia III" <stnpc>') --***
+		send_command('bind ^d input /ma "Distract III" <stnpc>')
+    	send_command('bind ^f input /ma "Frazzle III" <stnpc>')
+    	send_command('bind ^g input /ma "Gravity II" <stnpc>')
+    	send_command('bind ^p input /ma "Paralyze II" <stnpc>')
+    	send_command('bind ^t input /ma "Slow II" <stnpc>')
+	else
+    	send_command('bind ^a input /ma "Addle" <stnpc>')
+    	send_command('bind ^b input /ma "Bind" <stnpc>')
+    	send_command('bind ^v input /ma "Blind" <stnpc>') --***
+    	send_command('bind ^e input /ma "Dia II" <stnpc>') --***
+		send_command('bind ^d input /ma "Distract" <stnpc>')
+    	send_command('bind ^f input /ma "Frazzle" <stnpc>')
+    	send_command('bind ^g input /ma "Gravity" <stnpc>')
+    	send_command('bind ^p input /ma "Paralyze" <stnpc>')
+    	send_command('bind ^x input /ma "Silence" <stnpc>') --***
+    	--send_command('bind ^ input /ma "Sleep II" <stnpc>') --***
+    	send_command('bind ^t input /ma "Slow" <stnpc>') --***
+	end
+
+	if player.main_job:upper() == 'BRD' then
+    	send_command('bind ^z input /ma "Magic Finale" <stnpc>') --***
+    	send_command('bind ^s input /ma "Horde Lullaby II" <stnpc>')
+	elseif player.main_job:upper() == 'BLM' then
+    	send_command('bind ^s input /ma "Sleepga II" <stnpc>')
+	else
+    	send_command('bind ^z input /ma "Dispel" <stnpc>') --***
+    	send_command('bind ^s input /ma "Sleepga" <stnpc>')
+	end
+	
+	-- Default Enhancing HotKeys	
+	if player.main_job:upper() == 'RDM' then
+    	send_command('bind !f input /ma "Flurry II" <stal>')
+    	send_command('bind !h input /ma "Haste II" <stal>')
+    	send_command('bind !p input /ma "Phalanx II" <stal>')
+    	send_command('bind !r input /ma "Refresh III" <stal>')
+	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
+		send_command('bind !u input /ma "utsusemi: ni" <me>')
+		send_command('bind !b input /ma "utsusemi: ichi" <me>') --*** Blink
+	else
+    	send_command('bind !a input /ma "Aquaveil" <me>')
+    	send_command('bind !b input /ma "Blink" <me>')
+    	send_command('bind !f input /ma "Flurry" <stal>')
+    	send_command('bind !h input /ma "Haste" <stal>')
+    	send_command('bind !p input /ma "Phalanx" <me>')
+    	send_command('bind !r input /ma "Refresh" <stal>')
+    	send_command('bind !s input /ma "Stoneskin" <me>')
+	end
 
 	-- work on it
 	if player.sub_job:upper() == 'SMN' then
-		
+		-- i remember /smn to mew was useful
 		--send_command('bind F10 input /ma "Cait Sith" <me>')
 		--send_command('bind F11 input /ma "Mewing Lullaby" <stnpc>')
 		
@@ -157,93 +210,6 @@ function global_on_load()
 		--send_command('bind @F10 input /ja "Divine Waltz" <me>')
 		
 		--send_command('bind F11 input /ja "Curing Waltz II" <stal>')
-	
-	--elseif player.sub_job:upper() == 'NIN' then	
-		--send_command('bind ^` input /ma "utsusemi: ichi" <me>')
-		--send_command('bind !` input /ma "utsusemi: ni" <me>')
-		
-	end
-end
-
-	-- Cure Map
-	if player.main_job:upper() == 'WHM' then
-   		send_command('bind @1 input /ma "Cure V" <stal>')
-    	send_command('bind @2 input /ma "Cure III" <stal>')
-    	send_command('bind @3 input /ma "Curaga III" <stal>')
-	else
-   		send_command('bind @1 input /ma "Cure IV" <stal>')
-    	send_command('bind @2 input /ma "Cure III" <stal>')
-    	send_command('bind @3 input /ma "Curaga II" <stal>')
-	end
-
-	-- Default Status Healing HotKeys
-    send_command('bind @b input /ma "Blindna" <stal>')
-    send_command('bind @c input /ma "Cursna" <stal>')
-    send_command('bind @e input /ma "Erase" <stal>')
-    --send_command('bind @ input /ma "Esuna" <me>')
-    send_command('bind @p input /ma "Paralyna" <stal>')
-    --send_command('bind @ input /ma "Poisona" <stal>')
-    --send_command('bind @ input /ma "Sacrifice" <stal>')
-    send_command('bind @x input /ma "Silena" <stal>')
-    send_command('bind @s input /ma "Stona" <stal>')
-    send_command('bind @v input /ma "Viruna" <stal>')
-
-     -- Default Item HotKeys
-    --send_command('bind @a input /item "Antidote" <me>')
-    send_command('bind @d input /item "Echo Drops" <me>')
-    --send_command('bind @ input /item "Eye Drops" <me>')
-    send_command('bind @h input /item "Holy Water" <me>')
-    send_command('bind @r input /item "Remedy" <me>')
-    --send_command('bind @ input /item "Panacea" <me>')
-    --send_command('bind @ input /item "Vile Elixir +1" <me>')
-    --send_command('bind @ input /item "Vile Elixir" <me>')
-
-    -- Default Status Enfeebling HotKeys
-	if player.main_job:upper() == 'RDM' then
-    	send_command('bind ^a input /ma "Addle II" <t>')
-    	--send_command('bind ^ input /ma "Blind II" <t>')
-    	--send_command('bind ^ input /ma "Dia III" <t>')
-		--send_command('bind ^ input /ma "Distract III" <t>')
-    	send_command('bind ^f input /ma "Frazzle III" <t>')
-    	send_command('bind ^g input /ma "Gravity II" <t>')
-    	send_command('bind ^p input /ma "Paralyze II" <t>')
-	else
-    	send_command('bind ^a input /ma "Addle" <t>')
-    	send_command('bind ^b input /ma "Bind" <stnpc>')
-    	--send_command('bind ^ input /ma "Blind" <t>')
-    	--send_command('bind ^ input /ma "Dia II" <t>')
-		--send_command('bind ^ input /ma "Distract" <t>')
-    	send_command('bind ^f input /ma "Frazzle" <t>')
-    	send_command('bind ^g input /ma "Gravity" <t>')
-    	send_command('bind ^p input /ma "Paralyze" <t>')
-    	--send_command('bind ^ input /ma "Silence" <t>')
-    	send_command('bind ^s input /ma "Sleep II" <stnpc>')
-    	--send_command('bind ^ input /ma "Slow" <t>')
-	end
-
-	if player.main_job:upper() == 'BRD' then
-    	send_command('bind ^d input /ma "Magic Finale" <t>')
-    	send_command('bind ^s input /ma "Horde Lullaby II" <stnpc>')
-	else
-    	send_command('bind ^d input /ma "Dispel" <t>')
-    	send_command('bind ^s input /ma "Sleep II" <stnpc>')
-	end
-	
-	-- Default Enhancing HotKeys	
-	if player.main_job:upper() == 'RDM' then
-    	send_command('bind !p input /ma "Phalanx II" <stal>')
-    	send_command('bind !h input /ma "Haste II" <stal>')
-    	send_command('bind !r input /ma "Refresh II" <stal>')
-	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
-		send_command('bind !b input /ma "utsusemi: ni" <me>')
-		send_command('bind !n input /ma "utsusemi: ichi" <me>')
-	else
-    	send_command('bind !a input /ma "Aquaveil" <me>')
-    	send_command('bind !b input /ma "Blink" <me>')
-    	send_command('bind !p input /ma "Phalanx" <me>')
-    	send_command('bind !s input /ma "Stoneskin" <me>')
-    	send_command('bind !h input /ma "Haste" <stal>')
-    	send_command('bind !r input /ma "Refresh" <stal>')
 	end
 
 

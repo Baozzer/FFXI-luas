@@ -1,5 +1,4 @@
- 
- 
+ -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()
     set_macro_page(1, 2)
 end
@@ -62,12 +61,12 @@ function init_gear_sets()
     sets.precast.JA['Soul Voice'] = {legs=Relic_legs}
 
     -- Fast cast sets for spells
+	-- NO range and ammo slot. Messes up bard songs. Add them into later sets
     sets.precast.FC = {
---testing dispelga. disabled main swap
 		main="Mafic Cudgel",
 		sub="Genmei Shield",
-		-- range and ammo slot. Messes up bard songs
-		--ammo='Sapience Orb',  -- 2%
+		--range=
+		--ammo=
 		head=Vanya_head, -- 10%
 		neck="Orunmila's Torque", -- 5%
 		ear1="Loquac. Earring", -- 2%
@@ -83,15 +82,16 @@ function init_gear_sets()
 		}
 		-- Total 74% FC | 6% QM
 	
+	-- NO range and ammo slot. Messes up bard songs. Add them into later sets
 	sets.precast.FC.BardSong = set_combine(sets.precast.FC, {
-		-- no range or ammo. Messes up songs
-        --range=Linos_QC, -- 0% | 4%
+        --range=
+		--amnmo=
 		head=Empy_head, -- 14% ScT
 		hands=Gende_hands_Song, -- 7 % | 4% ScT
 		back="Solemnity Cape",
 		legs=Gende_legs, -- 9% ScT
 		})
-		-- Total = 81% Cast Speed + 10% Quick Cast 
+		-- Total = 81% Cast Speed + 6% Quick Cast 
 	
 	sets.precast.FC.BardSong['Honor March'] = set_combine(sets.precast.FC.BardSong, {range='Marsyas',})
 
@@ -100,8 +100,7 @@ function init_gear_sets()
 		})
 		-- Total = 76% Cast Speed + 6% Quick Cast
 	
-    sets.precast.FC.Cure = set_combine(sets.precast.FC, {
-		ammo='Sapience Orb',  -- 2%
+    sets.precast.FC.Cure = set_combine(sets.precast.FC['Healing Magic'], {
 		hands=Gende_hands_Cure, -- 11 CScT
 		back="Perimede Cape", -- 4 QC
 		legs="Doyen Pants", -- 15 CScT
@@ -113,17 +112,13 @@ function init_gear_sets()
 		ammo='Sapience Orb',  -- 2%
 		})
 		-- Total = 76% Cast Speed + 6% Quick Cast
-
---bao added. test----------------------------------------------------------------------------------------------------
 		
 	sets.precast.FC.Dispelga = set_combine(sets.precast.FC['Enfeebling Magic'], {
-		ammo='Sapience Orb',  -- 2%
 		main="Daybreak", 
 		sub="Ammurapi Shield", 
 		--waist="Shinjutsu-no-Obi +1"
 		})
 		-- Total = 76% Cast Speed + 6% Quick Cast
------------------------------------------------------------------------------------------------------------------
 	
 	sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {
 		ammo='Sapience Orb',  -- 2%
@@ -137,7 +132,7 @@ function init_gear_sets()
 		back="Perimede Cape", -- 4% QC
 		legs="Doyen Pants", -- 10%
 		})
-	-- Total 80% FC | 7% QM
+		-- Total 80% FC | 7% QM
 
 	sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {
 		ammo='Sapience Orb',  -- 2%
@@ -205,9 +200,10 @@ function init_gear_sets()
 		head=Empy_head,neck="Moonbow Whistle +1",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body=Empy_body,hands=Empy_hands,ring1="Weather. Ring",ring2="Kishar Ring",
 		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Empy_feet}
+
 	-- Song Type Equipment
 	-- dont use ballad af legs messes up timers	
-	sets.midcast['Buff']['Ballad']	 					= set_combine(sets.midcast['Buff'], {})
+	--sets.midcast['Buff']['Ballad']	 					= set_combine(sets.midcast['Buff'], {legs=AF_legs})
 	sets.midcast['Buff']['Carol']	 					= set_combine(sets.midcast['Buff'], {hands="Mousai Gages",})
 	sets.midcast['Buff']['Etude']	 					= set_combine(sets.midcast['Buff'], {head="Mousai Turban",})
 	sets.midcast['Buff']['Madrigal']	 				= set_combine(sets.midcast['Buff'], {feet=Empy_feet,})
@@ -217,7 +213,7 @@ function init_gear_sets()
 	sets.midcast['Buff']['Minne']	 					= set_combine(sets.midcast['Buff'], {legs="Mou. Seraweels +1",})
 	sets.midcast['Buff']['Minuet']	 					= set_combine(sets.midcast['Buff'], {})	
 	sets.midcast['Buff']['Paeon']	 					= set_combine(sets.midcast['Buff'], {
-														--head=AF_head,
+														--head=AF_head, dont have yet
 														})
 	sets.midcast['Buff']['Prelude']	 					= set_combine(sets.midcast['Buff'], {feet=Empy_feet,})	
 	sets.midcast['Buff']['Scherzo']	 					= set_combine(sets.midcast['Buff'], {feet=Empy_feet,})
@@ -233,7 +229,7 @@ function init_gear_sets()
 	sets.midcast['Buff']['Extra Length']['Minne']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {legs="Mou. Seraweels +1",})
 	sets.midcast['Buff']['Extra Length']['Minuet']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {})	
 	sets.midcast['Buff']['Extra Length']['Paeon']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {
-																		--head=AF_head,
+																		--head=AF_head, dont have yet
 																		})	
 	sets.midcast['Buff']['Extra Length']['Prelude']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})	
 	sets.midcast['Buff']['Extra Length']['Scherzo']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})
@@ -241,7 +237,7 @@ function init_gear_sets()
 	-- FC then Macc
 	sets.midcast['Debuff'] = {
 		main="Carnwenhan",sub="Ammurapi Shield",range="Gjallarhorn",
-		--head=AF_head,
+		--head=AF_head, dont have yet
 		head="Inyanga Tiara +2",neck="Moonbow Whistle +1",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body=Empy_body,hands="Inyan. Dastanas +2",ring1="Weather. Ring",ring2="Kishar Ring",
 		back=JSE_back_FC,waist="Witful Belt",legs="Inyanga Shalwar +2",feet=AF_feet
@@ -273,11 +269,11 @@ function init_gear_sets()
 
     -- Other general spells and classes.
 	
-	-- 101% Merits is 10%
+	-- 101% Cap | Merits is 10%
 	sets.midcast.SpellInterrupt = {
-		sub="Culminus", --10
+		sub="Culminus", --10 dont have yet
         ammo="Staunch Tathlum", --10
-        body="Ros. Jaseran +1", --25
+        body="Ros. Jaseran +1", --25 dont have yet
     	hands=Chironic_hands_DT, --20
     	legs="Querkening Brais", --15
         --neck="Loricate Torque +1", --5 unity aug
@@ -287,19 +283,21 @@ function init_gear_sets()
         waist="Emphatikos Rope", --12
         }
 		--72% 
+
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 				
 	sets.midcast['Enfeebling Magic'] = {
 		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
 		head=Vanya_head,neck="Orunmila's Torque",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_Macc,feet=Telch_Feet_Enh
-        }
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_Macc,feet=Telch_Feet_Enh}
 		
 	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
 		--waist="Shinjutsu-no-Obi +1" -- unity aug
+		--feet=something with macc
 		})
-		
+	
+	-- Unresistable. Might as well put TH
 	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Enfeebling Magic'],{
 		main=Taming_Sari_TH,sub="Genmei Shield",
 		head="Wh. Rarab Cap +1",
@@ -312,7 +310,8 @@ function init_gear_sets()
 		--back="Disperser's Cape",
 		})
 
-   sets.midcast.Cure = {
+	-- 50% CP | 100 CMP | 10% CPII CAP
+    sets.midcast.Cure = {
 		ammo="Pemphredo Tathlum", -- 4 CMP
 		head=Vanya_head, -- 10% CP | 6 CMP
 		neck="Incanter's Torque",
@@ -340,7 +339,8 @@ function init_gear_sets()
 	sets.midcast['Cure day / weather'] = set_combine(sets.midcast.Cure, {waist="Hachirin-no-Obi"})
         
     sets.midcast.Curaga = set_combine(sets.midcast.Cure, {})
-		
+	
+	-- Only need CMP
 	sets.midcast.StatusRemoval = {
         --head="Vanya Hood",
         --body="Vanya Robe",
@@ -353,6 +353,8 @@ function init_gear_sets()
         --back=gear.BRD_Song_Cape,
         --waist="Bishop's Sash",
         }
+
+	-- Cursna+ and Healing Magic Skill+
 	sets.midcast.Cursna = set_combine(sets.midcast.StatusRemoval, {
 		main="Prelatic Pole",
 		--sub="Curatio Grip",
@@ -366,31 +368,15 @@ function init_gear_sets()
 		feet=Gende_feet,
         })
 	
-	-- Skill+ for bar spells
 	sets.midcast['Enhancing Magic'] = set_combine(sets.midcast.FastRecast, {
 		main=Grioavolr_Enh,sub="Fulcio Grip",
 		head=Telch_head_Enh,
 		body=Telch_body_Enh,hands=Telch_hands_Enh,
 		--back='Merciful Cape',
-		legs=Telch_legs_Enh,feet=Telch_Feet_Enh})
-	
-	sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {
-		main=Grioavolr_Enh, sub="Fulcio Grip",
-		head="Inyanga Tiara +2",
-		--back="Grapevine Cape",
+		legs=Telch_legs_Enh,feet=Telch_Feet_Enh
 		})
 
-	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {
-		head=Chironic_head_TP,
-		waist="Emphatikos Rope",
-		legs="Shedir Seraweels",
-			})
-	
-    sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {
-		neck="Nodens Gorget", ear1="Earthcry Earring",
-		waist="Siegel Sash", legs="Shedir Seraweels",
-		})
-
+	-- Skill+
 	sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {
 		main=Grioavolr_Enh,sub="Fulcio Grip",ammo="Pemphredo Tathlum",
 		head="Umuthi Hat",neck="Incanter's Torque",ear1='Andoaa Earring',
@@ -402,13 +388,29 @@ function init_gear_sets()
 	sets.midcast.bar_status	= sets.midcast.BarElement
     
 	-- no skill bassed buffs
+
+	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {
+		head=Chironic_head_TP,
+		waist="Emphatikos Rope",
+		legs="Shedir Seraweels",
+		})
+	sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {
+		neck="Nodens Gorget", ear1="Earthcry Earring",
+		waist="Siegel Sash", legs="Shedir Seraweels",
+		})
+	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
+		waist="Gishdubar Sash", back="Grapevine Cape"
+		})
+	sets.midcast['Regen'] = set_combine(sets.midcast['Enhancing Magic'], {
+		main=Grioavolr_Enh, sub="Fulcio Grip",
+		head="Inyanga Tiara +2",
+		--back="Grapevine Cape",
+		})
+
     sets.midcast['Haste'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Reraise'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Sneak'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Invisible'] = set_combine(sets.midcast['Enhancing Magic'], {})
-	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
-		waist="Gishdubar Sash", back="Grapevine Cape"
-		})
 	
 	sets.midcast.Protect = set_combine(sets.midcast['Enhancing Magic'], {ring1="Sheltered Ring"})
 	sets.midcast.Protectra = sets.midcast.Protect
@@ -475,8 +477,13 @@ function init_gear_sets()
 
 	sets.Kiting = {feet=Empy_feet}
 	sets.Adoulin = {body="Councilor's Garb"}
-	sets.CP = {back="Mecistopins Mantle"}
+	sets.CP = {back=CP_back}
 	sets.latent_refresh = {waist="Fucho-no-obi"}
+	sets.buff.Reive = {neck="Arciela's Grace +1"}
+	sets.buff.Doom = {
+		neck="Nicander's Necklace",
+		waist="Gishdubar Sash",}
+	sets.warp = {ring2='Warp Ring'}
 	--sets.crafting = {sub={name="Toreutic Ecu",priority=-1},head="Shaded Spectacles",body="Goldsmith's Smock",neck="Goldsmith's Torque",ring1="Orvail Ring",ring2="Craftmaster's Ring",}
 
     -- Engaged sets
@@ -514,12 +521,7 @@ function init_gear_sets()
 			--body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ilabrat Ring",ring2="Ramuh Ring",
 			--back=TP_back,waist="Reiki Yotai",legs="Ayanmo Cosciales +1",feet="Ayanmo Gambieras +2"
 			}
-			
-	sets.buff.Reive = {neck="Arciela's Grace +1"}
-	sets.buff.Doom = {
-		neck="Nicander's Necklace",
-		waist="Gishdubar Sash",}
-	sets.warp = {ring2='Warp Ring'}
+
 	
 	sets.Locked_Main_Sub = {main="Carnwenhan",sub="Genmei Shield"}
 	sets.Locked_Main_Sub_DW = {main="Kaja Sword",sub="Carnwenhan"}

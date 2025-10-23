@@ -1,114 +1,36 @@
+-- Select default macro book on initial load or subjob change.
+function select_default_macro_book(reset)
+	 if reset == 'reset' then
+        -- lost pet, or tried to use pact when pet is gone
+    end
+	
+    set_macro_page(1, 3)
+end
 
 function init_gear_sets()
 	
-	print('Chitara_SMN_Gear.lua sidecar loaded')
+	print('Baozzer_SMN_Gear.lua sidecar loaded')
 	
 	--------------------------------------
 	-- Augemnted Gear
 	--------------------------------------
-	Grioavolr_Pet		={ name="Grioavolr", augments={'Blood Pact Dmg.+9','Pet: STR+11','Pet: Mag. Acc.+14','Pet: "Mag.Atk.Bns."+11',}}
-	Grioavolr_Enh		={ name="Grioavolr", augments={'Enh. Mag. eff. dur. +9','Mag. Acc.+20','"Mag.Atk.Bns."+9','Magic Damage +9',}}
-	Serenity				={ name="Serenity", augments={'MP+50','Enha.mag. skill +10','"Cure" potency +5%','"Cure" spellcasting time -10%',}}
-	--Gada					={ name="Gada", augments={'Indi. eff. dur. +9','STR+15','Mag. Acc.+1',}}
-	Rubicundity			={ name="Rubicundity", augments={'Mag. Acc.+10','"Mag.Atk.Bns."+10','Dark magic skill +10','"Conserve MP"+7',}}
-	Espiritus				={ name="Espiritus", augments={'Summoning magic skill +15','Pet: Mag. Acc.+30','Pet: Damage taken -4%',}}
-	Gridarvor				={ name="Gridarvor", augments={'Pet: Accuracy+70','Pet: Attack+70','Pet: "Dbl. Atk."+15',}}
+	AF_head 			={ name="Convoker's Horn +1" }
+	AF_body				={ name="Convoker's Doublet +2" }
+	AF_hands			={ name="Convoker's Bracers +1" }
+	AF_legs 			={ name="Convoker's Spats +1" }
+	AF_feet 			={ name="Convoker's Pigaches +1" }
 	
-	Mediums_Sabots		={ name="Medium's Sabots", augments={'MP+40','MND+6','"Conserve MP"+5','"Cure" potency +3%',}}
-	Psycloth_Lappas		={ name="Psycloth Lappas", augments={'MP+80','Mag. Acc.+15','"Fast Cast"+7',}}
-	Lengo_Pants				={ name="Lengo Pants", augments={'INT+9','Mag. Acc.+15','"Mag.Atk.Bns."+14',}}
-	--Witching_Robe			={ name="Witching Robe", augments={'MP+50','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Refresh"+1',}}
-	
-	Hagondes_head		={ name="Hagondes Hat", augments={'Phys. dmg. taken -1%','"Mag.Atk.Bns."+12',}}
-    Hagondes_body		={ name="Hagondes Coat", augments={'Phys. dmg. taken -3%','"Avatar perpetuation cost" -5',}}
-    Hagondes_hands		={ name="Hagondes Cuffs", augments={'Phys. dmg. taken -1%','"Mag.Atk.Bns."+5',}}
-    Hagondes_legs			={ name="Hagondes Pants", augments={'Phys. dmg. taken -3%','"Mag.Atk.Bns."+24',}}
-	
-	Telch_head_Enh		={ name="Telchine Cap", augments={'"Fast Cast"+4','Enh. Mag. eff. dur. +10',}}
-	Telch_body_Enh		={ name="Telchine Chas.", augments={'"Fast Cast"+3','Enh. Mag. eff. dur. +8',}}
-    Telch_hands_Enh		={ name="Telchine Gloves", augments={'Mag. Acc.+3','"Fast Cast"+3','Enh. Mag. eff. dur. +8',}}
-	Telch_legs_Enh			={ name="Telchine Braconi", augments={'"Fast Cast"+3','Enh. Mag. eff. dur. +9',}}
-	Telch_Feet_Enh		={ name="Telchine Pigaches", augments={'Mag. Acc.+22','"Fast Cast"+4','Enh. Mag. eff. dur. +10',}}
-	
-	--Telch_head_Pet		={ name="Telchine Cap", augments={'Pet: "Regen"+2','Pet: Damage taken -1%',}}
-    --Telch_body_Pet		={ name="Telchine Chas.", augments={'Pet: "Regen"+2','Pet: Damage taken -1%',}}
-    --Telch_hands_Pet		={ name="Telchine Gloves", augments={'Pet: "Regen"+2','Pet: Damage taken -2%',}}
-    --Telch_legs_Pet			={ name="Telchine Braconi", augments={'Evasion+10','Pet: "Regen"+2','Pet: Damage taken -4%',}}
-    --Telch_feet_Pet			={ name="Telchine Pigaches", augments={'Pet: "Regen"+2','Pet: Damage taken -4%',}}
-	
-    --Telch_legs_TP			={ name="Telchine Braconi", augments={'Accuracy+11','"Dbl.Atk."+3','STR+7 AGI+7',}}
-	
-	Apogee_head_phys 	={ name="Apogee Crown +1", augments={'MP+80','Pet: Attack+35','Blood Pact Dmg.+8',}}
-	Apogee_legs_phys	={ name="Apogee Slacks +1", augments={'MP+80','Pet: "Mag.Atk.Bns."+35','Blood Pact Dmg.+8',}}
-	Apogee_feet_phys 	={ name="Apogee Pumps +1", augments={'MP+80','Summoning magic skill +20','Blood Pact Dmg.+8',}}
-	
-	Apogee_body			={ name="Apogee Dalmatica +1"}
-	
-	Apogee_head_mag	={ name="Apogee Crown +1", augments={'MP+80','Pet: "Mag.Atk.Bns."+35','Blood Pact Dmg.+8',}}
-	Apogee_legs_mag	={ name="Apogee Slacks +1", augments={'MP+80','Pet: "Mag.Atk.Bns."+35','Blood Pact Dmg.+8',}}
-	Apogee_feet_mag	={ name="Apogee Pumps +1", augments={'MP+80','Pet: "Mag.Atk.Bns."+35','Blood Pact Dmg.+8',}}
-	
-	Merl_head_Burst		={ name="Merlinic Hood", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','Magic burst dmg.+10%','INT+3','Mag. Acc.+13',}}
-    --Merl_legs_Burst		={ name="Merlinic Shalwar", augments={'Mag. Acc.+21 "Mag.Atk.Bns."+21','Magic burst dmg.+10%','Mag. Acc.+9','"Mag.Atk.Bns."+11',}}
-	--Merl_feet_Burst		={ name="Merlinic Crackows", augments={'Mag. Acc.+28','Magic burst dmg.+10%','INT+7','"Mag.Atk.Bns."+8',}}
-	
-	--Merl_body_Nuke		={ name="Merlinic Jubbah", augments={'Mag. Acc.+25 "Mag.Atk.Bns."+25','Magic Damage +5','CHR+11','Mag. Acc.+14','"Mag.Atk.Bns."+11',}}
-	Merl_feet_Nuke		={ name="Merlinic Crackows", augments={'Mag. Acc.+25 "Mag.Atk.Bns."+25','CHR+7','Mag. Acc.+15','"Mag.Atk.Bns."+1',}}
-	
-	Merl_hands_Asp		={ name="Merlinic Dastanas", augments={'"Drain" and "Aspir" potency +9','CHR+2','"Mag.Atk.Bns."+7',}}
-	Merl_legs_Asp		={ name="Merlinic Shalwar", augments={'"Mag.Atk.Bns."+30','"Drain" and "Aspir" potency +8','Mag. Acc.+8',}}
-    Merl_feet_Asp		={ name="Merlinic Crackows", augments={'"Drain" and "Aspir" potency +9','"Mag.Atk.Bns."+15',}}
-	
-	Merl_head_FC		={ name="Merlinic Hood", augments={'"Mag.Atk.Bns."+20','"Fast Cast"+7','Mag. Acc.+10',}}
-	Merl_hands_FC		={ name="Merlinic Dastanas", augments={'"Fast Cast"+7','INT+1','Mag. Acc.+4','"Mag.Atk.Bns."+5',}}
-	Merl_feet_FC		={ name="Merlinic Crackows", augments={'Mag. Acc.+3','"Fast Cast"+7','"Mag.Atk.Bns."+8',}}
-	
-	Merl_feet_Refr		={ name="Merlinic Crackows", augments={'AGI+9','Crit.hit rate+3','"Refresh"+1','Mag. Acc.+1 "Mag.Atk.Bns."+1',}}
-	
-	Merl_hands_phys    ={ name="Merlinic Dastanas", augments={'Pet: Accuracy+20 Pet: Rng. Acc.+20','Blood Pact Dmg.+9','Pet: Mag. Acc.+10',}}
-	Merl_hands_mag    ={ name="Merlinic Dastanas", augments={'Pet: Mag. Acc.+22 Pet: "Mag.Atk.Bns."+22','Blood Pact Dmg.+10','Pet: "Mag.Atk.Bns."+15',}}
-	
-	Psycloth_legs		={ name="Psycloth Lappas", augments={'MP+80','Mag. Acc.+15','"Fast Cast"+7',}}
-	
-	Vanya_head			={ name="Vanya Hood", augments={'MP+50','"Fast Cast"+10','Haste+2%',}}
-	Vanya_body			={ name="Vanya Robe", augments={'Healing magic skill +20','"Cure" spellcasting time -7%','Magic dmg. taken -3',}}
-	Vanya_legs			={ name="Vanya Slops", augments={'Healing magic skill +20','"Cure" spellcasting time -7%','Magic dmg. taken -3',}}
-	Vanya_feet			={ name="Vanya Clogs", augments={'Healing magic skill +20','"Cure" spellcasting time -7%','Magic dmg. taken -3',}}
-	
-	-- Kaykaus_head		={ name="Kaykaus Mitra", augments={'MP+60','MND+10','Mag. Acc.+15',}}
-    -- Kaykaus_legs		={ name="Kaykaus Tights", augments={'MP+60','Spell interruption rate down +10%','"Cure" spellcasting time -5%',}}
-	
-	--head="Amalric Coif",
-	Amalric_body		={ name="Amalric Doublet", augments={'MP+60','Mag. Acc.+15','"Mag.Atk.Bns."+15',}}
-    Amalric_hands		={ name="Amalric Gages", augments={'INT+10','Mag. Acc.+15','"Mag.Atk.Bns."+15',}}
-	Amalric_legs			={ name="Amalric Slops", augments={'MP+60','Mag. Acc.+15','"Mag.Atk.Bns."+15',}}
-    Amalric_feet			={ name="Amalric Nails", augments={'INT+10','Mag. Acc.+15','"Mag.Atk.Bns."+15',}}
-	
-	Enticers_Pants		={ name="Enticer's Pants", augments={'MP+50','Pet: Accuracy+13 Pet: Rng. Acc.+13','Pet: Mag. Acc.+14','Pet: Damage taken -4%',}}
-	
-	AF_head 				={ name="Convoker's Horn +1" }
-	AF_body				    ={ name="Convoker's Doublet +2" }
-	AF_hands 			    ={ name="Convoker's Bracers +1" }
-	AF_legs 				={ name="Convoker's Spats +1" }
-	AF_feet 				    ={ name="Convoker's Pigaches +1" }
-	
-	Relic_head		        ={ name="Glyphic Horn +1", augments={'Enhances "Astral Flow" effect',}}
-	Relic_body			    ={ name="Glyphic Doublet +1", augments={'Reduces Sp. "Blood Pact" MP cost',}}
+	Relic_head		    ={ name="Glyphic Horn +1", augments={'Enhances "Astral Flow" effect',}}
+	Relic_body			={ name="Glyphic Doublet +1", augments={'Reduces Sp. "Blood Pact" MP cost',}}
 	Relic_hands			={ name="Glyphic Bracers +1", augments={'Inc. Sp. "Blood Pact" magic burst dmg.',}}
-	Relic_legs				={ name="Glyphic Spats +1", augments={'Increases Sp. "Blood Pact" accuracy',}}
-	Relic_feet				={ name="Glyph. Pigaches +1", augments={'Inc. Sp. "Blood Pact" magic crit. dmg.',}}
+	Relic_legs			={ name="Glyphic Spats +1", augments={'Increases Sp. "Blood Pact" accuracy',}}
+	Relic_feet			={ name="Glyph. Pigaches +1", augments={'Inc. Sp. "Blood Pact" magic crit. dmg.',}}
 	
 	Empy_head 			={ name="Beckoner's Horn +1" }
 	Empy_body			={ name="Beckoner's Doublet +1" }
 	Empy_hands			={ name="Beckoner's Bracers +1" }
 	Empy_legs 			={ name="Beckoner's Spats +1" }
 	Empy_feet 			={ name="Beckoner's Pigaches +1" }
-	
-	Pet_Mag_Cape		={ name="Campestres's Cape", augments={'Pet: M.Acc.+20 Pet: M.Dmg.+20','Eva.+20 /Mag. Eva.+20','Pet: Magic Damage+10','"Fast Cast"+10',}}
-	Pet_Phys_Cape		={ name="Campestres's Cape", augments={'Pet: Acc.+20 Pet: R.Acc.+20 Pet: Atk.+20 Pet: R.Atk.+20','Eva.+20 /Mag. Eva.+20','Pet: Accuracy+10 Pet: Rng. Acc.+10','Pet: Haste+10',}}
-	WS_Cape				={ name="Campestres's Cape"} -- WSD cape
-	
-	CP_back				={ name="Mecisto. Mantle", augments={'Cap. Point+44%','AGI+1','Attack+1','DEF+6',}}
 	
 	--------------------------------------
     -- Defaults
@@ -148,14 +70,36 @@ function init_gear_sets()
         head=Merl_head_FC,neck="Voltsurge Torque",ear1="Loquac. Earring",ear2="Enchanter Earring +1",
 		body="Inyanga Jubbah +2",hands=Merl_hands_FC,ring1="Veneficium Ring", ring2="Kishar Ring", 
 		back=Pet_Mag_Cape,waist="Witful Belt",legs=Psycloth_legs,feet=Merl_feet_FC}
-		
+		-- Total = % Cast Speed + % Quick Cast
+	
+	sets.precast.FC['Healing Magic'] = set_combine(sets.precast.FC, {
+		})
+		-- Total = % Cast Speed + % Quick Cast
+
 	sets.precast.FC.Cure = set_combine(sets.precast.FC, {main=Serenity,back="Perimede Cape",legs="Doyen Pants",feet=Vanya_feet})
+
+	sets.precast.FC['Enfeebling Magic'] = set_combine(sets.precast.FC, {
+		})
+		-- Total = % Cast Speed + % Quick Cast
+		
+	sets.precast.FC.Dispelga = set_combine(sets.precast.FC['Enfeebling Magic'], {
+		ammo='Sapience Orb',  -- 2%
+		main="Daybreak", 
+		sub="Ammurapi Shield", 
+		--waist="Shinjutsu-no-Obi +1"
+		})
+		-- Total = 76% Cast Speed + 6% Quick Cast
 
 	sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {ring1="Veneficium Ring",waist="Siegel Sash"})
 	
-	 sets.precast.FC.Stoneskin = set_combine(sets.precast.FC['Enhancing Magic'], {head="Umuthi hat",hands="Carapacho Cuffs",back="Perimede Cape",legs="Doyen Pants"})
+	sets.precast.FC.Stoneskin = set_combine(sets.precast.FC['Enhancing Magic'], {head="Umuthi hat",hands="Carapacho Cuffs",back="Perimede Cape",legs="Doyen Pants"})
 
-       
+    sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {
+		ammo='Sapience Orb',  -- 2%
+		})
+		-- Total % FC | % QM
+
+
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
@@ -164,21 +108,14 @@ function init_gear_sets()
         back=WS_Cape,waist="Fotia Belt",legs=Amalric_legs,feet=Amalric_feet}
 
     -- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
+	 sets.precast.WS['Myrkr'] = set_combine(sets.precast.WS, {
+        })
 	
-	 sets.precast.WS['Myrkr'] = {
-        head="Welkin Crown",neck="Fotia Gorget",ear1="Crematio Earring",ear2="Friomisi Earring",
-        body=Amalric_body,hands=Amalric_hands,ring1="Fenrir Ring +1",ring2="Fenrir Ring +1",
-        back=WS_Cape,waist="Fotia Belt",legs=Amalric_legs,feet=Amalric_feet}
-	
-	 sets.precast.WS['Garland of Bliss'] = {
-        head="Welkin Crown",neck="Fotia Gorget",ear1="Crematio Earring",ear2="Friomisi Earring",
-        body=Amalric_body,hands=Amalric_hands,ring1="Fenrir Ring +1",ring2="Fenrir Ring +1",
-        back=WS_Cape,waist="Fotia Belt",legs=Amalric_legs,feet=Amalric_feet}
+	 sets.precast.WS['Garland of Bliss'] = set_combine(sets.precast.WS, {
+        })
 		
-	 sets.precast.WS['Shattersoul'] = {
-        head="Sukeroku Hachimaki",neck="Fotia Gorget",ear1="Cessance Earring",ear2="Ishvara Earring",
-        body=AF_body,hands=Amalric_hands,ring1="Shiva Ring +1",ring2="Shiva Ring +1",
-        back=WS_Cape,waist="Fotia Belt",legs="Tali'ah Seraweels +1",feet=AF_feet}
+	 sets.precast.WS['Shattersoul'] = set_combine(sets.precast.WS, {
+        })
 
     
     --------------------------------------
@@ -190,6 +127,36 @@ function init_gear_sets()
         head=Merl_head_FC,neck="Voltsurge Torque",ear1="Loquac. Earring",ear2="Enchanter Earring +1",
 		body="Inyanga Jubbah +2",hands=Merl_hands_FC,ring1="Veneficium Ring", ring2="Kishar Ring", 
 		back=Pet_Mag_Cape,waist="Witful Belt",legs=Psycloth_legs,feet=Merl_feet_FC}
+	
+	-- 101% Cap | Merits is 10%
+	sets.midcast.SpellInterrupt = {
+		sub="Culminus", --10 dont have yet
+        ammo="Staunch Tathlum", --10
+        body="Ros. Jaseran +1", --25 dont have yet
+    	hands=Chironic_hands_DT, --20
+    	legs="Querkening Brais", --15
+        --neck="Loricate Torque +1", --5 unity aug
+        ear1="Halasz Earring", --5
+        ring2="Evanescence Ring", --5
+		--back="Fi Follet Cape +2", -- unity aug
+        waist="Emphatikos Rope", --12
+        }
+		--72% 
+
+    sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
+
+	-- Unresistable. Might as well put TH
+	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Enfeebling Magic'],{
+		main=Taming_Sari_TH,sub="Genmei Shield",
+		head="Wh. Rarab Cap +1",
+		waist="Chaac Belt",})
+
+	sets.midcast['Banish II'] = set_combine(sets.midcast['Debuff'].Resistant, {
+		--head="Ipoca Beret",
+		neck="Jokushu Chain",
+		--ring1="Fenian Ring",
+		--back="Disperser's Cape",
+		})
 
     sets.midcast.Cure = {main=Serenity,sub={name="Clerisy Strap",priority=-1},
 		head=Vanya_head,neck="Incanter's Torque",ear1='Healing Earring',ear2="Beatific Earring",
@@ -201,7 +168,22 @@ function init_gear_sets()
 	sets.midcast['Cure day / weather'] = set_combine(sets.midcast.Cure, {waist="Hachirin-no-Obi"})
         
     sets.midcast.Curaga = sets.midcast.Cure
-		
+
+	-- Only need CMP
+	sets.midcast.StatusRemoval = {
+        --head="Vanya Hood",
+        --body="Vanya Robe",
+        --legs="Aya. Cosciales +2",
+        --feet="Vanya Clogs",
+        --neck="Incanter's Torque",
+        --ear2="Meili Earring",
+        --ring1="Menelaus's Ring",
+        --ring2="Haoma's Ring",
+        --back=gear.BRD_Song_Cape,
+        --waist="Bishop's Sash",
+        }
+
+	-- Cursna+ and Healing Magic Skill+	
 	sets.midcast.Cursna = set_combine(sets.midcast.FastRecast, {
 		main=Grioavolr_Enh,
 		head=Vanya_head,neck="Incanter's Torque",ear1='Healing Earring',
@@ -214,18 +196,41 @@ function init_gear_sets()
 		body=Telch_body_Enh,hands=Telch_hands_Enh,
 		back='Merciful Cape',waist="Olympus Sash",legs=Telch_legs_Enh,feet=Telch_Feet_Enh})
 	
-	sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {head="Inyanga Tiara +1"})
-
-	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {head=Chironic_head_Refr,waist="Emphatikos Rope"})
+	-- Skill+
+	sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {
+		main=Grioavolr_Enh,sub="Fulcio Grip",ammo="Pemphredo Tathlum",
+		head="Umuthi Hat",neck="Incanter's Torque",ear1='Andoaa Earring',
+		--ear2="Mimir Earring",
+		body=Telch_body_Enh,hands="Inyan. Dastanas +2",ring1="Stikini Ring", ring2="Stikini Ring",
+		back='Fi Follet Cape +1',waist="Olympus Sash",legs="Shedir Seraweels",feet=Telch_Feet_Enh
+        })
 	
-    sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {neck="Nodens Gorget",ear1='Earthcry Earring',waist="Siegel Sash",legs="Haven Hose"})
-    
+	sets.midcast.bar_status	= sets.midcast.BarElement
+	
 	-- no skill bassed buffs
+
+	sets.midcast['Aquaveil'] = set_combine(sets.midcast['Enhancing Magic'], {
+		head=Chironic_head_TP,
+		waist="Emphatikos Rope",
+		legs="Shedir Seraweels",
+		})
+	sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {
+		neck="Nodens Gorget", ear1="Earthcry Earring",
+		waist="Siegel Sash", legs="Shedir Seraweels",
+		})
+	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
+		waist="Gishdubar Sash", back="Grapevine Cape"
+		})
+	sets.midcast['Regen'] = set_combine(sets.midcast['Enhancing Magic'], {
+		main=Grioavolr_Enh, sub="Fulcio Grip",
+		head="Inyanga Tiara +2",
+		--back="Grapevine Cape",
+		})
+
     sets.midcast['Haste'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Reraise'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Sneak'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	sets.midcast['Invisible'] = set_combine(sets.midcast['Enhancing Magic'], {})
-	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {})
 	
 	sets.midcast.Protect = set_combine(sets.midcast['Enhancing Magic'],{ring1="Sheltered Ring"})
 	sets.midcast.Protectra = sets.midcast.Protect
@@ -236,6 +241,11 @@ function init_gear_sets()
 	
 	-- Custom spell classes
 	
+	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
+		--waist="Shinjutsu-no-Obi +1" -- unity aug
+		--feet=something with macc
+		})
+
 	-- Need to earring 1
 	
     sets.midcast['Mnd Enfeebles'] = {main=Grioavolr_Enh,sub={name="Niobid Strap",priority=-1},ammo="Hydrocera",
@@ -343,10 +353,18 @@ function init_gear_sets()
         body=Apogee_body,hands="Asteria Mitts +1",ring1="Sheltered Ring",ring2="Defending Ring",
         back="Solemnity Cape",waist="Slipor Sash",legs="Assiduity Pants +1",feet=Merl_feet_Refr}
 
-    sets.idle.PDT = {main=Gridarvor,sub={name="Oneiros Grip",priority=-1},ammo="Sancus Sachet +1",
+    sets.idle.DT = {main=Gridarvor,sub={name="Oneiros Grip",priority=-1},ammo="Sancus Sachet +1",
         head=Hagondes_head,neck="Loricate Torque +1",ear1="Ethereal Earring",
         body=Hagondes_body,hands=Hagondes_hands,ring1="Defending Ring",ring2="Patricius Ring",
         back="Cheviot Cape",waist="Slipor Sash",legs=Hagondes_legs,feet="Battlecast Gaiters"}
+
+	-- Meva > DT > Refresh
+	sets.idle.MEva = {
+		main="Daybreak",sub="Ammurapi Shield",range='Nibiru Harp',
+		head="Inyanga Tiara +2",neck="Warder's Charm +1",ear1="Hearty Earring",ear2="Sanare Earring",
+		body="Inyanga Jubbah +2",hands="Inyan. Dastanas +2",ring1="Purity Ring",ring2="Vengeful Ring",
+		back="Felicitas Cape +1",waist="Carrier's Sash",legs="Inyanga Shalwar +2",feet="Inyan. Crackows +2",
+		}
 
 	-- Avatra Idle sets
     
@@ -355,10 +373,18 @@ function init_gear_sets()
         body=Apogee_body,hands="Asteria Mitts +1",ring1="Evoker's Ring",ring2="Varar Ring +1",
         back=Pet_Phys_Cape,waist="Klouskap Sash",legs="Assiduity Pants +1",feet=Apogee_feet_phys}
 
-    sets.idle.PDT.Avatar = {main=Gridarvor,sub={name="Oneiros Grip",priority=-1},ammo="Sancus Sachet +1",
+    sets.idle.DT.Avatar = {main=Gridarvor,sub={name="Oneiros Grip",priority=-1},ammo="Sancus Sachet +1",
         head=Empy_head,neck="Caller's Pendant",ear1="Gifted Earring",ear2="Evans Earring",
         body=Apogee_body,hands=Relic_hands,ring1="Evoker's Ring",ring2="Varar Ring +1",
         back=Pet_Phys_Cape,waist="Klouskap Sash",legs="Assiduity Pants +1",feet=Apogee_feet_phys}
+
+	-- Meva > DT > Refresh
+	sets.idle.MEva.Avatar = {
+		main="Daybreak",sub="Ammurapi Shield",range='Nibiru Harp',
+		head="Inyanga Tiara +2",neck="Warder's Charm +1",ear1="Hearty Earring",ear2="Sanare Earring",
+		body="Inyanga Jubbah +2",hands="Inyan. Dastanas +2",ring1="Purity Ring",ring2="Vengeful Ring",
+		back="Felicitas Cape +1",waist="Carrier's Sash",legs="Inyanga Shalwar +2",feet="Inyan. Crackows +2",
+		}
 
     sets.idle.Spirit = {main=Gridarvor,sub={name="Oneiros Grip",priority=-1},ammo="Sancus Sachet +1",
         head=Empy_head,neck="Caller's Pendant",ear1="Gifted Earring",ear2="Evans Earring",
@@ -391,9 +417,15 @@ function init_gear_sets()
         back="Solemnity Cape",waist="Slipor Sash",legs="Inyanga Shalwar +2",feet=Vanya_feet}
 
     sets.Kiting = {feet="Herald's Gaiters"}
+	sets.Adoulin = {body="Councilor's Garb"}
     sets.CP = {back=CP_back}
 	sets.warp = {ring2='Warp Ring'}
     sets.latent_refresh = {waist="Fucho-no-obi"}
+	sets.buff.Reive = {neck="Arciela's Grace +1"}
+	sets.buff.Doom = {
+		neck="Nicander's Necklace",
+		waist="Gishdubar Sash",}
+	sets.warp = {ring2='Warp Ring'}
     
 
     --------------------------------------
@@ -407,36 +439,9 @@ function init_gear_sets()
         back="Kayapa Cape",waist="Klouskap Sash",legs=empty,feet=empty}
 		
 	sets.engaged.acc = {}
+
+	sets.Locked_Main_Sub = {main="Nirvana",sub="Oneiros Grip"}
+	sets.Locked_Main_Sub_DW = {main="Nirvana",sub="Oneiros Grip"}
 			
-end
-
--- Select default macro book on initial load or subjob change.
-function select_default_macro_book(reset)
-	 if reset == 'reset' then
-        -- lost pet, or tried to use pact when pet is gone
-    end
-	
-    set_macro_page(1, 14)
-	
-	if player.sub_job:upper() == 'WHM' then		
-		send_command('bind ^` input /ma "Blink" <me>')
-        send_command('bind !` input /ma "Stoneskin" <me>')
-		
-		send_command('bind F9 input /ma "Haste" <stal>')
-		send_command('bind ^F9 input /ma "erase" <stal>')
-		send_command('bind F10 input /ma "cure III" <stal>')
-		send_command('bind F11 input /ma "cure IV" <stal>')
-
-	elseif player.sub_job:upper() == 'RDM' then
-		send_command('bind ^` input /ma "Blink" <me>')
-		send_command('bind !` input /ma "Stoneskin" <me>')
-		
-		send_command('bind F7 input /ma "Haste" <stal>')
-		send_command('bind F8 input /ma "Refresh" <stal>')
-		send_command('bind F9 input /ma "Phalanx" <me>')
-		send_command('bind ^F9 input /ma "Dispel" <stnpc>')
-		send_command('bind F10 input /ma "cure III" <stal>')
-		send_command('bind F11 input /ma "cure IV" <stal>')
-	end
 end
  

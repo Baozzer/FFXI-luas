@@ -212,8 +212,9 @@ function job_state_change(field, newValue, oldValue)
 	
     if field == 'Offense Mode' then
         if newValue ~= 'None' then
-			--if state.CombatForm == 'DW' then
-			if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
+			if state.CombatForm == 'DW' then
+-- I added this rule it works better. Old Rule Prob works. test. 
+			--if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 				equip(sets.Locked_Main_Sub_DW)
 			else
 				equip(sets.Locked_Main_Sub)
@@ -236,18 +237,6 @@ function job_buff_change(buff, gain)
 			-- handle_equipping_gear(player.status)
 		-- end
 	end
---bao added. not needed.
-	--[[if buff == "Doom" then
-        if gain then
-            equip(sets.buff.Doom)
-            send_command('@input /p Doomed.')
-            disable('neck','ring1','ring2','waist')
-        else
-            send_command('@input /p Doom Off')
-            enable('neck','ring1','ring2','waist')
-            handle_equipping_gear(player.status)
-        end
-    end]]
 	if buff == 'Goldsmithing Imagery' and gain then
 		 send_command('timers create "'..buff..'" 480 down abilities/00121.png')
 	end
@@ -257,30 +246,33 @@ end
 function customize_idle_set(idleSet)
 	
 	lockouts()
-
-	if state.Buff.doom then
-        idleSet = set_combine(idleSet, sets.buff.Doom)
-		add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
-    end
-	if state.CP.value == true then
-		idleSet = set_combine(idleSet, sets.CP)
-	end
-	if state.Auto_Kite.value == true then
-		if world.area:endswith('Adoulin') then
-			idleSet = set_combine(idleSet, sets.Adoulin)
-		else 
-			idleSet = set_combine(idleSet, sets.Kiting)
-		end
-	end	
-
+	
 	if state.DefenseMode.current == 'None' then 
-		if player.mpp < 51 and state.IdleMode.current == 'Normal' then
+		if player.mpp < 51 then
 			idleSet = set_combine(idleSet, sets.latent_refresh)
 		end
 		if state.Buff["Reive Mark"] then
 			idleSet = set_combine(idleSet, sets.buff.Reive)
 		end
 	end
+
+-- I seperated these so they are always on
+		if state.CP.value == true then
+			idleSet = set_combine(idleSet, sets.CP)
+		end
+		if state.Auto_Kite.value == true then
+-- I added Councilor's Garb Swap for when in Adoulin
+			if world.area:endswith('Adoulin') then
+				idleSet = set_combine(idleSet, sets.Adoulin)
+			else 
+				idleSet = set_combine(idleSet, sets.Kiting)
+			end
+		end	
+		if state.Buff.doom then
+        	idleSet = set_combine(idleSet, sets.buff.Doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+ 		end
+    
     return idleSet
 end
 
@@ -288,22 +280,18 @@ function customize_melee_set(meleeSet)
 	
 	lockouts()
 
-	if state.Buff.doom then
-        meleeSet = set_combine(meleeSet, sets.buff.Doom)
-		add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
-    end
-	if state.Auto_Kite.value == true then
-		--if world.area:endswith('Adoulin') then
-			--idleSet = set_combine(idleSet, sets.Adoulin)
-		--else 
-			meleeSet = set_combine(meleeSet, sets.Kiting)
-		--end
-	end	
-	
+-- I turned this off so these sets are always on
 	--if state.DefenseMode.current == 'None' then 
+		if state.Auto_Kite.value == true then
+			meleeSet = set_combine(meleeSet, sets.Kiting)
+		end
 		if state.CP.value == true then
 			meleeSet = set_combine(meleeSet, sets.CP)
 		end
+		if state.Buff.doom then
+        	meleeSet = set_combine(meleeSet, sets.buff.Doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+    	end
 	--end
     return meleeSet
 end
@@ -388,8 +376,9 @@ end
 
 function check_moving()
 	if 
-		--state.DefenseMode.value == 'None' and 
-		state.Kiting.value == false then
+--I disabled this so sets are always on
+	--state.DefenseMode.value == 'None' and state.Kiting.value == false then
+	state.Kiting.value == false then
 		if state.Auto_Kite.value == false and moving then
 			state.Auto_Kite:set(true)
 		elseif state.Auto_Kite.value == true and moving == false then
@@ -541,18 +530,10 @@ function get_casting_style(spell, action, spellMap, eventArgs)
 	equip(equipSet)
 end
 
--- i added this
---function update_offense_mode()
-   -- if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
-   --     state.CombatForm:set('DW')
-  --  else
-      --  state.CombatForm:reset()
-    --end
---end
-
 -- Examine equipment to determine what our current TP weapon is.
 function update_combat_form()
 	--if DW == true then
+-- I added this. This rule works better for DW
     if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 		state.CombatForm:set('DW')
 	elseif H2H == true then

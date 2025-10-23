@@ -52,6 +52,7 @@ function job_setup()
     state.Buff["Avatar's Favor"] = buffactive["Avatar's Favor"] or false
     state.Buff["Astral Conduit"] = buffactive["Astral Conduit"] or false
 	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
+	state.Buff.doom = buffactive.doom or false
 
     spirits = S{"LightSpirit", "DarkSpirit", "FireSpirit", "EarthSpirit", "WaterSpirit", "AirSpirit", "IceSpirit", "ThunderSpirit"}
     avatars = S{'Shiva','Ramuh','Garuda','Leviathan','Diabolos','Titan','Fenrir','Ifrit','Carbuncle','Cait Sith','Alexander','Odin','Atomos'}
@@ -85,11 +86,10 @@ function job_setup()
         ['Diabolos']='Ruinous Omen', ['Cait Sith']="Altana's Favor"}
 		
 	bp_physical	= S{'Punch','Rock Throw','Barracuda Dive','Claw','Axe Kick','Shock Strike','Camisado','Regal Scratch','Poison Nails',
-				'Moonlit Charge','Crescent Fang','Rock Buster','Tail Whip','Double Punch','Megalith Throw','Double Slap','Eclipse Bite',
-				'Mountain Buster','Spinning Dive','Predator Claws','Rush','Chaotic Strike','Crag Throw','Volt Strike'}
+		'Moonlit Charge','Crescent Fang','Rock Buster','Tail Whip','Double Punch','Megalith Throw','Double Slap','Eclipse Bite',
+		'Mountain Buster','Spinning Dive','Predator Claws','Rush','Chaotic Strike','Crag Throw','Volt Strike'}
 				
-	 bp_magical	= S{
-        'Inferno','Earthen Fury','Tidal Wave','Aerial Blast','Diamond Dust','Judgment Bolt','Searing Light','Howling Moon','Ruinous Omen',
+	bp_magical	= S{'Inferno','Earthen Fury','Tidal Wave','Aerial Blast','Diamond Dust','Judgment Bolt','Searing Light','Howling Moon','Ruinous Omen',
         'Fire II','Stone II','Water II','Aero II','Blizzard II','Thunder II',
         'Fire IV','Stone IV','Water IV','Aero IV','Blizzard IV','Thunder IV',
         'Thunderspark','Burning Strike','Meteorite','Nether Blast','Flaming Crush',
@@ -100,11 +100,11 @@ function job_setup()
 	bp_hybrid	=S{'Burning Strike','Flaming Crush'}
 				
 	bp_debuff	=S{'Lunar Cry','Mewing Lullaby','Nightmare','Lunar Roar','Slowga','Ultimate Terror','Sleepga','Eerie Eye','Tidal Roar',
-				'Diamond Storm','Shock Squall','Pavor Nocturnus'}
+		'Diamond Storm','Shock Squall','Pavor Nocturnus'}
 				
 	bp_buff		=S{'Shining Ruby','Frost Armor','Rolling Thunder','Crimson Howl','Lightning Armor','Ecliptic Growl','Hastega','Noctoshield',
-				'Ecliptic Howl','Dream Shroud','Earthen Armor','Fleet Wind','Inferno Howl','Soothing Ruby','Heavenward Howl',
-				'Soothing Current','Hastega II','Crystal Blessing'}
+		'Ecliptic Howl','Dream Shroud','Earthen Armor','Fleet Wind','Inferno Howl','Soothing Ruby','Heavenward Howl',
+		'Soothing Current','Hastega II','Crystal Blessing'}
 
 	bp_other	=S{'Healing Ruby','Raise II','Aerial Armor','Reraise II','Whispering Wind','Glittering Ruby','Earthen Ward','Spring Water','Healing Ruby II'} 
 
@@ -147,7 +147,7 @@ end
 function user_setup()
 	state.OffenseMode:options('None', 'Normal', 'Acc')
     state.CastingMode:options('Normal', 'Resistant')
-    state.IdleMode:options('Normal', 'PDT')
+    state.IdleMode:options('MEva', 'DT', 'Normal')
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
 	
@@ -166,13 +166,7 @@ function user_setup()
     update_combat_form()
     
     -- Additional local binds
-	
-	--send_command('bind !] gs c toggle ')
-	--send_command('bind ^] gs c cycle ')
-	send_command('bind ^F11 gs c cycle CP')
 	--send_command('bind @f11 gs c cycle PetIdleMode')
-	send_command('bind !F12 gs c cycle IdleMode')
-	send_command('bind ^F12 gs c cycle CastingMode')
 	
 	send_command('gi ugs true')
 	
@@ -304,9 +298,11 @@ function job_state_change(field, newValue, oldValue)
 		end
     end
 	
-    if field == 'Offense Mode' then
+     if field == 'Offense Mode' then
         if newValue ~= 'None' then
 			if state.CombatForm == 'DW' then
+-- I added this rule it works better. 
+			--if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 				equip(sets.Locked_Main_Sub_DW)
 			else
 				equip(sets.Locked_Main_Sub)
@@ -436,13 +432,24 @@ function customize_idle_set(idleSet)
 		if state.Buff["Reive Mark"] then
 			idleSet = set_combine(idleSet, sets.buff.Reive)
 		end
+	end
+
+-- I seperated these so these sets are always on
 		if state.CP.value == true then
 			idleSet = set_combine(idleSet, sets.CP)
 		end
 		if state.Auto_Kite.value == true then
-			idleSet = set_combine(idleSet, sets.Kiting)
-		end
-	end
+-- I added Councilor's Garb Swap for when in Adoulin
+			if world.area:endswith('Adoulin') then
+				idleSet = set_combine(idleSet, sets.Adoulin)
+			else 
+				idleSet = set_combine(idleSet, sets.Kiting)
+			end
+		end	
+		if state.Buff.doom then
+        	idleSet = set_combine(idleSet, sets.buff.Doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+ 		end
     
     return idleSet
 end
@@ -450,12 +457,20 @@ end
 function customize_melee_set(meleeSet)
 	
 	lockouts()
-	
-	if state.DefenseMode.current == 'None' then 
+
+-- I turned this off so these sets are always on
+	--if state.DefenseMode.current == 'None' then 
+		if state.Auto_Kite.value == true then
+			meleeSet = set_combine(meleeSet, sets.Kiting)
+		end
 		if state.CP.value == true then
 			meleeSet = set_combine(meleeSet, sets.CP)
 		end
-	end
+		if state.Buff.doom then
+        	meleeSet = set_combine(meleeSet, sets.buff.Doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+    	end
+	--end
     return meleeSet
 end
 
@@ -533,7 +548,10 @@ end
 windower.raw_register_event('zone change',reset_rings)
 
 function check_moving()
-	if state.DefenseMode.value == 'None'  and state.Kiting.value == false then
+	if 
+--I disabled this so sets are always on
+	--state.DefenseMode.value == 'None' and state.Kiting.value == false then
+	state.Kiting.value == false then
 		if state.Auto_Kite.value == false and moving then
 			state.Auto_Kite:set(true)
 		elseif state.Auto_Kite.value == true and moving == false then
@@ -614,11 +632,14 @@ function display_current_job_state(eventArgs)
 end
 
 function update_combat_form()
-	state.CombatForm:reset()
-	if DW == true then
+	--if DW == true then
+-- I added this. This rule works better for DW
+    if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 		state.CombatForm:set('DW')
 	elseif H2H == true then
 		state.CombatForm:set('H2H')
+	else
+		state.CombatForm:reset()
 	end
 end
 
