@@ -54,7 +54,7 @@ function define_global_sets()
 	
 	-- Accesories
 	Dark_Ring				={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
-	CP_back 				={ name="Mecistopins Mantle"}
+	CP_back 				={ name="Mecisto. Mantle", augments={'Cap. Point+49%','VIT+1','Mag. Acc.+4','DEF+8',}}
 end
 
 -- Function to bind GearSwap binds when loading a GS script.
@@ -86,8 +86,6 @@ function global_on_load()
 	send_command('bind ^[ gs c cycle OffenseMode')
 	-- Some DT pieces
 	send_command('bind ![ gs c cycle HybridMode')
-	-- Targets npc in crowded areas
-	send_command('bind @[ gs c toggle selectnpctargets')
 
 	-- MDT
 	send_command('bind ] gs c toggle MagicalDefense')
@@ -138,7 +136,7 @@ function global_on_load()
 	if player.main_job:upper() == 'RDM' then
     	send_command('bind ^a input /ma "Addle II" <stnpc>')
     	send_command('bind ^v input /ma "Blind II" <stnpc>') --***
-    	send_command('bind ^e input /ma "Dia III" <stnpc>') --***
+    	--send_command('bind ^ input /ma "Dia III" <stnpc>') --***
 		send_command('bind ^d input /ma "Distract III" <stnpc>')
     	send_command('bind ^f input /ma "Frazzle III" <stnpc>')
     	send_command('bind ^g input /ma "Gravity II" <stnpc>')
@@ -148,7 +146,7 @@ function global_on_load()
     	send_command('bind ^a input /ma "Addle" <stnpc>')
     	send_command('bind ^b input /ma "Bind" <stnpc>')
     	send_command('bind ^v input /ma "Blind" <stnpc>') --***
-    	send_command('bind ^e input /ma "Dia II" <stnpc>') --***
+    	--send_command('bind ^ input /ma "Dia II" <stnpc>') --***
 		send_command('bind ^d input /ma "Distract" <stnpc>')
     	send_command('bind ^f input /ma "Frazzle" <stnpc>')
     	send_command('bind ^g input /ma "Gravity" <stnpc>')
@@ -212,9 +210,12 @@ function global_on_load()
 		--send_command('bind F11 input /ja "Curing Waltz II" <stal>')
 	end
 
+end
+
 
 -- Function to re-bind Spellcast binds when unloading GearSwap.
 function binds_on_unload()
+	send_command('unbind ^e')
 
 	send_command('unbind ^`')
     send_command('unbind !`')

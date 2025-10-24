@@ -212,9 +212,9 @@ function job_state_change(field, newValue, oldValue)
 	
     if field == 'Offense Mode' then
         if newValue ~= 'None' then
-			if state.CombatForm == 'DW' then
--- I added this rule it works better. Old Rule Prob works. test. 
-			--if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
+			--if state.CombatForm == 'DW' then
+-- I added this rule it works better.
+			if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
 				equip(sets.Locked_Main_Sub_DW)
 			else
 				equip(sets.Locked_Main_Sub)
