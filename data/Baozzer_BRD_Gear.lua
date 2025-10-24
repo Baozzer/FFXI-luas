@@ -305,11 +305,15 @@ function init_gear_sets()
 		head="Wh. Rarab Cap +1",
 		waist="Chaac Belt",})
 
-	sets.midcast['Banish II'] = set_combine(sets.midcast['Debuff'].Resistant, {
+	sets.midcast['Divine Magic'] = set_combine(sets.midcast['Debuff'].Resistant, {
 		--head="Ipoca Beret",
 		neck="Jokushu Chain",
 		--ring1="Fenian Ring",
 		--back="Disperser's Cape",
+		})
+	
+	-- enmity+
+	sets.midcast['Flash'] = set_combine(sets.midcast['Debuff'].Resistant, {
 		})
 
 	-- 50% CP | 100 CMP | 10% CPII CAP

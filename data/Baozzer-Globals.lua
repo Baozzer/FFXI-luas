@@ -1,3 +1,10 @@
+--[[
+	auto echo drop
+	auto ws
+	use difference earring if tp>2750
+--]]
+
+
 -------------------------------------------------------------------------------------------------------------------
 -- ALL YOUR JOBS NEED OR SHARE THESE
 -------------------------------------------------------------------------------------------------------------------
@@ -96,6 +103,9 @@ function global_on_load()
 	
 	-- Locks CP Back
 	send_command('bind @] gs c cycle CP')
+
+	-- Target NPC. Good for crowded areas
+	send_command('bind @[ input /targetbpc')
 
 
 	-- Cure Map
