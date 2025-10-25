@@ -14,7 +14,7 @@
 
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book(reset)
-	 if reset == 'reset' then
+	if reset == 'reset' then
         -- lost pet, or tried to use pact when pet is gone
     end
 	
@@ -46,13 +46,7 @@ function init_gear_sets()
 	Empy_legs 			={ name="Beckoner's Spats +1" }
 	Empy_feet 			={ name="Beckoner's Pigaches +1" }
 	
-	--------------------------------------
-    -- Defaults
-    --------------------------------------
-	
-	-- gear.perp_staff = {name = "Hoe"}
-	-- gear.default.perp_staff = {name = "Hoe"}
-	
+
     --------------------------------------
     -- Precast Sets
     --------------------------------------
@@ -134,7 +128,7 @@ function init_gear_sets()
 		})
 		-- Total = % Cast Speed + % Quick Cast
 
-	sets.precast.FC.Cure = set_combine(sets.precast.['Healing Magic'], {
+	sets.precast.FC.Cure = set_combine(sets.precast.FC['Healing Magic'], {
 		})
 		-- Total = % Cast Speed + % Quick Cast
 
@@ -167,7 +161,7 @@ function init_gear_sets()
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
 		neck="Fotia Gorget",ear1="Brutal Earring",ear2="Moonshade Earring",
-		waist="Fotia Belt".}
+		waist="Fotia Belt",}
 
 	-- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
 
@@ -200,9 +194,9 @@ function init_gear_sets()
 			back="Fi Follet Cape +1",
 			waist="Luminary Sash",
 			legs="Amalric Slops",
-			feet="Amalric Nails"}
+			feet="Amalric Nails",}
 	
-	sets.WS.Retribution = set_combine(sets.WS,{})	
+	sets.precast.WS['Retribution'] = set_combine(sets.precast.WS,{})	
 	sets.precast.WS['Shattersoul'] = set_combine(sets.precast.WS, { })
 
     
@@ -249,19 +243,14 @@ function init_gear_sets()
 	-- add meva set
 	sets.midcast['Summoning Magic'] = {
 		body="Baayami Robe",
-	}
+		}
 
-	-- Unresistable. Might as well put TH
-	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Enfeebling Magic'],{
-		head="Wh. Rarab Cap +1",
-		waist="Chaac Belt",})
-
-	sets.midcast['Divine Magic'] = set_combine(sets.midcast['Debuff'].Resistant, {
+	sets.midcast['Divine Magic'] = {
 		--head="Ipoca Beret",
 		neck="Jokushu Chain",
 		--ring1="Fenian Ring",
 		--back="Disperser's Cape",
-		})
+		}
 
     sets.midcast.Cure = {
 			main="Serenity",
@@ -373,11 +362,6 @@ function init_gear_sets()
 	sets.midcast.Trust = set_combine(sets.midcast.FastRecast, {body="Apururu Unity Shirt"})
 	
 	-- Custom spell classes
-	
-	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
-		--waist="Shinjutsu-no-Obi +1" -- unity aug
-		--feet=something with macc
-		})
 
 	-- Need to earring 1
 	
@@ -421,6 +405,16 @@ function init_gear_sets()
 	
 	sets.midcast.ElementalEnfeeble				= sets.midcast['Int Enfeebles']
 	sets.midcast.ElementalEnfeeble.Resistant 	= sets.midcast['Int Enfeebles'].Resistant
+
+	-- Unresistable. Might as well put TH
+	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Mnd Enfeebles'],{
+		head="Wh. Rarab Cap +1",
+		waist="Chaac Belt",})
+		
+	sets.midcast.Dispelga = set_combine(sets.midcast['Int Enfeebles'], {
+		--waist="Shinjutsu-no-Obi +1" -- unity aug
+		--feet=something with macc
+		})
 	
     sets.midcast['Dark Magic'] = {main=Grioavolr_Enh,sub={name="Niobid Strap",priority=-1},ammo="Hydrocera",
         head=Merl_head_Burst,neck="Incanter's Torque",ear2="Enchanter Earring +1",

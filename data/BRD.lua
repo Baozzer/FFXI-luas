@@ -71,6 +71,9 @@ function user_setup()
 	Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
 	Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
 	Ear_lock = S{"Reraise Earring"}
+	Back_lock  = S{"Nexus Cape"}
+	--Main_lock = S{"Warp Cudgel"}
+	Waist_lock  = S{"Lutienent's Sash"}
 	
 	Ring_slot_locked_1 = false
 	Ring_slot_locked_2 = false
@@ -357,6 +360,34 @@ function lockouts()
 		disable('Ear2')
 	elseif not Ear_lock:contains(player.equipment.ear2) then
 		enable('Ear2')
+	end
+	
+	---------------------------------
+	-- back locks
+	
+	if Back_lock:contains(player.equipment.back) then
+		disable('Back')
+	elseif not Back_lock:contains(player.equipment.back) then
+		enable('Back')
+	end
+	if Back_lock:contains(player.equipment.back) then
+		disable('Back')
+	elseif not Back_lock:contains(player.equipment.back) then
+		enable('Back')
+	end
+	
+	---------------------------------
+	-- waist locks
+	
+	if Waist_lock:contains(player.equipment.waist) then
+		disable('Waist')
+	elseif not Waist_lock:contains(player.equipment.waist) then
+		enable('Waist')
+	end
+	if Waist_lock:contains(player.equipment.waist) then
+		disable('Waist')
+	elseif not Waist_lock:contains(player.equipment.waist) then
+		enable('Waist')
 	end
 	
 end

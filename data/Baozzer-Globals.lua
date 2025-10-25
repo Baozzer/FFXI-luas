@@ -1,7 +1,7 @@
 --[[
 	auto echo drop
 	auto ws
-	use difference earring if tp>2750
+	use different earring if tp>2750
 --]]
 
 
@@ -31,7 +31,7 @@ function define_global_sets()
 	Chironic_hands_MAB 		={ name="Chironic Gloves", augments={'STR+7','"Mag.Atk.Bns."+30','Mag. Acc.+15 "Mag.Atk.Bns."+15',}}
 	Chironic_feet_MAB 		={ name="Chironic Slippers", augments={'Mag. Acc.+22 "Mag.Atk.Bns."+22','Haste+1','Mag. Acc.+12','"Mag.Atk.Bns."+15',}}
 	
-	Chironic_legs_Macc		={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}}
+	Chironic_legs_MAcc		={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}}
 	
 	Chironic_hands_Refresh	={ name="Chironic Gloves", augments={'Accuracy+7','Haste+1','"Refresh"+2','Accuracy+19 Attack+19',}}
 	
@@ -102,10 +102,13 @@ function global_on_load()
 	send_command('bind !] gs c cycle IdleMode')
 	
 	-- Locks CP Back
-	send_command('bind @] gs c cycle CP')
+	send_command('bind @9 gs c cycle CP')
+
+	-- Equips Warp Ring
+	send_command('bind @0 input //gs equip sets.warp')
 
 	-- Target NPC. Good for crowded areas
-	send_command('bind @[ input /targetbpc')
+	send_command('bind @t input /targetnpc')
 
 
 	-- Cure Map

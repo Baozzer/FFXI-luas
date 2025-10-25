@@ -38,7 +38,9 @@ function init_gear_sets()
 	Rhapsode_back		={ name="Rhapsode's Cape", augments={'HP+19','Mag. Acc.+5','Enmity-8',}}
 	JSE_back_FC			={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10',}}
 	JSE_back_TP			={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dbl.Atk."+10',}}
+	JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','CHR+10','Weapon skill damage +10%',}}
 	JSE_back_WS_DEX		={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
+	JSE_back_WS_STR		={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
 	--JSE_back_WS_Evis	={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Crit.hit rate+10',}}
 	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	
@@ -149,10 +151,9 @@ function init_gear_sets()
 	-- Default set for any weaponskill that isn't any more specifically defined
 	sets.precast.WS = {
 		range=Linos_WS,
-		head="Aya. Zucchetto +2",neck="Caro Necklace",ear1="Moonshade Earring",ear2="Ishvara Earring",
+		head="Aya. Zucchetto +2",neck="Fotia Gorget",ear1="Moonshade Earring",ear2="Ishvara Earring",
 		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Rajas Ring",ring2="Ilabrat Ring",
-		back=JSE_back_WS_DEX,waist="Fotia Belt",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2"
-        }
+		back=JSE_back_WS_STR,waist="Fotia Belt",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2",}
    
 	-- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
 	sets.precast.WS['Evisceration'] = set_combine(sets.precast.WS, {
@@ -166,20 +167,27 @@ function init_gear_sets()
 	sets.precast.WS["Rudra's Storm"] = set_combine(sets.precast.WS, {
 		neck="Fotia Gorget",
 		ring1="Ramuh Ring +1",
+		feet=Lustratio_feet,
         })
 
-	sets.precast.WS['Mordant Rime'] = set_combine(sets.precast.WS, {
-		ear1="Regal Earring",ear2="Ishvara Earring",
-		body=Relic_body,ring1="Hetairoi Ring",
-		--back=JSE_back_WS_CHR,
-		waist="Grunfeld Rope",
-        })
-
-    sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {
-        })
-	--TP Bonus > WSDMG  > DA > STR
-    sets.precast.WS['Savage Blade'] = set_combine(sets.precast.WS, {
-        })
+	--CHR > WSD
+	sets.precast.WS['Mordant Rime'] = {
+		range=Linos_WS,
+		head="Aya. Zucchetto +2",neck="Fotia Gorget",ear1="Regal Earring",ear2="Ishvara Earring",
+		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Petrov Ring",ring2="Ilabrat Ring",
+		back=JSE_back_WS_STR,waist="Fotia Belt",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2",}
+	-- MAB > INT/DEX
+    sets.precast.WS['Aeolian Edge'] =  {
+		range=Linos_WS,
+		head="Inyanga Tiara +2",neck="Sanctity Necklace",ear1="Moonshade Earring",ear2="Friomisi Earring",
+		body="Inyanga Jubbah +2",hands=Chironic_hands_MAB,ring1="Shiva Ring +1",ring2="Shiva Ring +1",
+		back=JSE_back_WS_STR,waist="Eschan Stone",legs=Chironic_legs_MAcc,feet=Chironic_feet_MAB,}
+	--TP Bonus > WSD > DA > STR
+    sets.precast.WS['Savage Blade'] = {
+		range=Linos_WS,
+		head="Aya. Zucchetto +2",neck="Caro Necklace",ear1="Moonshade Earring",ear2="Ishvara Earring",
+		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ifrit Ring +1",ring2="Shukuyu Ring",
+		back=JSE_back_WS_STR,waist="Prosilio Belt +1",legs="Aya. Cosciales +2",feet=Lustratio_feet}
     
     
     -- Midcast Sets
@@ -208,9 +216,9 @@ function init_gear_sets()
 	sets.midcast['Buff']['Etude']	 					= set_combine(sets.midcast['Buff'], {head="Mousai Turban",})
 	sets.midcast['Buff']['Madrigal']	 				= set_combine(sets.midcast['Buff'], {feet=Empy_feet,})
 	sets.midcast['Buff']['March']	 					= set_combine(sets.midcast['Buff'], {})
-	sets.midcast['Buff']['Honor March']					= set_combine(sets.midcast['Buff'], {range={name='Marsyas',priority = 16}})
+	sets.midcast['Buff']['Honor March']					= set_combine(sets.midcast['Buff'], {range="Marsyas",})
 	sets.midcast['Buff']['Mambo']	 					= set_combine(sets.midcast['Buff'], {feet="Mousai Crackows",})
-	--sets.midcast['Buff']['Mazurka']	 					= set_combine(sets.midcast['Buff'], {range="Marsyas",})
+	sets.midcast['Buff']['Mazurka']	 					= set_combine(sets.midcast['Buff'], {range="Daurdabla",})
 	sets.midcast['Buff']['Minne']	 					= set_combine(sets.midcast['Buff'], {legs="Mou. Seraweels +1",})
 	sets.midcast['Buff']['Minuet']	 					= set_combine(sets.midcast['Buff'], {})	
 	sets.midcast['Buff']['Paeon']	 					= set_combine(sets.midcast['Buff'], {
@@ -227,7 +235,7 @@ function init_gear_sets()
 	sets.midcast['Buff']['Extra Length']['March']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {})
 	sets.midcast['Buff']['Extra Length']['Honor March']					= set_combine(sets.midcast['Buff']['Extra Length'], {range="Marsyas",})
 	sets.midcast['Buff']['Extra Length']['Mambo']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet="Mousai Crackows",})
-	--sets.midcast['Buff']['Extra Length']['Mazurka']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {range="Marsyas",})
+	sets.midcast['Buff']['Extra Length']['Mazurka']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {range="Daurdabla",})
 	sets.midcast['Buff']['Extra Length']['Minne']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {legs="Mou. Seraweels +1",})
 	sets.midcast['Buff']['Extra Length']['Minuet']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {})	
 	sets.midcast['Buff']['Extra Length']['Paeon']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {
@@ -251,19 +259,19 @@ function init_gear_sets()
 		waist="Luminary Sash",
 		})
 	-- Macc
-	sets.midcast['Debuff']['Macc-Lullaby']  = set_combine(sets.midcast['Debuff'].Resistant, {})
+	sets.midcast['Debuff']['Macc-Lullaby']  = set_combine(sets.midcast['Debuff'].Resistant, {neck="Null Loop",waist="Null Belt"})
 	-- Macc
-	sets.midcast['Debuff']['Macc-Lullaby'].Resistant = set_combine(sets.midcast['Debuff'].Resistant, {})
+	sets.midcast['Debuff']['Macc-Lullaby'].Resistant = set_combine(sets.midcast['Debuff'].Resistant, {neck="Null Loop",waist="Null Belt"})
 	-- String Skill for range then Macc. Only For Horde II 486 skill
 	sets.midcast['Debuff']['StringSkill-Lullaby'] = set_combine(sets.midcast['Debuff'].Resistant, {
 		range="Daurdabla",
 		--af head
-        ear1="Gersemi Earring",ear2="Darkside Earring",
+        --ear1="Gersemi Earring",ear2="Darkside Earring",
 		waist=="Harfner's Sash",
         })
 		-- 475 skill
 	-- Macc. No range
-	sets.midcast['Debuff']['StringSkill-Lullaby'].Resistant	= set_combine(sets.midcast['Debuff'].Resistant, {})
+	sets.midcast['Debuff']['StringSkill-Lullaby'].Resistant	= set_combine(sets.midcast['Debuff'].Resistant, {neck="Null Loop",waist="Null Belt"})
      
     -- Dummy song with Daurdabla; minimize duration to make it easy to overwrite.
     sets.midcast['Dummy'] = set_combine(sets.midcast.SongEnhancing, {range=info.ExtraSongInstrument})
@@ -273,13 +281,13 @@ function init_gear_sets()
 	
 	-- 101% Cap | Merits is 10%
 	sets.midcast.SpellInterrupt = {
-		sub="Culminus", --10 dont have yet
+		--sub="Culminus", --10 dont have yet
         ammo="Staunch Tathlum", --10
-        body="Ros. Jaseran +1", --25 dont have yet
+        --body="Ros. Jaseran +1", --25 dont have yet
     	hands=Chironic_hands_DT, --20
     	legs="Querkening Brais", --15
         --neck="Loricate Torque +1", --5 unity aug
-        ear1="Halasz Earring", --5
+        --ear1="Halasz Earring", --5
         ring2="Evanescence Ring", --5
 		--back="Fi Follet Cape +2", -- unity aug
         waist="Emphatikos Rope", --12
@@ -290,9 +298,9 @@ function init_gear_sets()
 				
 	sets.midcast['Enfeebling Magic'] = {
 		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
-		head=Vanya_head,neck="Orunmila's Torque",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
+		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_Macc,feet=Telch_Feet_Enh}
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh}
 		
 	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
 		--waist="Shinjutsu-no-Obi +1" -- unity aug
@@ -301,6 +309,7 @@ function init_gear_sets()
 	
 	-- Unresistable. Might as well put TH
 	sets.midcast['Dia II'] 	= set_combine(sets.midcast['Enfeebling Magic'],{
+		ammo="Per. Lucky Egg",
 		main=Taming_Sari_TH,sub="Genmei Shield",
 		head="Wh. Rarab Cap +1",
 		waist="Chaac Belt",})
@@ -313,8 +322,21 @@ function init_gear_sets()
 		})
 	
 	-- enmity+
-	sets.midcast['Flash'] = set_combine(sets.midcast['Debuff'].Resistant, {
-		})
+	sets.midcast['Flash'] = {
+		ammo="Sapience Orb",-- 2
+		head="Aya. Zucchetto +2",
+		neck="Null Loop",
+		ear1="Trux Earring", -- 5
+		ear2="Sanare Earring",
+		body="Emet Harness +1", -- 10
+		hands="Aya. Manopolas +2",
+		ring1="Pernicious Ring", -- 5
+		ring2="Petrov Ring", -- 4
+		back="Reiki Cloak", -- 6
+		waist="Goading Belt", -- 3
+		legs="Aya. Cosciales +2",
+		feet="Aya. Gambrieras +2",
+		}
 
 	-- 50% CP | 100 CMP | 10% CPII CAP
     sets.midcast.Cure = {
@@ -375,7 +397,7 @@ function init_gear_sets()
         })
 	
 	sets.midcast['Enhancing Magic'] = set_combine(sets.midcast.FastRecast, {
-		main=Grioavolr_Enh,sub="Fulcio Grip",
+		main=Grioavolr_Enh,
 		head=Telch_head_Enh,
 		body=Telch_body_Enh,hands=Telch_hands_Enh,
 		--back='Merciful Cape',
@@ -384,7 +406,7 @@ function init_gear_sets()
 
 	-- Skill+
 	sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {
-		main=Grioavolr_Enh,sub="Fulcio Grip",ammo="Pemphredo Tathlum",
+		main=Grioavolr_Enh,ammo="Pemphredo Tathlum",
 		head="Umuthi Hat",neck="Incanter's Torque",ear1='Andoaa Earring',
 		--ear2="Mimir Earring",
 		body=Telch_body_Enh,hands="Inyan. Dastanas +2",ring1="Stikini Ring", ring2="Stikini Ring",
@@ -405,10 +427,11 @@ function init_gear_sets()
 		waist="Siegel Sash", legs="Shedir Seraweels",
 		})
 	sets.midcast['Refresh'] = set_combine(sets.midcast['Enhancing Magic'], {
-		waist="Gishdubar Sash", back="Grapevine Cape"
+		waist="Gishdubar Sash", 
+		--back="Grapevine Cape"
 		})
 	sets.midcast['Regen'] = set_combine(sets.midcast['Enhancing Magic'], {
-		main=Grioavolr_Enh, sub="Fulcio Grip",
+		main=Grioavolr_Enh,
 		head="Inyanga Tiara +2",
 		--back="Grapevine Cape",
 		})
@@ -433,7 +456,7 @@ function init_gear_sets()
 		main="Sangoma",sub="Genmei Shield",range="Oneiros Harp",
 		head=empty,neck="Sanctity Necklace",ear1="Ethereal Earring",ear2="Infused Earring",
 		body="Respite Cloak",hands=Chironic_hands_Refresh,ring1="Sheltered Ring",ring2="Defending Ring",
-		back="Felicitas Cape +1",waist="Flume Belt",legs="Assid. Pants +1",feet=Empy_feet,
+		back="Felicitas Cape +1",waist="Null Belt",legs="Assid. Pants +1",feet=Empy_feet,
 	}
 
     -- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
@@ -443,7 +466,7 @@ function init_gear_sets()
 		main="Sangoma",sub="Genmei Shield",range="Oneiros Harp",
 		head=empty,neck="Loricate Torque +1",ear1="Ethereal Earring",ear2="Infused Earring",
 		body="Respite Cloak",hands=Chironic_hands_Refresh,ring1="Sheltered Ring",ring2="Defending Ring",
-		back="Solemnity Cape",waist="Flume Belt",legs="Assid. Pants +1",feet=Empy_feet,
+		back="Solemnity Cape",waist="Null Belt",legs="Assid. Pants +1",feet=Empy_feet,
         }
 			
 	-- DT > Refresh > Meva
@@ -489,7 +512,7 @@ function init_gear_sets()
 	sets.buff.Doom = {
 		neck="Nicander's Necklace",
 		waist="Gishdubar Sash",}
-	sets.warp = {ring2='Warp Ring'}
+	sets.warp = {ring1='Warp Ring'}
 	--sets.crafting = {sub={name="Toreutic Ecu",priority=-1},head="Shaded Spectacles",body="Goldsmith's Smock",neck="Goldsmith's Torque",ring1="Orvail Ring",ring2="Craftmaster's Ring",}
 
     -- Engaged sets
@@ -504,29 +527,19 @@ function init_gear_sets()
 			main="Carnwenhan",sub="Genmei Shield",range=Linos_TP,
 			head="Aya. Zucchetto +2",neck="Ainia Collar",ear1="Cessance Earring",ear2="Telos Earring",
 			body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Petrov Ring",ring2="Ilabrat Ring",
-			back=JSE_back_TP,waist="Windbuffet Belt +1",legs="Jokushu Haidate",feet="Battlecast Gaiters"
+			back=JSE_back_TP,waist="Windbuffet Belt +1",legs="Querkening Brais",feet="Battlecast Gaiters"
         }
 			
-	sets.engaged.Acc = {
-			--main=Carnwenhan_Macc,sub={name="Culminus",priority=-1},range=TP_Linos,
-			--head="Ayanmo Zucchetto +1",neck="Sanctity Necklace",ear1="Mache Earring",ear2="Mache Earring",
-			--body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ilabrat Ring",ring2="Ramuh Ring",
-			--back=TP_back,waist="Windbuffet Belt +1",legs="Ayanmo Cosciales +1",feet="Ayanmo Gambieras +2"
-			}
+	sets.engaged.Acc = set_combine(sets.engaged,{neck="Null Loop",waist="Null Belt"})
 	
 	sets.engaged.DW = {
 			main="Kaja Sword",sub="Carnwenhan",range=Linos_TP,
-			--head="Highwing Helm",neck="Asperity Necklace",ear1="Brutal Earring",ear2="Eabani Earring",
-			--body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Ilabrat Ring",ring2="Petrov Ring",
-			--back=TP_back,waist="Reiki Yotai",legs="Jokushu Haidate",feet="Ayanmo Gambieras +2"
+			head="Aya. Zucchetto +2",neck="Ainia Collar",ear1="Eabani Earring",ear2="Telos Earring",
+			body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Petrov Ring",ring2="Ilabrat Ring",
+			back=JSE_back_TP,waist="Reiki Yotai",legs="Querkening Brais",feet="Battlecast Gaiters"
 			}
 			
-	sets.engaged.DW.Acc = {
-			--main="Taming Sari",sub={name="Carnwenhan",priority=-1},range=TP_Linos,
-			--head="Ayanmo Zucchetto +1",neck="Sanctity Necklace",ear1="Mache Earring",ear2="Eabani Earring",
-			--body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ilabrat Ring",ring2="Ramuh Ring",
-			--back=TP_back,waist="Reiki Yotai",legs="Ayanmo Cosciales +1",feet="Ayanmo Gambieras +2"
-			}
+	sets.engaged.DW.Acc = set_combine(sets.engaged.DW,{neck="Null Loop",waist="Null Belt"})
 
 	
 	sets.Locked_Main_Sub = {main="Carnwenhan",sub="Genmei Shield"}
