@@ -39,8 +39,9 @@
 
 
 -- Initialization function for this job file.
+include('Make-Settings.lua')
+include('organizer-lib')
 function get_sets()
-	include('Make-Settings.lua')
     mote_include_version = 2
 
     -- Load and initialize the include file.

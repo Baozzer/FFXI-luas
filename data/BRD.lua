@@ -1,6 +1,36 @@
-include('Make-Settings.lua')
+-------------------------------------------------------------------------------------------------------------------
+-- Setup functions for this job.  Generally should not be modified.
+-------------------------------------------------------------------------------------------------------------------
+--[[
+    Custom commands:
+    
+    ExtraSongsMode may take one of these values: None, Dummy
+		send_command('bind f12 gs c cycle ExtraSongsMode')
+    
+    You can set these via the standard 'set' and 'cycle' self-commands.  EG:
+    gs c cycle ExtraSongsMode
+    gs c set ExtraSongsMode Dummy
+    
+    The Dummy state will equip the extra song instrument and ensure non-duration gear is equipped.
+
+
+	SingingMode may take one of these values: None, Extra_Length
+		send_command('bind f10 gs c cycle SingingMode')
+
+    The Extra_Length state will equip the bonus song instrument on top of standard gear. This is default.
+	The None state will equip full AF for stat+ bonus when duration isn't needed. 
+    
+    
+    Simple macro to cast a dummy Daurdabla song:
+    /console gs c set ExtraSongsMode Dummy
+    /ma "Shining Fantasia" <me>
+    
+--]]
 
 -- Initialization function for this job file.
+include('Make-Settings.lua')
+include('organizer-lib')
+
 function get_sets()
     mote_include_version = 2
     
@@ -9,6 +39,10 @@ function get_sets()
 	
 end
 
+-- Select default macro book on initial load or subjob change.
+function select_default_macro_book()
+    set_macro_page(1, 2)
+end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
@@ -243,6 +277,19 @@ function job_buff_change(buff, gain)
 	if buff == 'Goldsmithing Imagery' and gain then
 		 send_command('timers create "'..buff..'" 480 down abilities/00121.png')
 	end
+end
+
+-- Custom spell mapping.
+function job_get_spell_map(spell,default_spell_map)
+    if spell.action_type == 'Magic' then
+        if spell.skill == 'Enfeebling Magic' then
+            if spell.type == 'WhiteMagic' then
+                return 'Mnd Enfeebles'
+            else
+                return 'Int Enfeebles'
+            end
+		end
+    end
 end
 
 -- Modify the default idle set after it was constructed.
@@ -836,9 +883,6 @@ end)
 windower.register_event('job change',function()
     send_command('gs r')
 end)
-
---function select_default_macro_book()
---end
 
 --these were already disabled
 -- windower.raw_register_event('zone change',reset_timers)

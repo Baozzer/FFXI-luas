@@ -363,8 +363,7 @@ function init_gear_sets()
 	
 	-- Custom spell classes
 
-	-- Need to earring 1
-	
+	-- Addle, Slow, Paralyze, Frazzle, Distract, 
     sets.midcast['Mnd Enfeebles'] = {
 			main={ name="Grioavolr", augments={'Blood Pact Dmg.+8','Pet: STR+1','Pet: Mag. Acc.+19','Pet: "Mag.Atk.Bns."+22',}},
 			sub="Enki Strap",
@@ -380,10 +379,10 @@ function init_gear_sets()
 			back="Kumbira Cape",
 			waist="Luminary Sash",
 			legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Mag. crit. hit dmg. +3%','INT+8','Mag. Acc.+12','"Mag.Atk.Bns."+12',}},
-			feet="Medium's Sabots"}
-		
+			feet="Medium's Sabots"}	
 	sets.midcast['Mnd Enfeebles'].Resistant 	= set_combine(sets.midcast['Mnd Enfeebles'], {})
 
+	-- Others
     sets.midcast['Int Enfeebles'] = {
 			main={ name="Grioavolr", augments={'Blood Pact Dmg.+8','Pet: STR+1','Pet: Mag. Acc.+19','Pet: "Mag.Atk.Bns."+22',}},
 			sub="Enki Strap",
@@ -399,8 +398,7 @@ function init_gear_sets()
 			back="Kumbira Cape",
 			waist="Luminary Sash",
 			legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Mag. crit. hit dmg. +3%','INT+8','Mag. Acc.+12','"Mag.Atk.Bns."+12',}},
-			feet="Medium's Sabots"}
-		
+			feet="Medium's Sabots"}	
 	sets.midcast['Int Enfeebles'].Resistant 	= set_combine(sets.midcast['Int Enfeebles'], {})
 	
 	sets.midcast.ElementalEnfeeble				= sets.midcast['Int Enfeebles']

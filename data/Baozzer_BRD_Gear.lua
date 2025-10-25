@@ -1,7 +1,6 @@
- -- Select default macro book on initial load or subjob change.
-function select_default_macro_book()
-    set_macro_page(1, 2)
-end
+-------------------------------------------------------------------------------------------------------------------
+-- Gear Specifc to this job
+-------------------------------------------------------------------------------------------------------------------
 
 function init_gear_sets()
 		
@@ -295,12 +294,30 @@ function init_gear_sets()
 		--72% 
 
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
-				
+	
+	--[[
 	sets.midcast['Enfeebling Magic'] = {
 		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
 		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh}
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh,}
+	--]]
+
+	-- Addle, Slow, Paralyze, Frazzle, Distract. Don't see any INT enfeebs worthwhile to differiante the sets. 
+    sets.midcast['Mnd Enfeebles'] = {
+		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
+		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
+		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet="Uk'uxkaj boots",}
+	sets.midcast['Mnd Enfeebles'].Resistant 	= set_combine(sets.midcast['Mnd Enfeebles'], {})
+
+	-- Others
+    sets.midcast['Int Enfeebles'] = {
+		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
+		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
+		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
+		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh,}
+	sets.midcast['Int Enfeebles'].Resistant 	= set_combine(sets.midcast['Int Enfeebles'], {})
 		
 	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
 		--waist="Shinjutsu-no-Obi +1" -- unity aug
@@ -323,11 +340,12 @@ function init_gear_sets()
 	
 	-- enmity+
 	sets.midcast['Flash'] = {
+		main="Mafic Cudgel", -- 6
 		ammo="Sapience Orb",-- 2
 		head="Aya. Zucchetto +2",
-		neck="Null Loop",
+		neck="Warder's Charm +1",
 		ear1="Trux Earring", -- 5
-		ear2="Sanare Earring",
+		ear2="Friomisi Earring", -- 2
 		body="Emet Harness +1", -- 10
 		hands="Aya. Manopolas +2",
 		ring1="Pernicious Ring", -- 5

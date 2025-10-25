@@ -1,7 +1,15 @@
 --[[
-	auto echo drop
-	auto ws
-	use different earring if tp>2750
+	To Do List:
+
+		auto echo drop (it spellcast buffactive silence not mute then use)
+		auto ws (if engage tp > 1000 then ws)
+		use different earring (if tp>2750 and ear1 ear2 = moonshade then equip sets.NoMoonshade
+		primary ws depending on mainhand type (if main type = then this ws)
+		adoulin movement for idle in adoulin only 
+		doom set for all sets 
+		reive set for idle only
+		all modes not specific to job
+		equipment lock: rings, nexus cape, warp curdgel, rr earring for all sets. in case need rr during a fight
 --]]
 
 
@@ -16,8 +24,11 @@ Notification_color = 200
 text_color = 160
 warning_text = 167
 
+-------------------------------------------------------------------------------------------------------------------
+-- Global Augmented Gear
+-------------------------------------------------------------------------------------------------------------------
+
 function define_global_sets()
-	-- Augmented Universal Gear
 
 	-- Weapons
 	Grioavolr_Enh			={ name="Grioavolr", augments={'Enh. Mag. eff. dur. +9','MP+88','Magic Damage +8',}}
@@ -64,23 +75,19 @@ function define_global_sets()
 	CP_back 				={ name="Mecisto. Mantle", augments={'Cap. Point+49%','VIT+1','Mag. Acc.+4','DEF+8',}}
 end
 
--- Function to bind GearSwap binds when loading a GS script.
-function global_on_load()
-	
--------------------------------------------------------------------------------------------------------------------	
-	-- send_command('bind ^- gs c toggle selectnpctargets')
-	-- send_command('bind ^= gs c cycle pctargetmode')
--------------------------------------------------------------------------------------------------------------------	
 
 -------------------------------------------------------------------------------------------------------------------
 --  Global Keybinds
 -------------------------------------------------------------------------------------------------------------------
+
+-- Function to bind GearSwap binds when loading a GS script.
+function global_on_load()
 	-- ctrl = ^
 	-- alt = !
 	-- windows key = @
 		-- @ doesnt work with f keys
 
-	-- Functions
+	-- Global Functions Keybinds
 
 	-- Summons all Trusts
 	send_command('bind f8 input //tru 1')
@@ -96,7 +103,7 @@ function global_on_load()
 
 	-- MDT
 	send_command('bind ] gs c toggle MagicalDefense')
-	-- Macc Array
+	-- Resistant Mode
 	send_command('bind ^] gs c cycle CastingMode')
 	-- Idle Set
 	send_command('bind !] gs c cycle IdleMode')
@@ -107,23 +114,42 @@ function global_on_load()
 	-- Equips Warp Ring
 	send_command('bind @0 input //gs equip sets.warp')
 
-	-- Target NPC. Good for crowded areas
+	-- Target NPC. Good for crowded areas.
 	send_command('bind @t input /targetnpc')
 
 
-	-- Cure Map
-	if player.main_job:upper() == 'WHM' then
-   		send_command('bind @1 input /ma "Cure V" <stal>')
+	-- Default Cure HotKeys
+	if player.sub_job:upper() == 'SCH' then
+   		send_command('bind @1 input /ma "Cure III" <stal>')
+    	send_command('bind @2 input /ma "Cure II" <stal>')
+	elseif player.sub_job:upper() == 'RDM' then
+   		send_command('bind @1 input /ma "Cure IV" <stal>')
     	send_command('bind @2 input /ma "Cure III" <stal>')
-    	send_command('bind @3 input /ma "Curaga III" <stal>')
-	else
+	elseif player.sub_job:upper() == 'WHM' then
    		send_command('bind @1 input /ma "Cure IV" <stal>')
     	send_command('bind @2 input /ma "Cure III" <stal>')
     	send_command('bind @3 input /ma "Curaga II" <stal>')
+
+	elseif player.main_job:upper() == 'SCH' then
+   		send_command('bind @1 input /ma "Cure IV" <stal>')
+    	send_command('bind @2 input /ma "Cure III" <stal>')
+	elseif player.main_job:upper() == 'RDM' then
+   		send_command('bind @1 input /ma "Cure IV" <stal>')
+    	send_command('bind @2 input /ma "Cure III" <stal>')
+	elseif player.main_job:upper() == 'WHM' then
+   		send_command('bind @1 input /ma "Cure V" <stal>')
+    	send_command('bind @2 input /ma "Cure III" <stal>')
+    	send_command('bind @3 input /ma "Curaga III" <stal>')
+	elseif player.main_job:upper() == 'BLU' then
+   		send_command('bind @1 input /ma "Magic Fruit" <stal>')
+    	send_command('bind @2 input /ma "Wild Carrot" <stal>')
+    	send_command('bind @3 input /ma "White Wind" <me>')
 	end
 
-	-- Default Status Healing HotKeys
+
 	-- For easy memorization Priority goes to alpha key, shared letter goes to another keystroke.
+
+	-- Default Status Healing Keybinds
     send_command('bind @b input /ma "Blindna" <stal>')
     send_command('bind @c input /ma "Cursna" <stal>')
     send_command('bind @e input /ma "Erase" <stal>')
@@ -135,21 +161,39 @@ function global_on_load()
     send_command('bind @s input /ma "Stona" <stal>')
     send_command('bind @v input /ma "Viruna" <stal>')
 
-    -- Default Item HotKeys
-    --send_command('bind @a input /item "Antidote" <me>')
+
+    -- Default Item Keybinds
+    --send_command('bind @a input /item "Antidote" <me>') -- Just use remedy
     send_command('bind @d input /item "Echo Drops" <me>')
-    --send_command('bind @ input /item "Eye Drops" <me>')
+    --send_command('bind @ input /item "Eye Drops" <me>') -- Just use remedy
     send_command('bind @h input /item "Holy Water" <me>')
     send_command('bind @r input /item "Remedy" <me>')
-    --send_command('bind @ input /item "Panacea" <me>')
-    --send_command('bind @ input /item "Vile Elixir +1" <me>')
+    --send_command('bind @ input /item "Panacea" <me>') -- Oh you rich. Just use remedy.
+    --send_command('bind @ input /item "Vile Elixir +1" <me>') -- Too niche to bind
     --send_command('bind @ input /item "Vile Elixir" <me>')
+	if player.main_job:upper() == 'DNC' or player.sub_job:upper == 'DNC' then
+    	send_command('bind @i input /ja "Spectral Jig" <me>')
+    	send_command('bind @u input /ja "Spectral Jig" <me>') --*** Nearby
+	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
+    	send_command('bind @i input /ma "Tonko: Ni" <me>')
+    	send_command('bind @u input /ma "Monomi: Ichi" <me>') --*** Nearby
+	elseif player.main_job:upper() == 'RDM' or 'WHM' or 'SCH' then
+    	send_command('bind @i input /ma "Invisible" <stal>')
+    	send_command('bind @u input /ma "Sneak" <stal>') --*** Nearby
+	elseif player.sub_job:upper() == 'RDM' or 'WHM' or 'SCH' then
+    	send_command('bind @i input /ma "Invisible" <stal>')
+    	send_command('bind @u input /ma "Sneak" <stal>') --*** Nearby
+	else
+    	send_command('bind @i input /item "Prism Powder" <me>')
+    	send_command('bind @u input /item "Silent Oil" <me>') --*** Nearby
+	end
 
-    -- Default Status Enfeebling HotKeys
+
+    -- Default Status Enfeebling Keybinds
 	if player.main_job:upper() == 'RDM' then
     	send_command('bind ^a input /ma "Addle II" <stnpc>')
-    	send_command('bind ^v input /ma "Blind II" <stnpc>') --***
-    	--send_command('bind ^ input /ma "Dia III" <stnpc>') --***
+    	send_command('bind ^v input /ma "Blind II" <stnpc>') --*** Nearby
+    	send_command('bind ^. input /ma "Dia III" <stnpc>') --*** "DOT..."
 		send_command('bind ^d input /ma "Distract III" <stnpc>')
     	send_command('bind ^f input /ma "Frazzle III" <stnpc>')
     	send_command('bind ^g input /ma "Gravity II" <stnpc>')
@@ -158,27 +202,28 @@ function global_on_load()
 	else
     	send_command('bind ^a input /ma "Addle" <stnpc>')
     	send_command('bind ^b input /ma "Bind" <stnpc>')
-    	send_command('bind ^v input /ma "Blind" <stnpc>') --***
-    	--send_command('bind ^ input /ma "Dia II" <stnpc>') --***
+    	send_command('bind ^v input /ma "Blind" <stnpc>') --*** Nearby
+    	send_command('bind ^. input /ma "Dia II" <stnpc>') --*** "DOT..."
 		send_command('bind ^d input /ma "Distract" <stnpc>')
     	send_command('bind ^f input /ma "Frazzle" <stnpc>')
     	send_command('bind ^g input /ma "Gravity" <stnpc>')
     	send_command('bind ^p input /ma "Paralyze" <stnpc>')
-    	send_command('bind ^x input /ma "Silence" <stnpc>') --***
+    	send_command('bind ^x input /ma "Silence" <stnpc>') --*** "Mute = x"
     	--send_command('bind ^ input /ma "Sleep II" <stnpc>') --***
-    	send_command('bind ^t input /ma "Slow" <stnpc>') --***
+    	send_command('bind ^t input /ma "Slow" <stnpc>') --*** "T... urtle"
 	end
 
 	if player.main_job:upper() == 'BRD' then
-    	send_command('bind ^z input /ma "Magic Finale" <stnpc>') --***
+    	send_command('bind ^z input /ma "Magic Finale" <stnpc>') --*** "Undo"
     	send_command('bind ^s input /ma "Horde Lullaby II" <stnpc>')
 	elseif player.main_job:upper() == 'BLM' then
     	send_command('bind ^s input /ma "Sleepga II" <stnpc>')
 	else
-    	send_command('bind ^z input /ma "Dispel" <stnpc>') --***
+    	send_command('bind ^z input /ma "Dispel" <stnpc>')  --*** "Undo"
     	send_command('bind ^s input /ma "Sleepga" <stnpc>')
 	end
 	
+
 	-- Default Enhancing HotKeys	
 	if player.main_job:upper() == 'RDM' then
     	send_command('bind !f input /ma "Flurry II" <stal>')
@@ -199,13 +244,13 @@ function global_on_load()
 	end
 
 	-- work on it
+	--[[
 	if player.sub_job:upper() == 'SMN' then
 		-- i remember /smn to mew was useful
 		--send_command('bind F10 input /ma "Cait Sith" <me>')
 		--send_command('bind F11 input /ma "Mewing Lullaby" <stnpc>')
 		
 	elseif player.sub_job:upper() == 'DNC' then		
-		--send_command('bind ^` input /ja "spectral jig" <me>')
 		--send_command('bind !` input /ja "Reverse Flourish" <me>')
 		
 		--send_command('bind F7 input /ja "Violent flourish" <t>')
@@ -222,6 +267,7 @@ function global_on_load()
 		
 		--send_command('bind F11 input /ja "Curing Waltz II" <stal>')
 	end
+	--]]
 
 end
 
