@@ -7,8 +7,6 @@
 	9 bpd and 20 mab
 	10 bpd and 17.5 mab
 	augmented on grio.
-
-	-- get siren
 	
 --]]
 
@@ -29,7 +27,7 @@ function init_gear_sets()
 	-- Augemnted Gear
 	--------------------------------------
 	AF_head 			={ name="Convoker's Horn +1" }
-	AF_body				={ name="Convoker's Doublet +2" }
+	AF_body				={ name="Con. Doublet +3" }
 	AF_hands			={ name="Convoker's Bracers +1" }
 	AF_legs 			={ name="Convoker's Spats +1" }
 	AF_feet 			={ name="Convoker's Pigaches +1" }
@@ -42,7 +40,7 @@ function init_gear_sets()
 	
 	Empy_head 			={ name="Beckoner's Horn +1" }
 	Empy_body			={ name="Beckoner's Doublet +1" }
-	Empy_hands			={ name="Beckoner's Bracers +1" }
+	Empy_hands			={ name="Beckoner's Bracers" }
 	Empy_legs 			={ name="Beckoner's Spats +1" }
 	Empy_feet 			={ name="Beckoner's Pigaches +1" }
 	
@@ -113,7 +111,7 @@ function init_gear_sets()
 		neck="Orunmila's Torque",
 		ear1="Enchntr. Earring +1",
 		ear2="Loquac. Earring",
-		body="Inyanga Jubbah +1",
+		body="Inyanga Jubbah +2",
 		hands={ name="Merlinic Dastanas", augments={'Accuracy+3 Attack+3','Pet: Phys. dmg. taken -3%','"Fast Cast"+7',}},
 		ring1="Lebeche Ring",
 		ring2="Weather. Ring",
@@ -213,7 +211,7 @@ function init_gear_sets()
 		neck="Orunmila's Torque",
 		ear1="Enchntr. Earring +1",
 		ear2="Loquac. Earring",
-		body="Inyanga Jubbah +1",
+		body="Inyanga Jubbah +2",
 		hands={ name="Merlinic Dastanas", augments={'Accuracy+3 Attack+3','Pet: Phys. dmg. taken -3%','"Fast Cast"+7',}},
 		ring1="Lebeche Ring",
 		ring2="Weather. Ring",
@@ -256,8 +254,8 @@ function init_gear_sets()
 			main="Serenity",
 			sub="Enki Strap",
 			head="Vanya Hood",
-			body="Inyanga Jubbah +1",
-			hands="Inyan. Dastanas +1",
+			body="Inyanga Jubbah +2",
+			hands="Inyan. Dastanas +2",
 			ring1="Haoma's Ring",
 			ring2="Haoma's Ring",
 			legs="Inyanga Shalwar +2",
@@ -287,7 +285,7 @@ function init_gear_sets()
 
 	-- Cursna+ and Healing Magic Skill+	
 	sets.midcast.Cursna = set_combine(sets.midcast.FastRecast, {
-			neck="Malison Medallion",
+			neck="Debilis Medallion",
 			hands="Hieros Mittens",
 			waist="Gishdubar Sash",
 			feet="Gende. Galosh. +1"})
@@ -309,7 +307,7 @@ function init_gear_sets()
 	sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {
 			neck="Incanter's Torque",
 			ear1="Andoaa Earring",
-			hands="Inyan. Dastanas +1",
+			hands="Inyan. Dastanas +2",
 			ring1="Stikini Ring",
 			ring2="Stikini Ring",
 			back="Fi Follet Cape +1",
@@ -344,7 +342,7 @@ function init_gear_sets()
 			waist="Gishdubar Sash",
 		})
 	sets.midcast['Regen'] = set_combine(sets.midcast['Enhancing Magic'], {
-		main=Grioavolr_Enh, sub="Fulcio Grip",
+		main=Grioavolr_Enh, sub="Enki Strap",
 		head="Inyanga Tiara +2",
 		--back="Grapevine Cape",
 		})
@@ -373,7 +371,7 @@ function init_gear_sets()
 			ear1="Enchntr. Earring +1",
 			ear2="Gwati Earring",
 			body={ name="Merlinic Jubbah", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Magic burst dmg.+4%','"Mag.Atk.Bns."+15',}},
-			hands="Inyan. Dastanas +1",
+			hands="Inyan. Dastanas +2",
 			ring1="Stikini Ring",
 			ring2="Stikini Ring",
 			back="Kumbira Cape",
@@ -392,7 +390,7 @@ function init_gear_sets()
 			ear1="Enchntr. Earring +1",
 			ear2="Gwati Earring",
 			body={ name="Merlinic Jubbah", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Magic burst dmg.+4%','"Mag.Atk.Bns."+15',}},
-			hands="Inyan. Dastanas +1",
+			hands="Inyan. Dastanas +2",
 			ring1="Stikini Ring",
 			ring2="Stikini Ring",
 			back="Kumbira Cape",
@@ -414,14 +412,16 @@ function init_gear_sets()
 		--feet=something with macc
 		})
 	
-    sets.midcast['Dark Magic'] = {main=Grioavolr_Enh,sub={name="Niobid Strap",priority=-1},ammo="Hydrocera",
-        head=Merl_head_Burst,neck="Incanter's Torque",ear2="Enchanter Earring +1",
-        body="Inyanga jubbah +2",hands=Merl_hands_Asp,ring1="Perception Ring",ring2="Kishar Ring",
+    sets.midcast['Dark Magic'] = {main=Grioavolr_Enh,sub={name="Enki Strap",priority=-1},ammo="Hydrocera",
+        head=Merl_head_Burst,neck="Incanter's Torque",ear2="Enchntr. Earring +1",
+        body="Inyanga jubbah +2",hands=Merl_hands_Asp,ring1="Stikini Ring",ring2="Kishar Ring",
         back="Perimede cape",waist="Eschan Stone",legs=Psycloth_legs,feet=Merl_feet_Nuke}
 
 	sets.midcast.Drain = {main=Rubicundity,sub={name="Genbu's Shield",priority=-1},ammo="Hydrocera",
-        head="Pixie Hairpin +1",neck="Incanter's Torque",ear2="Enchanter Earring +1",
-        body="Inyanga jubbah +2",hands="Lurid Mitts",ring1="Evanescence Ring",ring2="Kishar Ring",
+        head="Pixie Hairpin +1",neck="Incanter's Torque",ear2="Enchntr. Earring +1",
+        body="Inyanga jubbah +2",
+		--hands="",
+		ring1="Evanescence Ring",ring2="Kishar Ring",
         back="Perimede cape",waist="Fucho-no-obi",legs=Merl_legs_Asp,feet=Merl_feet_Asp}
 		
 	sets.midcast.Aspir = sets.midcast.Drain
@@ -559,7 +559,7 @@ function init_gear_sets()
     
     -- Resting sets
     sets.resting = {
-			main="Terra's Staff",
+			main="Malignance Pole",
 			sub="Oneiros Grip",
 			ammo="Staunch Tathlum",
 			head="Beckoner's Horn +1",
@@ -577,7 +577,7 @@ function init_gear_sets()
     
     -- Idle sets
     sets.idle = {
-			main="Terra's Staff",
+			main="Malignance Pole",
 			sub="Oneiros Grip",
 			ammo="Staunch Tathlum",
 			head="Beckoner's Horn +1",
@@ -594,8 +594,8 @@ function init_gear_sets()
 			feet="Baayami Sabots",}
 
     sets.idle.DT = {
-			main="Terra's Staff",
-			sub="Oneiros Grip",
+			main="Malignance Pole",
+			sub="Enki Strap",
 			neck="Loricate Torque +1",
 			ear1="Genmei Earring",
 			ear2="Ethereal Earring",
@@ -607,7 +607,7 @@ function init_gear_sets()
 
 	-- Meva > DT > Refresh
 	sets.idle.MEva = {
-		main="Daybreak",sub="Ammurapi Shield",range='Nibiru Harp',
+		main="Reikikon",sub="Enki Strap",ammo="Staunch Tathlum",
 		head="Inyanga Tiara +2",neck="Warder's Charm +1",ear1="Hearty Earring",ear2="Sanare Earring",
 		body="Inyanga Jubbah +2",hands="Inyan. Dastanas +2",ring1="Purity Ring",ring2="Vengeful Ring",
 		back="Felicitas Cape +1",waist="Carrier's Sash",legs="Inyanga Shalwar +2",feet="Inyan. Crackows +2",
@@ -720,8 +720,8 @@ function init_gear_sets()
     --------------------------------------
     
     -- Normal melee group				
-	sets.engaged = {main="Nirvana",sub="Elan Strap +1",
-			ammo="Vanir Battery",
+	sets.engaged = {
+		main="Nirvana",sub="Elan Strap +1",ammo="Sancus Sachet +1",
 			head="Tali'ah Turban +1",
 			neck="Shulmanu Collar",
 			ear1="Cessance Earring",

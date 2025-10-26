@@ -572,9 +572,9 @@ function get_casting_style(spell, action, spellMap, eventArgs)
 	if spell.type == 'BardSong' then
 		if set.contains(spell.targets, 'Enemy') then
 			if song_sleep_MaccSpellName:contains(spell.name) then
-				spellMap = "F-Lullaby" 
+				spellMap = "Macc-Lullaby" 
 			elseif song_sleepStringSkillSpellName:contains(spell.name) then
-				spellMap = "H-Lullaby" 
+				spellMap = "StringSkill-Lullaby" 
 			end
 			equipSet = equipSet['Debuff']
 			equipSet = select_specific_set(equipSet, spell, spellMap)

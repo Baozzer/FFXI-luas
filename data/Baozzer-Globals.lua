@@ -114,6 +114,9 @@ function global_on_load()
 	-- Equips Warp Ring
 	send_command('bind @0 input //gs equip sets.warp')
 
+	-- Mount/dismount
+	send_command('bind @m input //mr')
+
 	-- Target NPC. Good for crowded areas.
 	send_command('bind @t input /targetnpc')
 
@@ -171,21 +174,21 @@ function global_on_load()
     --send_command('bind @ input /item "Panacea" <me>') -- Oh you rich. Just use remedy.
     --send_command('bind @ input /item "Vile Elixir +1" <me>') -- Too niche to bind
     --send_command('bind @ input /item "Vile Elixir" <me>')
-	if player.main_job:upper() == 'DNC' or player.sub_job:upper == 'DNC' then
+	if player.main_job:upper() == 'DNC' or player.sub_job:upper () == 'DNC' then
     	send_command('bind @i input /ja "Spectral Jig" <me>')
-    	send_command('bind @u input /ja "Spectral Jig" <me>') --*** Nearby
+    	send_command('bind @o input /ja "Spectral Jig" <me>') --*** Nearby
 	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
-    	send_command('bind @i input /ma "Tonko: Ni" <me>')
-    	send_command('bind @u input /ma "Monomi: Ichi" <me>') --*** Nearby
+    	send_command('bind @i input /ma "Tonko: ni" <me>')
+    	send_command('bind @o input /ma "Monomi: Ichi" <me>') --*** Nearby
 	elseif player.main_job:upper() == 'RDM' or 'WHM' or 'SCH' then
     	send_command('bind @i input /ma "Invisible" <stal>')
-    	send_command('bind @u input /ma "Sneak" <stal>') --*** Nearby
+    	send_command('bind @o input /ma "Sneak" <stal>') --*** Nearby
 	elseif player.sub_job:upper() == 'RDM' or 'WHM' or 'SCH' then
     	send_command('bind @i input /ma "Invisible" <stal>')
-    	send_command('bind @u input /ma "Sneak" <stal>') --*** Nearby
+    	send_command('bind @o input /ma "Sneak" <stal>') --*** Nearby
 	else
     	send_command('bind @i input /item "Prism Powder" <me>')
-    	send_command('bind @u input /item "Silent Oil" <me>') --*** Nearby
+    	send_command('bind @o input /item "Silent Oil" <me>') --*** Nearby
 	end
 
 
@@ -231,8 +234,8 @@ function global_on_load()
     	send_command('bind !p input /ma "Phalanx II" <stal>')
     	send_command('bind !r input /ma "Refresh III" <stal>')
 	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
-		send_command('bind !u input /ma "utsusemi: ni" <me>')
-		send_command('bind !b input /ma "utsusemi: ichi" <me>') --*** Blink
+		send_command('bind !b input /ma "utsusemi: ni" <me>') --*** Blink
+		send_command('bind !u input /ma "utsusemi: ichi" <me>') 
 	else
     	send_command('bind !a input /ma "Aquaveil" <me>')
     	send_command('bind !b input /ma "Blink" <me>')
@@ -274,11 +277,105 @@ end
 
 -- Function to re-bind Spellcast binds when unloading GearSwap.
 function binds_on_unload()
+	send_command('unbind @1')
+	send_command('unbind @2')
+	send_command('unbind @3')
+	send_command('unbind @4')
+	send_command('unbind @5')
+	send_command('unbind @6')
+	send_command('unbind @7')
+	send_command('unbind @8')
+	send_command('unbind @9')
+	send_command('unbind @0')
+
+	send_command('unbind ^a')
+	send_command('unbind ^b')
+	send_command('unbind ^c')
+	send_command('unbind ^d')
 	send_command('unbind ^e')
+	send_command('unbind ^f')
+	send_command('unbind ^g')
+	send_command('unbind ^h')
+	send_command('unbind ^i')
+	send_command('unbind ^j')
+	send_command('unbind ^k')
+	send_command('unbind ^l')
+	send_command('unbind ^m')
+	send_command('unbind ^n')
+	send_command('unbind ^o')
+	send_command('unbind ^p')
+	send_command('unbind ^q')
+	send_command('unbind ^r')
+	send_command('unbind ^s')
+	send_command('unbind ^t')
+	send_command('unbind ^u')
+	send_command('unbind ^v')
+	send_command('unbind ^w')
+	send_command('unbind ^x')
+	send_command('unbind ^y')
+	send_command('unbind ^z')
+	
+	send_command('unbind !a')
+	send_command('unbind !b')
+	send_command('unbind !c')
+	send_command('unbind !d')
+	send_command('unbind !e')
+	send_command('unbind !f')
+	send_command('unbind !g')
+	send_command('unbind !h')
+	send_command('unbind !i')
+	send_command('unbind !j')
+	send_command('unbind !k')
+	send_command('unbind !l')
+	send_command('unbind !m')
+	send_command('unbind !n')
+	send_command('unbind !o')
+	send_command('unbind !p')
+	send_command('unbind !q')
+	send_command('unbind !r')
+	send_command('unbind !s')
+	send_command('unbind !t')
+	send_command('unbind !u')
+	send_command('unbind !v')
+	send_command('unbind !w')
+	send_command('unbind !x')
+	send_command('unbind !y')
+	send_command('unbind !z')
+
+	send_command('unbind @a')
+	send_command('unbind @b')
+	send_command('unbind @c')
+	send_command('unbind @d')
+	send_command('unbind @e')
+	send_command('unbind @f')
+	send_command('unbind @g')
+	send_command('unbind @h')
+	send_command('unbind @i')
+	send_command('unbind @j')
+	send_command('unbind @k')
+	send_command('unbind @l')
+	send_command('unbind @m')
+	send_command('unbind @n')
+	send_command('unbind @o')
+	send_command('unbind @p')
+	send_command('unbind @q')
+	send_command('unbind @r')
+	send_command('unbind @s')
+	send_command('unbind @t')
+	send_command('unbind @u')
+	send_command('unbind @v')
+	send_command('unbind @w')
+	send_command('unbind @x')
+	send_command('unbind @y')
+	send_command('unbind @z')
 
 	send_command('unbind ^`')
     send_command('unbind !`')
 	send_command('unbind @`')
+
+	send_command('unbind ^.')
+    send_command('unbind !.')
+	send_command('unbind @.')
 	
 	send_command('unbind f7')
 	send_command('unbind ^f7')
