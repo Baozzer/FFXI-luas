@@ -24,6 +24,40 @@ Notification_color = 200
 text_color = 160
 warning_text = 167
 
+-- Setup vars that are user-dependent.  Can override this function in a sidecar file.
+function user_setup()
+	state.CP					= M(false, 'CP')
+	state.Auto_Kite				= M(false, 'Auto_Kite')
+	
+	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
+	state.Buff['Doom'] = buffactive['Doom'] or false
+	
+	moving = false
+	
+	send_command('gi update')
+	send_command('gi ugs true')
+	
+	-- Gear Lock for item usage. 
+Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
+Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
+Ear_lock = S{"Reraise Earring"}
+Back_lock  = S{"Nexus Cape"}
+Main_lock = S{"Warp Cudgel"}
+Waist_lock  = S{"Lutienent's Sash"}
+
+Bar_Status = S{'Barsleepra','Barpoisonra','Barparalyzra','Barblindra','Barsilencra','Barvira','Barpetra','Baramnesra',
+						'Barsleep','Barpoison','Barparalyze','Barblind','Barsilence','Barvirus','Barpetrify','Baramnesia'}
+	
+	Ring_slot_locked_1 = false
+	Ring_slot_locked_2 = false
+	unlock_em = false
+	
+	
+	--local msg = ''
+	--msg = ('You have loaded Seb\'s BRD lua. Please use '):color(text_color) .. ('\"\/\/GS c help\" '):color(Notification_color) .. ('for a full list of key bound functions. Enjoy!'):color(text_color)
+	--add_to_chat(122, msg)
+end
+
 -------------------------------------------------------------------------------------------------------------------
 -- Global Augmented Gear
 -------------------------------------------------------------------------------------------------------------------
@@ -73,6 +107,18 @@ function define_global_sets()
 	-- Accesories
 	Dark_Ring				={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
 	CP_back 				={ name="Mecisto. Mantle", augments={'Cap. Point+49%','VIT+1','Mag. Acc.+4','DEF+8',}}
+
+	-- Sets
+	sets.adoulin = {body="Councilor's Garb"}
+	sets.CP = {back=CP_back}
+	sets.latent_refresh = {waist="Fucho-no-obi"}
+	sets.reive = {neck="Arciela's Grace +1"}
+	sets.doom = {
+		neck="Nicander's Necklace",
+		waist="Gishdubar Sash",}
+	sets.warp = {ring1='Warp Ring'}
+	--sets.crafting = {}
+
 end
 
 
@@ -463,7 +509,173 @@ function user_buff_change(buff, gain, eventArgs)
 		end
 	end
 end
+--------------
 
+function lockouts()
+
+	if Tele_Ring:contains(player.equipment.ring1) and unlock_em == false then
+		if Ring_slot_locked_1 == false then
+			add_to_chat(200,('[Tele Ring Equipped: '):color(Notification_color) .. ('-> Locking \"'..player.equipment.ring1 .. '\"'):color(text_color) .. (']'):color(Notification_color) )
+		end
+		Ring_slot_locked_1 = true
+		disable('ring1')
+	end
+	if Tele_Ring:contains(player.equipment.ring2) and unlock_em == false then
+		if Ring_slot_locked_2 == false then
+			add_to_chat(200,('[Tele Ring Equipped: '):color(Notification_color) .. ('-> Locking \"'..player.equipment.ring2 .. '\"'):color(text_color) .. (']'):color(Notification_color) )
+		end
+		Ring_slot_locked_2 = true
+		disable('ring2')
+	end
+	
+	if (Tele_Ring:contains(player.equipment.ring1) or Tele_Ring:contains(player.equipment.ring2)) and unlock_em then
+		enable('ring1')
+		enable('ring2')
+	elseif not (Tele_Ring:contains(player.equipment.ring1) or Tele_Ring:contains(player.equipment.ring2)) and unlock_em then 
+		unlock_em = false
+		Ring_slot_locked_1 = false
+		Ring_slot_locked_2 = false
+		add_to_chat(200,('[Zoned: '):color(Notification_color) .. ('-> Un-locking Tele/Warp Rings '):color(text_color) .. (']'):color(Notification_color) )
+	elseif not Tele_Ring:contains(player.equipment.ring1) and Ring_slot_locked_1 and unlock_em == false then 
+		Ring_slot_locked_1 = false
+		enable('ring1')
+		add_to_chat(200,('[Tele Ring Removed manually: '):color(Notification_color) .. ('-> Un-locking Slot 1'):color(text_color) .. (']'):color(Notification_color) )
+	elseif not Tele_Ring:contains(player.equipment.ring2) and Ring_slot_locked_2 and unlock_em == false then 
+		Ring_slot_locked_2 = false
+		enable('ring2')
+		add_to_chat(200,('[Tele Ring Removed manually: '):color(Notification_color) .. ('-> Un-locking Slot 2'):color(text_color) .. (']'):color(Notification_color) )
+	end
+	--------------------------------
+	-- Ring locks for exp ring use
+	
+	if Ring_lock:contains(player.equipment.ring1) and Ring_slot_locked_1 == false then
+		disable('ring1')
+	elseif not Ring_lock:contains(player.equipment.ring1) and Ring_slot_locked_1 == false then
+		enable('ring1')
+	end
+	
+	if Ring_lock:contains(player.equipment.ring2) and Ring_slot_locked_2 == false then
+		disable('ring2')
+	elseif not Ring_lock:contains(player.equipment.ring2) and Ring_slot_locked_2 == false then
+		enable('ring2')
+	end
+	
+	---------------------------------
+	-- earring locks
+	
+	if Ear_lock:contains(player.equipment.ear1) then
+		disable('Ear1')
+	elseif not Ear_lock:contains(player.equipment.ear1) then
+		enable('Ear1')
+	end
+	if Ear_lock:contains(player.equipment.ear2) then
+		disable('Ear2')
+	elseif not Ear_lock:contains(player.equipment.ear2) then
+		enable('Ear2')
+	end
+	
+	---------------------------------
+	-- back locks
+	
+	if Back_lock:contains(player.equipment.back) then
+		disable('Back')
+	elseif not Back_lock:contains(player.equipment.back) then
+		enable('Back')
+	end
+	if Back_lock:contains(player.equipment.back) then
+		disable('Back')
+	elseif not Back_lock:contains(player.equipment.back) then
+		enable('Back')
+	end
+	
+	---------------------------------
+	-- waist locks
+	
+	if Waist_lock:contains(player.equipment.waist) then
+		disable('Waist')
+	elseif not Waist_lock:contains(player.equipment.waist) then
+		enable('Waist')
+	end
+	if Waist_lock:contains(player.equipment.waist) then
+		disable('Waist')
+	elseif not Waist_lock:contains(player.equipment.waist) then
+		enable('Waist')
+	end
+	
+end
+
+function reset_rings()
+	if Ring_slot_locked_1 or Ring_slot_locked_2 then
+		unlock_em = true
+	end
+end
+
+function check_moving()
+	if 
+--I disabled this so sets are always on
+	--state.DefenseMode.value == 'None' and state.Kiting.value == false then
+	state.Kiting.value == false then
+		if state.Auto_Kite.value == false and moving then
+			state.Auto_Kite:set(true)
+		elseif state.Auto_Kite.value == true and moving == false then
+			state.Auto_Kite:set(false)
+		end
+	end
+end
+
+function user_customize_melee_set(meleeSet)
+	
+	lockouts()
+
+-- I turned this off so these sets are always on
+	--if state.DefenseMode.current == 'None' then 
+		if state.Auto_Kite.value == true then
+			meleeSet = set_combine(meleeSet, sets.kiting)
+		end
+		if state.CP.value == true then
+			meleeSet = set_combine(meleeSet, sets.CP)
+		end
+		if state.Buff['Doom'] then
+        	meleeSet = set_combine(meleeSet, sets.doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+    	end
+	--end
+    return meleeSet
+end
+
+
+function user_customize_idle_set(idleSet)
+	
+	lockouts()
+	
+	if state.DefenseMode.current == 'None' then 
+		if player.mpp < 51 then
+			idleSet = set_combine(idleSet, sets.latent_refresh)
+		end
+		if state.Buff["Reive Mark"] then
+			idleSet = set_combine(idleSet, sets.reive)
+		end
+	end
+
+		if state.CP.value == true then
+			idleSet = set_combine(idleSet, sets.CP)
+		end
+		if state.Auto_Kite.value == true then
+			if world.area:endswith('Adoulin') then
+				idleSet = set_combine(idleSet, sets.adoulin)
+			else 
+				idleSet = set_combine(idleSet, sets.kiting)
+			end
+		end	
+		if state.Buff['Doom'] then
+        	idleSet = set_combine(idleSet, sets.doom)
+			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+ 		end
+    
+    return idleSet
+end
+
+--------------
 function gearinfo(cmdParams, eventArgs)
 
     if cmdParams[1] == 'gearinfo' then

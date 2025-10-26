@@ -36,12 +36,11 @@ function init_gear_sets()
 	
 	Rhapsode_back		={ name="Rhapsode's Cape", augments={'HP+19','Mag. Acc.+5','Enmity-8',}}
 	JSE_back_FC			={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10',}}
+	--you need a better one. stp
 	JSE_back_TP			={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dbl.Atk."+10',}}
-	JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','CHR+10','Weapon skill damage +10%',}}
+	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','CHR+10','Weapon skill damage +10%',}}
 	JSE_back_WS_DEX		={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	JSE_back_WS_STR		={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
-	--JSE_back_WS_Evis	={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Crit.hit rate+10',}}
-	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	
 	--------------------------------------
 	-- Gear for organizer to get
@@ -225,6 +224,7 @@ function init_gear_sets()
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
 		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Telch_Feet_Enh}
 	
+	-- Song equipment overide goes from Buff(Empy) -> Extra Length(+duration) -> +song
 	sets.midcast['Buff'] = {
 		main="Carnwenhan",sub="Genmei Shield",range="Gjallarhorn",
 		head=Empy_head,neck="Moonbow Whistle +1",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
@@ -266,7 +266,7 @@ function init_gear_sets()
 	sets.midcast['Buff']['Extra Length']['Prelude']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})	
 	sets.midcast['Buff']['Extra Length']['Scherzo']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})
 	
-	-- FC then Macc
+	-- Duration then FC then Macc
 	sets.midcast['Debuff'] = {
 		main="Carnwenhan",sub="Ammurapi Shield",range="Gjallarhorn",
 		--head=AF_head, dont have yet
@@ -281,7 +281,7 @@ function init_gear_sets()
 		waist="Null Belt",
 		})
 		
-	-- FC then Macc
+	-- Duration then FC then Macc
 	sets.midcast['Debuff']['Macc-Lullaby']  = set_combine(sets.midcast['Debuff'], {})
 	-- Macc
 	sets.midcast['Debuff']['Macc-Lullaby'].Resistant = set_combine(sets.midcast['Debuff']['Macc-Lullaby'], {
@@ -291,6 +291,8 @@ function init_gear_sets()
 		})
 
 	-- String Skill for range then Macc. Only For Horde II 486 skill
+
+	--sets.midcast['Horde Lullaby II'] = {}
 	sets.midcast['Debuff']['StringSkill-Lullaby'] = set_combine(sets.midcast['Debuff'], {
 		range="Daurdabla",
 		--af head
@@ -555,16 +557,21 @@ function init_gear_sets()
 		body="Inyanga Jubbah +2",hands="Inyan. Dastanas +2",ring1="Archon Ring",ring2="Defending Ring",
 		back=Rhapsode_back,waist="Slipor Sash",legs="Inyanga Shalwar +2",feet="Inyan. Crackows +2"}
 		-- 39 MDT | 30 PDT w/o weapons
+	
+	sets.kiting = {feet=Empy_feet}
 
-	sets.Kiting = {feet=Empy_feet}
-	sets.Adoulin = {body="Councilor's Garb"}
+	--[[
+	sets.adoulin = {body="Councilor's Garb"}
 	sets.CP = {back=CP_back}
 	sets.latent_refresh = {waist="Fucho-no-obi"}
-	sets.buff.Reive = {neck="Arciela's Grace +1"}
-	sets.buff.Doom = {
+	sets.reive = {neck="Arciela's Grace +1"}
+	sets.doom = {
 		neck="Nicander's Necklace",
 		waist="Gishdubar Sash",}
 	sets.warp = {ring1='Warp Ring'}
+	--]]
+
+	
 	--sets.crafting = {sub={name="Toreutic Ecu",priority=-1},head="Shaded Spectacles",body="Goldsmith's Smock",neck="Goldsmith's Torque",ring1="Orvail Ring",ring2="Craftmaster's Ring",}
 
     -- Engaged sets

@@ -1,3 +1,10 @@
+--[[
+	Things to do:
+		-make lullabies more generic. only need specific for Horde Lullaby II
+		-threnody set
+
+--]]
+
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
 -------------------------------------------------------------------------------------------------------------------
@@ -14,17 +21,15 @@
     The Dummy state will equip the extra song instrument and ensure non-duration gear is equipped.
 
 
-	SingingMode may take one of these values: None, Extra_Length
-		send_command('bind f10 gs c cycle SingingMode')
+	SongPotencyMode may take one of these values: Duration, Empy_Boost
+		send_command('bind f10 gs c cycle SongPotencyMode')
 
-    The Extra_Length state will equip the bonus song instrument on top of standard gear. This is default.
-	The None state will equip full AF for stat+ bonus when duration isn't needed. 
+	The Empy_Boost state will equip Empy_gear over duration gear for stat+ bonus when duration isn't needed. Short fights.
     
     
     Simple macro to cast a dummy Daurdabla song:
     /console gs c set ExtraSongsMode Dummy
     /ma "Shining Fantasia" <me>
-    
 --]]
 
 -- Initialization function for this job file.
@@ -39,80 +44,61 @@ function get_sets()
 	
 end
 
--- Select default macro book on initial load or subjob change.
-function select_default_macro_book()
-    set_macro_page(1, 2)
-end
-
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
     state.ExtraSongsMode = M{['description']='Extra Songs', 'None', 'Dummy'}
-	state.SingingMode = M{['description']='Singing Style', 'None', 'Extra_Length'}
+	state.SongPotencyMode = M{['description']='Song Potency', 'Empy_Boost', 'Duration'}
+	state.SongPotencyMode:set('Duration')
 
-    state.Buff['Pianissimo'] = buffactive['pianissimo'] or false
-	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
-	state.Buff['Troubadour'] = buffactive['troubadour'] or false
-	state.Buff['Nightingale'] = buffactive['nightingale'] or false
-	state.Buff.doom = buffactive.doom or false
+	state.Pianissimo = M(false, 'Pianissimo All Songs')
+    state.Buff['Pianissimo'] = buffactive['Pianissimo'] or false
+
+
+	-- I don't think this does anything
+	--[[
+	state.Buff['Troubadour'] = buffactive['Troubadour'] or false
+	state.Buff['Nightingale'] = buffactive['Nightingale'] or false
+	--]]
+
 	
+	-- so complicated. why. only for auto piano. kinematic rule is better 
 	song_buffsSpellMap = S{'Minuet', 'Minne', 'March', 'Madrigal', 'Prelude', 'Mambo', 'Mazurka', 'Etude', 'Ballad', 'Paeon', 'Carol'}
 	song_buffsSpellName = S{"Honor March", "Fowl Aubade", "Herb Pastoral", "Shining Fantasia", "Scop's Operetta", "Puppet's Operetta", "Gold Capriccio", "Warding Round", "Goblin Gavotte", "Goddess's Hymnus", "Maiden's Virelai", "Sentinel's Scherzo"}
+	-- All other brd song debuffs will use duration>FC>macc. then resistant set
 	song_sleep_MaccSpellName = S{'Foe Lullaby', 'Foe Lullaby II','Horde Lullaby'}
+	-- Only need Horde Lullaby II range increases with skill. horde I caps really early.
 	song_sleepStringSkillSpellName = S{'Horde Lullaby II'}
-	
-end
 
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
+	lockstyleset = 1
 
--- Setup vars that are user-dependent.  Can override this function in a sidecar file.
-function user_setup()
+
     state.OffenseMode:options('None', 'Normal', 'Acc')
+    state.HybridMode:options('Normal', 'DT')
     state.CastingMode:options('Normal', 'Resistant')
-    state.IdleMode:options('MEva', 'DT', 'Normal')
+    state.IdleMode:options('Normal', 'DT', 'MEva')
+	state.IdleMode:set('MEva')
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
 	
-	state.PhysicalDefense    = M(false, 'PhysicalDefense')
-	state.MagicalDefense     = M(false, 'MagicalDefense')
-	state.CP  				  		= M(false, 'CP')
-	state.Auto_Kite  			= M(false, 'Auto_Kite')
+	state.PhysicalDefense		= M(false, 'PhysicalDefense')
+	state.MagicalDefense		= M(false, 'MagicalDefense')
 
-	state.Pianissimo	      	= M(false, 'Pianissimo All Songs')
-	state.SingingMode:set('Extra_Length')
-	
 	DW_needed = 0
 	DW = false
 	MA_needed = 0
 	H2H = false
-	moving = false
-	
-	send_command('gi update')
     update_combat_form()
-    
-    -- Additional Lob Specifc local binds
+
+	 -- Additional Lob Specifc local binds
 	send_command('bind f9 input /ma "Chocobo Mazurka <me>')
-	send_command('bind f10 gs c cycle SingingMode')
+	send_command('bind f10 gs c cycle SongPotencyMode')
 	send_command('bind f11 gs c toggle Pianissimo')
 	send_command('bind f12 gs c cycle ExtraSongsMode')
 
 	-- Overwrites Global "Dispel"
     --send_command('bind ^d input /ma "Magic Finale" <t>')
-	
-	send_command('gi ugs true')
-	
-	Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
-	Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
-	Ear_lock = S{"Reraise Earring"}
-	Back_lock  = S{"Nexus Cape"}
-	--Main_lock = S{"Warp Cudgel"}
-	Waist_lock  = S{"Lutienent's Sash"}
-	
-	Ring_slot_locked_1 = false
-	Ring_slot_locked_2 = false
-	unlock_em = false
-	
+
+
     select_default_macro_book()
 
 	old_inform = {}
@@ -122,21 +108,59 @@ function user_setup()
 	
 	initialize(text_box)
 	
+end
+
+-------------------------------------------------------------------------------------------------------------------
+-- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
+-------------------------------------------------------------------------------------------------------------------
+
+--[[
+-- Setup vars that are user-dependent.  Can override this function in a sidecar file.
+function user_setup()
+	state.CP					= M(false, 'CP')
+	state.Auto_Kite				= M(false, 'Auto_Kite')
+	
+	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
+	state.Buff['Doom'] = buffactive['Doom'] or false
+	
+	moving = false
+	
+	send_command('gi update')
+	send_command('gi ugs true')
+	
+	
+	Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
+	Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
+	Ear_lock = S{"Reraise Earring"}
+	Back_lock  = S{"Nexus Cape"}
+	Main_lock = S{"Warp Cudgel"}
+	Waist_lock  = S{"Lutienent's Sash"}
+	
+	
+	Ring_slot_locked_1 = false
+	Ring_slot_locked_2 = false
+	unlock_em = false
+	
+	
 	--local msg = ''
 	--msg = ('You have loaded Seb\'s BRD lua. Please use '):color(text_color) .. ('\"\/\/GS c help\" '):color(Notification_color) .. ('for a full list of key bound functions. Enjoy!'):color(text_color)
 	--add_to_chat(122, msg)
 end
+--]]
 
+--[[
 -- Called when this job file is unloaded (eg: job change)
 function user_unload()
 
 end
+--]]
 
-
+--[[
 -- Define sets and vars used by this job file.
 function init_gear_sets()
 		
 end
+--]]
 
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for standard casting events.
@@ -148,11 +172,15 @@ function job_precast(spell, action, spellMap, eventArgs)
 	if spell.action_type == 'Magic' then
 		if spell.type == 'BardSong' then
 			check_target(spell, action, spellMap, eventArgs)
+			-- I don't think this does anything
+			--[[
 			if state.Buff['Troubadour'] and state.Buff['Nightingale'] then
 				get_casting_style(spell, action, spellMap, eventArgs)
 				eventArgs.handled = true
 			end
+			--]]
 		end
+		-- global intercept this
 		local spell_recasts = windower.ffxi.get_spell_recasts()
 		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Cure' then
 			if spell.en == 'Cure IV' then
@@ -186,6 +214,8 @@ function job_midcast(spell, action, spellMap, eventArgs)
     end
 end
 
+
+-- global intercept this 
 function job_post_midcast(spell, action, spellMap, eventArgs)
 	if spell.action_type == 'Magic' then
 		 if spellMap == 'Cure' or spellMap == 'Curaga' then
@@ -199,7 +229,7 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 	end
 end
 
-
+-- global intercept this
 -- Set eventArgs.handled to true if we don't want automatic gear equipping to be done.
 function job_aftercast(spell, action, spellMap, eventArgs)
 	if state.Buff[spell.name] == false and not spell.interrupted then
@@ -209,6 +239,10 @@ function job_aftercast(spell, action, spellMap, eventArgs)
 		if state.Buff['Pianissimo'] == true then
 			state.Buff['Pianissimo'] = false
 		end
+    	if spell.english:contains('Lullaby') and not spell.interrupted then
+        	get_lullaby_duration(spell)
+ 		end
+		-- Rather than turning off extra songs after every cast. It'll reset for more conveience
 		state.ExtraSongsMode:reset()
 	end
 	
@@ -292,6 +326,7 @@ function job_get_spell_map(spell,default_spell_map)
     end
 end
 
+--[[
 -- Modify the default idle set after it was constructed.
 function customize_idle_set(idleSet)
 	
@@ -318,14 +353,16 @@ function customize_idle_set(idleSet)
 				idleSet = set_combine(idleSet, sets.Kiting)
 			end
 		end	
-		if state.Buff.doom then
-        	idleSet = set_combine(idleSet, sets.buff.Doom)
+		if state.Buff['Doom'] then
+        	idleSet = set_combine(idleSet, sets.Buff['Doom'])
 			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
  		end
     
     return idleSet
 end
+--]]
 
+--[[
 function customize_melee_set(meleeSet)
 	
 	lockouts()
@@ -338,14 +375,16 @@ function customize_melee_set(meleeSet)
 		if state.CP.value == true then
 			meleeSet = set_combine(meleeSet, sets.CP)
 		end
-		if state.Buff.doom then
-        	meleeSet = set_combine(meleeSet, sets.buff.Doom)
+		if state.Buff['Doom'] then
+        	meleeSet = set_combine(meleeSet, sets.Buff['Doom'])
 			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
     	end
 	--end
     return meleeSet
 end
+--]]
 
+--[[
 function lockouts()
 
 	if Tele_Ring:contains(player.equipment.ring1) and unlock_em == false then
@@ -444,6 +483,7 @@ function reset_rings()
 		unlock_em = true
 	end
 end
+--]]
 
 windower.raw_register_event('zone change',reset_rings)
 
@@ -452,6 +492,7 @@ function job_update(cmdParams, eventArgs)
 	handle_equipping_gear(player.status)
 end
 
+--[[
 function check_moving()
 	if 
 --I disabled this so sets are always on
@@ -464,6 +505,8 @@ function check_moving()
 		end
 	end
 end
+
+--]]
 
 -- Function to display the current relevant user state when doing an update.
 function display_current_job_state(eventArgs)
@@ -503,7 +546,7 @@ function display_current_job_state(eventArgs)
 	
 	msg = msg .. (' [Idle: '):color(Notification_color) .. (state.IdleMode.value):color(text_color) .. ('] '):color(Notification_color)
 	
-	msg = msg .. (' [Extra Length: '):color(Notification_color) .. (state.SingingMode.value):color(text_color) .. ('] '):color(Notification_color)
+	msg = msg .. (' [Song Potency: '):color(Notification_color) .. (state.SongPotencyMode.value):color(text_color) .. ('] '):color(Notification_color)
 	
 	msg = msg .. (' [Dummy Song: '):color(Notification_color) .. (state.ExtraSongsMode.value):color(text_color) .. ('] '):color(Notification_color)
 	
@@ -552,6 +595,7 @@ function check_target(spell, action, spellMap, eventArgs)
 				end
 			end
 		end
+	-- global intercept this
 	elseif (buffactive['Amnesia'] or buffactive['impairment']) then 
 		if spell.target.type == 'PLAYER' then
 			cancel_spell()
@@ -570,6 +614,7 @@ function get_casting_style(spell, action, spellMap, eventArgs)
     -- Handle automatic selection of set based on spell class/name/map/skill/type.
     equipSet = select_specific_set(equipSet, spell, spellMap)
 	if spell.type == 'BardSong' then
+		-- this is overkill. go to kinematics defaults
 		if set.contains(spell.targets, 'Enemy') then
 			if song_sleep_MaccSpellName:contains(spell.name) then
 				spellMap = "Macc-Lullaby" 
@@ -581,11 +626,11 @@ function get_casting_style(spell, action, spellMap, eventArgs)
 			
 		else
 			if state.ExtraSongsMode.value == 'None' then
-				if state.SingingMode.value == 'None' then
+				if state.SongPotencyMode.value == 'Empy_Boost' then
 					if equipSet['Buff'] then 
 						equipSet = equipSet['Buff']
 					end
-				elseif state.SingingMode.value == 'Extra_Length' then 
+				elseif state.SongPotencyMode.value == 'Duration' then 
 					if equipSet['Extra Length'] then 
 						equipSet = equipSet['Extra Length']
 					elseif equipSet['Buff']['Extra Length'] then 
@@ -672,7 +717,7 @@ function job_self_command(cmdParams, eventArgs)
 		windower.add_to_chat(6, ' ')
 		windower.add_to_chat(6, chat_yellow..	'             \']\''..chat_l_blue  ..' = toggle MagicalDefense ' .. chat_white .. '  --  Locks MDT set on.')
 		windower.add_to_chat(6, chat_yellow..	'    \'Alt + \']\''..chat_l_blue  ..' = toggle Pianissimo ' .. chat_white .. '  --  toggle Pianissimo modes.')
-		windower.add_to_chat(6, chat_yellow..	'    \'Ctrl + \']\''..chat_l_blue  ..' = cycle SingingMode ' .. chat_white .. '  --  full Empy, or song length bonus gear.')
+		windower.add_to_chat(6, chat_yellow..	'    \'Ctrl + \']\''..chat_l_blue  ..' = cycle SongPotencyMode ' .. chat_white .. '  --  full Empy, or song length bonus gear.')
 		windower.add_to_chat(6, ' ')
 		windower.add_to_chat(6, chat_d_blue.. 	'If you need more help or run into problems, you can contact me via email at ' .. chat_yellow .. 'sebyg666@hotmail.com')
 		windower.add_to_chat(6, chat_d_blue.. 	'Alternatively if you have me on your skype list, just leave me a message there and ill get back to you.')
@@ -699,8 +744,8 @@ initialize = function(text, t)
 	if state.IdleMode then
         properties:append('${IdleMode}')
     end
-	if state.SingingMode then
-       properties:append('${SingingMode}')
+	if state.SongPotencyMode then
+       properties:append('${SongPotencyMode}')
     end
 	if state.ExtraSongsMode then
         properties:append('${ExtraSongsMode}')
@@ -765,12 +810,14 @@ function update()
 			
 	inform.CastingMode = (blue .. ('\n [Casting: '.. white .. state.CastingMode.value:lpad(' ', 2) .. blue .. '] ' )) .. '\\cr'
 	
-	if state.SingingMode.value ~= 'None' then
-		inform.SingingMode = (purple .. ('\n [Singing: '.. white .. state.SingingMode.value:lpad(' ', 2) .. purple .. '] ' )) .. '\\cr'
+	--[[
+	if state.SongPotencyMode.value ~= 'None' then
+		inform.SongPotencyMode = (purple .. ('\n [Singing: '.. white .. state.SongPotencyMode.value:lpad(' ', 2) .. purple .. '] ' )) .. '\\cr'
 	else
-		inform.SingingMode = ('')
+		inform.SongPotencyMode = ('')
 	end
-	
+	--]]
+
 	if state.ExtraSongsMode.value ~= 'None' then
 		inform.ExtraSongsMode = (red .. ('\n [Extra Song: '.. yellow .. state.ExtraSongsMode.value:lpad(' ', 2) .. red .. '] ' )) .. '\\cr'
 	else
@@ -844,6 +891,7 @@ windower.register_event('unload', function()
 	text_box:destroy()
 	text_box = nil
 	
+--[[
 	send_command('unbind ^`')
     send_command('unbind !`')
 	send_command('unbind @`')
@@ -877,13 +925,112 @@ windower.register_event('unload', function()
 	send_command('unbind ^f12')
 	send_command('unbind !f12')
 	send_command('unbind @f12')
+--]]
 	
 end)
+
+
+function get_lullaby_duration(spell)
+    local self = windower.ffxi.get_player()
+
+    local troubadour = false
+    local clarioncall = false
+    local soulvoice = false
+    local marcato = false
+
+    for i,v in pairs(self.buffs) do
+        if v == 348 then troubadour = true end
+        if v == 499 then clarioncall = true end
+        if v == 52 then soulvoice = true end
+        if v == 231 then marcato = true end
+    end
+
+    local mult = 1
+
+    if player.equipment.range == 'Daurdabla' then mult = mult + 0.3 end -- change to 0.25 with 90 Daur
+    if player.equipment.range == "Gjallarhorn" then mult = mult + 0.4 end -- change to 0.3 with 95 Gjall
+    if player.equipment.range == "Marsyas" then mult = mult + 0.5 end
+
+    if player.equipment.main == "Carnwenhan" then mult = mult + 0.5 end -- 0.1 for 75, 0.4 for 95, 0.5 for 99/119
+    if player.equipment.main == "Legato Dagger" then mult = mult + 0.05 end
+    if player.equipment.main == "Kali" then mult = mult + 0.05 end
+    if player.equipment.sub == "Kali" then mult = mult + 0.05 end
+    if player.equipment.sub == "Legato Dagger" then mult = mult + 0.05 end
+    if player.equipment.neck == "Aoidos' Matinee" then mult = mult + 0.1 end
+    if player.equipment.neck == "Mnbw. Whistle" then mult = mult + 0.2 end
+    if player.equipment.neck == "Mnbw. Whistle +1" then mult = mult + 0.3 end
+    if player.equipment.body == "Fili Hongreline +1" then mult = mult + 0.12 end
+    if player.equipment.legs == "Inyanga Shalwar +1" then mult = mult + 0.15 end
+    if player.equipment.legs == "Inyanga Shalwar +2" then mult = mult + 0.17 end
+    if player.equipment.feet == "Brioso Slippers" then mult = mult + 0.1 end
+    if player.equipment.feet == "Brioso Slippers +1" then mult = mult + 0.11 end
+    if player.equipment.feet == "Brioso Slippers +2" then mult = mult + 0.13 end
+    if player.equipment.feet == "Brioso Slippers +3" then mult = mult + 0.15 end
+    if player.equipment.hands == 'Brioso Cuffs +1' then mult = mult + 0.1 end
+    if player.equipment.hands == 'Brioso Cuffs +2' then mult = mult + 0.1 end
+    if player.equipment.hands == 'Brioso Cuffs +3' then mult = mult + 0.2 end
+
+    --JP Duration Gift
+    if self.job_points.brd.jp_spent >= 1200 then
+        mult = mult + 0.05
+    end
+
+    if troubadour then
+        mult = mult * 2
+    end
+
+    if spell.en == "Foe Lullaby II" or spell.en == "Horde Lullaby II" then
+        base = 60
+    elseif spell.en == "Foe Lullaby" or spell.en == "Horde Lullaby" then
+        base = 30
+    end
+
+    totalDuration = math.floor(mult * base)
+
+    -- Job Points Buff
+    totalDuration = totalDuration + self.job_points.brd.lullaby_duration
+    if troubadour then
+        totalDuration = totalDuration + self.job_points.brd.lullaby_duration
+        -- adding it a second time if Troubadour up
+    end
+
+    if clarioncall then
+        if troubadour then
+            totalDuration = totalDuration + (self.job_points.brd.clarion_call_effect * 2 * 2)
+            -- Clarion Call gives 2 seconds per Job Point upgrade.  * 2 again for Troubadour
+        else
+            totalDuration = totalDuration + (self.job_points.brd.clarion_call_effect * 2)
+            -- Clarion Call gives 2 seconds per Job Point upgrade.
+        end
+    end
+
+    if marcato and not soulvoice then
+        totalDuration = totalDuration + self.job_points.brd.marcato_effect
+    end
+
+    -- Create the custom timer
+    if spell.english == "Foe Lullaby II" or spell.english == "Horde Lullaby II" then
+        send_command('@timers c "Lullaby II ['..spell.target.name..']" ' ..totalDuration.. ' down spells/00377.png')
+    elseif spell.english == "Foe Lullaby" or spell.english == "Horde Lullaby" then
+        send_command('@timers c "Lullaby ['..spell.target.name..']" ' ..totalDuration.. ' down spells/00376.png')
+    end
+end
+
 
 windower.register_event('job change',function()
     send_command('gs r')
 end)
 
---these were already disabled
--- windower.raw_register_event('zone change',reset_timers)
--- windower.raw_register_event('logout',reset_timers)
+-- Select default macro book on initial load or subjob change.
+function select_default_macro_book()
+    set_macro_page(1, 2)
+end
+
+function set_lockstyle()
+    send_command('wait 2; input /lockstyleset ' .. lockstyleset)
+	add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Lockstyle Set '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+end
+
+--these were disabled. On by default in Kinematics. 
+windower.raw_register_event('zone change',reset_timers)
+windower.raw_register_event('logout',reset_timers)
