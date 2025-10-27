@@ -65,7 +65,6 @@ function init_gear_sets()
     sets.precast.FC = {
 		main="Mafic Cudgel",
 		sub="Genmei Shield",
-		--range=
 		ammo='Sapience Orb',  -- 2%
 		head=Vanya_head, -- 10%
 		neck="Orunmila's Torque", -- 5%
@@ -82,12 +81,10 @@ function init_gear_sets()
 		}
 		-- Total 76% FC | 6% QM
 
-	-- NO range and ammo slot. Messes up bard songs. Add them into later sets
 	sets.precast.FC.BardSong = {
 		main="Mafic Cudgel",
 		sub="Genmei Shield",
         range=Linos_QC, -- 0% | 4%
-		--ammo=
 		head=Empy_head, -- 14% ScT
 		neck="Orunmila's Torque", -- 5%
 		ear1="Loquac. Earring", -- 2%
