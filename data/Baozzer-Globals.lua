@@ -8,6 +8,9 @@
 		adoulin movement for idle in adoulin only 
 		doom set for all sets 
 		reive set for idle only
+		ftp ws neck and belt
+		auto cast degrade. mp
+		stna
 		all modes not specific to job
 		equipment lock: rings, nexus cape, warp curdgel, rr earring for all sets. in case need rr during a fight
 --]]
@@ -23,6 +26,20 @@ hide_window = false
 Notification_color = 200
 text_color = 160
 warning_text = 167
+
+-- Map for auto Fotia Gorget and Fotia Belt
+fTPweaponskills = S{
+	"Jishnu's Radiance",
+	'Decimation','Rampage','Ruinator',
+	'Hexa Strike','Realmrazer',
+	'Dancing Edge','Evisceration','Extenterator','Pyrrhic Kleos',
+	'Resolution',
+	"Ascetic's Fury",'Asuran Fist','Backhand Blow','Combo','Dragon Kick','Howling Fist','One Inch Punch','Raging Fists','Shijin Spiral','Shoulder Tackle','Spinning Attack','Stringing Plummel','Tornado Kick','Victory Smite',
+	'Blade: Jin', 'Blade: Ku', 'Blade: Shun',
+	'Last Stand',
+	'Stardiver',
+	'Entropy',
+	'Chant du Cygne','Requiescat','Swift Blade','Vorpal Blade',}
 
 -------------------------------------------------------------------------------------------------------------------
 -- Global Augmented Gear
@@ -73,6 +90,15 @@ function define_global_sets()
 	-- Accesories
 	Dark_Ring				={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
 	CP_back 				={ name="Mecisto. Mantle", augments={'Cap. Point+49%','VIT+1','Mag. Acc.+4','DEF+8',}}
+
+
+	sets.buff.reive = {neck="Arciela's Grace +1"}
+	sets.buff.doom = {
+		neck="Nicander's Necklace",
+		--ring1
+		--ring2
+		waist="Gishdubar Sash",}
+	sets.notmoonshade = {ear1="",}
 end
 
 
@@ -416,11 +442,13 @@ end
 
 -- Global intercept on precast.
 function user_precast(spell, action, spellMap, eventArgs)
+	-- Auto Echo Drop When Silenced
 	if spell.action_type == 'Magic' and buffactive.silence then
 		cancel_spell()
 		send_command('input /item "Echo Drops" <me>')
 		add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Echo Drops] ******')
 		return
+	-- Auto Spell Tier Degradation. Recast
 	elseif spell.action_type == 'Magic' then
 		local spell_recasts = windower.ffxi.get_spell_recasts()
 		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Utsusemi' then
@@ -438,7 +466,11 @@ function user_precast(spell, action, spellMap, eventArgs)
 				return
 			end
 		end
+	-- Add Auto Spell Tier Degration. MP cost
 	end
+
+	-- Add nonmoonshade earring TP > 2750
+	-- Add Fotia Gorget and Belt for repeating fTP. WS
 end
 
 -- Global intercept on midcast.
