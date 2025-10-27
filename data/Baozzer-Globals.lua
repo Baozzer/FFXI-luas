@@ -24,40 +24,6 @@ Notification_color = 200
 text_color = 160
 warning_text = 167
 
--- Setup vars that are user-dependent.  Can override this function in a sidecar file.
-function user_setup()
-	state.CP					= M(false, 'CP')
-	state.Auto_Kite				= M(false, 'Auto_Kite')
-	
-	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
-	state.Buff['Doom'] = buffactive['Doom'] or false
-	
-	moving = false
-	
-	send_command('gi update')
-	send_command('gi ugs true')
-	
-	-- Gear Lock for item usage. 
-Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
-Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
-Ear_lock = S{"Reraise Earring"}
-Back_lock  = S{"Nexus Cape"}
-Main_lock = S{"Warp Cudgel"}
-Waist_lock  = S{"Lutienent's Sash"}
-
-Bar_Status = S{'Barsleepra','Barpoisonra','Barparalyzra','Barblindra','Barsilencra','Barvira','Barpetra','Baramnesra',
-						'Barsleep','Barpoison','Barparalyze','Barblind','Barsilence','Barvirus','Barpetrify','Baramnesia'}
-	
-	Ring_slot_locked_1 = false
-	Ring_slot_locked_2 = false
-	unlock_em = false
-	
-	
-	--local msg = ''
-	--msg = ('You have loaded Seb\'s BRD lua. Please use '):color(text_color) .. ('\"\/\/GS c help\" '):color(Notification_color) .. ('for a full list of key bound functions. Enjoy!'):color(text_color)
-	--add_to_chat(122, msg)
-end
-
 -------------------------------------------------------------------------------------------------------------------
 -- Global Augmented Gear
 -------------------------------------------------------------------------------------------------------------------
@@ -107,18 +73,6 @@ function define_global_sets()
 	-- Accesories
 	Dark_Ring				={ name="Dark Ring", augments={'Magic dmg. taken -3%','Phys. dmg. taken -5%',}}
 	CP_back 				={ name="Mecisto. Mantle", augments={'Cap. Point+49%','VIT+1','Mag. Acc.+4','DEF+8',}}
-
-	-- Sets
-	sets.adoulin = {body="Councilor's Garb"}
-	sets.CP = {back=CP_back}
-	sets.latent_refresh = {waist="Fucho-no-obi"}
-	sets.reive = {neck="Arciela's Grace +1"}
-	sets.doom = {
-		neck="Nicander's Necklace",
-		waist="Gishdubar Sash",}
-	sets.warp = {ring1='Warp Ring'}
-	--sets.crafting = {}
-
 end
 
 
@@ -213,7 +167,7 @@ function global_on_load()
 
     -- Default Item Keybinds
     --send_command('bind @a input /item "Antidote" <me>') -- Just use remedy
-    send_command('bind @d input /item "Echo Drops" <me>')
+	--send_command('bind @ input /item "Echo Drops" <me>') -- Auto Intercept Below
     --send_command('bind @ input /item "Eye Drops" <me>') -- Just use remedy
     send_command('bind @h input /item "Holy Water" <me>')
     send_command('bind @r input /item "Remedy" <me>')
@@ -238,7 +192,7 @@ function global_on_load()
 	end
 
 
-    -- Default Status Enfeebling Keybinds
+    -- Default Enfeebling Keybinds
 	if player.main_job:upper() == 'RDM' then
     	send_command('bind ^a input /ma "Addle II" <stnpc>')
     	send_command('bind ^v input /ma "Blind II" <stnpc>') --*** Nearby
@@ -258,7 +212,7 @@ function global_on_load()
     	send_command('bind ^g input /ma "Gravity" <stnpc>')
     	send_command('bind ^p input /ma "Paralyze" <stnpc>')
     	send_command('bind ^x input /ma "Silence" <stnpc>') --*** "Mute = x"
-    	--send_command('bind ^ input /ma "Sleep II" <stnpc>') --***
+    	--send_command('bind ^ input /ma "Sleep II" <stnpc>') --*** Macro These
     	send_command('bind ^t input /ma "Slow" <stnpc>') --*** "T... urtle"
 	end
 
@@ -281,7 +235,9 @@ function global_on_load()
     	send_command('bind !r input /ma "Refresh III" <stal>')
 	elseif player.main_job:upper() == 'NIN' or player.sub_job:upper() == 'NIN' then
 		send_command('bind !b input /ma "utsusemi: ni" <me>') --*** Blink
-		send_command('bind !u input /ma "utsusemi: ichi" <me>') 
+		--send_command('bind ! input /ma "utsusemi: ichi" <me>') -- Auto Intercept Below
+	elseif player.main_job:upper() == 'BLU' then
+		send_command('bind !b input /ma "Occulation" <me>') --*** Blink
 	else
     	send_command('bind !a input /ma "Aquaveil" <me>')
     	send_command('bind !b input /ma "Blink" <me>')
@@ -460,222 +416,65 @@ end
 
 -- Global intercept on precast.
 function user_precast(spell, action, spellMap, eventArgs)
-		if spell.type == 'WeaponSkill' then
-			-- Abort WS if TP < 1000
-			if player.tp < 950 then
-				add_to_chat(123,('[Abort WS: '):color(warning_text) .. ('\"' .. spell.name .. '\"'):color(Notification_color) .. (' -> TP: '..player.tp..' / 3000'):color(text_color) .. (']'):color(warning_text))
+	if spell.action_type == 'Magic' and buffactive.silence then
+		cancel_spell()
+		send_command('input /item "Echo Drops" <me>')
+		add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Echo Drops] ******')
+		return
+	elseif spell.action_type == 'Magic' then
+		local spell_recasts = windower.ffxi.get_spell_recasts()
+		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Utsusemi' then
+			if spell.en == "Utsusemi: Ni" then
+				cancel_spell()
+				send_command('input /ma "Utsusemi: Ichi" ' .. spell.target.name)
 				eventArgs.cancel = true
 				return
 			end
-		elseif spell.action_type == 'Magic' then
-            local spell_recasts = windower.ffxi.get_spell_recasts()
-            if spell_recasts[spell.recast_id] > 1.5 then
-                add_to_chat(123,('[Abort Spell: '):color(warning_text) .. ('\"' .. spell.name .. '\"'):color(Notification_color) .. (' -> Waiting on recast ['..math.floor(spell_recasts[spell.recast_id] / 60)..' s]'):color(text_color) .. (']'):color(warning_text))
-                eventArgs.cancel = true
-                return
-            end
-        -- elseif spell.action_type == 'Ability' then
-            -- local abil_recasts = windower.ffxi.get_ability_recasts()
-            -- if abil_recasts[spell.recast_id] > 0 then
-                -- add_to_chat(123,('[Abort Ability: '):color(warning_text) .. ('\"' .. spell.name .. '\"'):color(Notification_color) .. (' -> Waiting on recast ['..math.floor(abil_recasts[spell.recast_id] / 60)..' s]'):color(text_color) .. (']'):color(warning_text))
-                -- eventArgs.cancel = true
-                -- return
-            -- end
+		elseif spell_recasts[spell.recast_id] > 0 and spellMap == 'Cure' then
+			if spell.en == 'Cure IV' then
+				cancel_spell()
+				send_command('input /ma "Cure III" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			end
 		end
-		
-	-- else
-		-- add_to_chat(123,('[Abort Action: '):color(warning_text) .. ('\"' .. spell.name .. '\"'):color(Notification_color) .. (' -> Action in progress'):color(text_color) .. (']'):color(warning_text))
-		-- eventArgs.cancel = true
-	-- end
-	cancel_conflicting_buffs(spell, action, spellMap, eventArgs)
-	refine_waltz(spell, action, spellMap, eventArgs)
+	end
 end
 
 -- Global intercept on midcast.
 function user_midcast(spell, action, spellMap, eventArgs)
-	-- Default base equipment layer of fast recast.
-	if spell.action_type == 'Magic' and sets.midcast and sets.midcast.FastRecast then
-		equip(sets.midcast.FastRecast)
-	end
 end
 
+-- Global intercept on buff change.
 function user_buff_change(buff, gain, eventArgs)
-	-- Create a timer when we gain weakness.  Remove it when weakness is gone.
-	if buff:lower() == 'weakness' then
-		if gain then
-			send_command('timers create "Weakness" 300 up abilities/00255.png')
-		else
-			send_command('timers delete "Weakness"')
-		end
-	end
-end
---------------
-
-function lockouts()
-
-	if Tele_Ring:contains(player.equipment.ring1) and unlock_em == false then
-		if Ring_slot_locked_1 == false then
-			add_to_chat(200,('[Tele Ring Equipped: '):color(Notification_color) .. ('-> Locking \"'..player.equipment.ring1 .. '\"'):color(text_color) .. (']'):color(Notification_color) )
-		end
-		Ring_slot_locked_1 = true
-		disable('ring1')
-	end
-	if Tele_Ring:contains(player.equipment.ring2) and unlock_em == false then
-		if Ring_slot_locked_2 == false then
-			add_to_chat(200,('[Tele Ring Equipped: '):color(Notification_color) .. ('-> Locking \"'..player.equipment.ring2 .. '\"'):color(text_color) .. (']'):color(Notification_color) )
-		end
-		Ring_slot_locked_2 = true
-		disable('ring2')
-	end
-	
-	if (Tele_Ring:contains(player.equipment.ring1) or Tele_Ring:contains(player.equipment.ring2)) and unlock_em then
-		enable('ring1')
-		enable('ring2')
-	elseif not (Tele_Ring:contains(player.equipment.ring1) or Tele_Ring:contains(player.equipment.ring2)) and unlock_em then 
-		unlock_em = false
-		Ring_slot_locked_1 = false
-		Ring_slot_locked_2 = false
-		add_to_chat(200,('[Zoned: '):color(Notification_color) .. ('-> Un-locking Tele/Warp Rings '):color(text_color) .. (']'):color(Notification_color) )
-	elseif not Tele_Ring:contains(player.equipment.ring1) and Ring_slot_locked_1 and unlock_em == false then 
-		Ring_slot_locked_1 = false
-		enable('ring1')
-		add_to_chat(200,('[Tele Ring Removed manually: '):color(Notification_color) .. ('-> Un-locking Slot 1'):color(text_color) .. (']'):color(Notification_color) )
-	elseif not Tele_Ring:contains(player.equipment.ring2) and Ring_slot_locked_2 and unlock_em == false then 
-		Ring_slot_locked_2 = false
-		enable('ring2')
-		add_to_chat(200,('[Tele Ring Removed manually: '):color(Notification_color) .. ('-> Un-locking Slot 2'):color(text_color) .. (']'):color(Notification_color) )
-	end
-	--------------------------------
-	-- Ring locks for exp ring use
-	
-	if Ring_lock:contains(player.equipment.ring1) and Ring_slot_locked_1 == false then
-		disable('ring1')
-	elseif not Ring_lock:contains(player.equipment.ring1) and Ring_slot_locked_1 == false then
-		enable('ring1')
-	end
-	
-	if Ring_lock:contains(player.equipment.ring2) and Ring_slot_locked_2 == false then
-		disable('ring2')
-	elseif not Ring_lock:contains(player.equipment.ring2) and Ring_slot_locked_2 == false then
-		enable('ring2')
-	end
-	
-	---------------------------------
-	-- earring locks
-	
-	if Ear_lock:contains(player.equipment.ear1) then
-		disable('Ear1')
-	elseif not Ear_lock:contains(player.equipment.ear1) then
-		enable('Ear1')
-	end
-	if Ear_lock:contains(player.equipment.ear2) then
-		disable('Ear2')
-	elseif not Ear_lock:contains(player.equipment.ear2) then
-		enable('Ear2')
-	end
-	
-	---------------------------------
-	-- back locks
-	
-	if Back_lock:contains(player.equipment.back) then
-		disable('Back')
-	elseif not Back_lock:contains(player.equipment.back) then
-		enable('Back')
-	end
-	if Back_lock:contains(player.equipment.back) then
-		disable('Back')
-	elseif not Back_lock:contains(player.equipment.back) then
-		enable('Back')
-	end
-	
-	---------------------------------
-	-- waist locks
-	
-	if Waist_lock:contains(player.equipment.waist) then
-		disable('Waist')
-	elseif not Waist_lock:contains(player.equipment.waist) then
-		enable('Waist')
-	end
-	if Waist_lock:contains(player.equipment.waist) then
-		disable('Waist')
-	elseif not Waist_lock:contains(player.equipment.waist) then
-		enable('Waist')
-	end
-	
 end
 
-function reset_rings()
-	if Ring_slot_locked_1 or Ring_slot_locked_2 then
-		unlock_em = true
+-- Global intercept of idle set
+function user_customize_idle_set(idleSet)
+	if buffactive['Reive Mark'] then
+		idleSet = set_combine(idleSet, sets.buff.reive)
 	end
+	if buffactive.doom then
+        idleSet = set_combine(idleSet, sets.buff.doom)
+		add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+ 	end
+    return idleSet
 end
 
-function check_moving()
-	if 
---I disabled this so sets are always on
-	--state.DefenseMode.value == 'None' and state.Kiting.value == false then
-	state.Kiting.value == false then
-		if state.Auto_Kite.value == false and moving then
-			state.Auto_Kite:set(true)
-		elseif state.Auto_Kite.value == true and moving == false then
-			state.Auto_Kite:set(false)
-		end
-	end
-end
-
+--global intercept of melee set
 function user_customize_melee_set(meleeSet)
-	
-	lockouts()
-
--- I turned this off so these sets are always on
-	--if state.DefenseMode.current == 'None' then 
-		if state.Auto_Kite.value == true then
-			meleeSet = set_combine(meleeSet, sets.kiting)
-		end
-		if state.CP.value == true then
-			meleeSet = set_combine(meleeSet, sets.CP)
-		end
-		if state.Buff['Doom'] then
-        	meleeSet = set_combine(meleeSet, sets.doom)
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
-    	end
-	--end
+	if buffactive.doom then
+        idleSet = set_combine(idleSet, sets.buff.doom)
+		add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
+ 	end
     return meleeSet
 end
 
 
-function user_customize_idle_set(idleSet)
-	
-	lockouts()
-	
-	if state.DefenseMode.current == 'None' then 
-		if player.mpp < 51 then
-			idleSet = set_combine(idleSet, sets.latent_refresh)
-		end
-		if state.Buff["Reive Mark"] then
-			idleSet = set_combine(idleSet, sets.reive)
-		end
-	end
+-------------------------------------------------------------------------------------------------------------------
+-- Global GearInfo
+-------------------------------------------------------------------------------------------------------------------
 
-		if state.CP.value == true then
-			idleSet = set_combine(idleSet, sets.CP)
-		end
-		if state.Auto_Kite.value == true then
-			if world.area:endswith('Adoulin') then
-				idleSet = set_combine(idleSet, sets.adoulin)
-			else 
-				idleSet = set_combine(idleSet, sets.kiting)
-			end
-		end	
-		if state.Buff['Doom'] then
-        	idleSet = set_combine(idleSet, sets.doom)
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
- 		end
-    
-    return idleSet
-end
-
---------------
 function gearinfo(cmdParams, eventArgs)
 
     if cmdParams[1] == 'gearinfo' then

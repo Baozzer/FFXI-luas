@@ -1,10 +1,3 @@
---[[
-	Things to do:
-		-make lullabies more generic. only need specific for Horde Lullaby II
-		-threnody set
-
---]]
-
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
 -------------------------------------------------------------------------------------------------------------------
@@ -21,15 +14,17 @@
     The Dummy state will equip the extra song instrument and ensure non-duration gear is equipped.
 
 
-	SongPotencyMode may take one of these values: Duration, Empy_Boost
-		send_command('bind f10 gs c cycle SongPotencyMode')
+	SongPotencyMode may take one of these values: Empy_Boost, Duration
+		send_command('bind f11 gs c cycle SongPotencyMode')
 
-	The Empy_Boost state will equip Empy_gear over duration gear for stat+ bonus when duration isn't needed. Short fights.
+    The Duration state will equip max duration+ equipment. This is default.
+	The Empy_Boost state will equip full Empy_gear for stat+ bonus when duration isn't needed. Short Fights.
     
     
     Simple macro to cast a dummy Daurdabla song:
     /console gs c set ExtraSongsMode Dummy
     /ma "Shining Fantasia" <me>
+    
 --]]
 
 -- Initialization function for this job file.
@@ -50,56 +45,66 @@ function job_setup()
 	state.SongPotencyMode = M{['description']='Song Potency', 'Empy_Boost', 'Duration'}
 	state.SongPotencyMode:set('Duration')
 
-	state.Pianissimo = M(false, 'Pianissimo All Songs')
-    state.Buff['Pianissimo'] = buffactive['Pianissimo'] or false
-
-
-	-- I don't think this does anything
-	--[[
-	state.Buff['Troubadour'] = buffactive['Troubadour'] or false
-	state.Buff['Nightingale'] = buffactive['Nightingale'] or false
-	--]]
-
+    state.Buff['Pianissimo'] = buffactive['pianissimo'] or false
+	state.Buff['Troubadour'] = buffactive['troubadour'] or false
+	state.Buff['Nightingale'] = buffactive['nightingale'] or false
+	state.Pianissimo	    = M(false, 'Pianissimo All Songs')
 	
-	-- so complicated. why. only for auto piano. kinematic rule is better 
+	-- Additional Job Specifc local binds
+	send_command('bind f9 input /ma "Chocobo Mazurka <me>')
+	send_command('bind f10 gs c toggle Pianissimo')
+	send_command('bind f11 gs c cycle SongPotencyMode')
+	send_command('bind f12 gs c cycle ExtraSongsMode')
+	
+	--Custom Mapping
 	song_buffsSpellMap = S{'Minuet', 'Minne', 'March', 'Madrigal', 'Prelude', 'Mambo', 'Mazurka', 'Etude', 'Ballad', 'Paeon', 'Carol'}
 	song_buffsSpellName = S{"Honor March", "Fowl Aubade", "Herb Pastoral", "Shining Fantasia", "Scop's Operetta", "Puppet's Operetta", "Gold Capriccio", "Warding Round", "Goblin Gavotte", "Goddess's Hymnus", "Maiden's Virelai", "Sentinel's Scherzo"}
-	-- All other brd song debuffs will use duration>FC>macc. then resistant set
-	song_sleep_MaccSpellName = S{'Foe Lullaby', 'Foe Lullaby II','Horde Lullaby'}
-	-- Only need Horde Lullaby II range increases with skill. horde I caps really early.
-	song_sleepStringSkillSpellName = S{'Horde Lullaby II'}
+	song_sleepSpellName  = S{'Foe Lullaby', 'Foe Lullaby II',}
+	song_sleepAoESpellName = S{'Horde Lullaby', 'Horde Lullaby II'}
+end
 
-	lockstyleset = 1
+-------------------------------------------------------------------------------------------------------------------
+-- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
+-------------------------------------------------------------------------------------------------------------------
 
-
-    state.OffenseMode:options('None', 'Normal', 'Acc')
+-- Setup vars that are user-dependent.  Can override this function in a sidecar file.
+function user_setup()
+	state.OffenseMode:options('None', 'Normal', 'Acc')
     state.HybridMode:options('Normal', 'DT')
     state.CastingMode:options('Normal', 'Resistant')
     state.IdleMode:options('Normal', 'DT', 'MEva')
 	state.IdleMode:set('MEva')
+
 	state.PhysicalDefenseMode:options('PDT')
 	state.MagicalDefenseMode:options('MDT')
 	
-	state.PhysicalDefense		= M(false, 'PhysicalDefense')
-	state.MagicalDefense		= M(false, 'MagicalDefense')
+	state.PhysicalDefense	= M(false, 'PhysicalDefense')
+	state.MagicalDefense    = M(false, 'MagicalDefense')
+	state.CP  				= M(false, 'CP')
+	state.Auto_Kite			= M(false, 'Auto_Kite')
 
 	DW_needed = 0
 	DW = false
 	MA_needed = 0
 	H2H = false
+	moving = false
+	
+	send_command('gi update')
+	send_command('gi ugs true')
     update_combat_form()
 
-	 -- Additional Lob Specifc local binds
-	send_command('bind f9 input /ma "Chocobo Mazurka <me>')
-	send_command('bind f10 gs c cycle SongPotencyMode')
-	send_command('bind f11 gs c toggle Pianissimo')
-	send_command('bind f12 gs c cycle ExtraSongsMode')
+	Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
+	Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
+	Ear_lock = S{"Reraise Earring"}
+	Back_lock  = S{"Nexus Cape"}
+	
+	Ring_slot_locked_1 = false
+	Ring_slot_locked_2 = false
+	unlock_em = false
 
-	-- Overwrites Global "Dispel"
-    --send_command('bind ^d input /ma "Magic Finale" <t>')
-
-
-    select_default_macro_book()
+	lockstyleset = 1 
+	set_lockstyle()
+	select_default_macro_book()
 
 	old_inform = {}
 	settings = load_settings()
@@ -107,60 +112,7 @@ function job_setup()
 	text_box:register_event('reload', initialize)
 	
 	initialize(text_box)
-	
 end
-
--------------------------------------------------------------------------------------------------------------------
--- User setup functions for this job.  Recommend that these be overridden in a sidecar file.
--------------------------------------------------------------------------------------------------------------------
-
---[[
--- Setup vars that are user-dependent.  Can override this function in a sidecar file.
-function user_setup()
-	state.CP					= M(false, 'CP')
-	state.Auto_Kite				= M(false, 'Auto_Kite')
-	
-	state.Buff["Reive Mark"] = buffactive["Reive Mark"] or false
-	state.Buff['Doom'] = buffactive['Doom'] or false
-	
-	moving = false
-	
-	send_command('gi update')
-	send_command('gi ugs true')
-	
-	
-	Ring_lock = S{"Resolution Ring", "Emperor Band", "Capacity Ring", "Echad Ring", "Trizek Ring", "Facility Ring", "Caliber Ring"}
-	Tele_Ring = S{"Warp Ring", "Dim. Ring (Dem)", "Dim. Ring (Holla)", "Dim. Ring (Mea)"}
-	Ear_lock = S{"Reraise Earring"}
-	Back_lock  = S{"Nexus Cape"}
-	Main_lock = S{"Warp Cudgel"}
-	Waist_lock  = S{"Lutienent's Sash"}
-	
-	
-	Ring_slot_locked_1 = false
-	Ring_slot_locked_2 = false
-	unlock_em = false
-	
-	
-	--local msg = ''
-	--msg = ('You have loaded Seb\'s BRD lua. Please use '):color(text_color) .. ('\"\/\/GS c help\" '):color(Notification_color) .. ('for a full list of key bound functions. Enjoy!'):color(text_color)
-	--add_to_chat(122, msg)
-end
---]]
-
---[[
--- Called when this job file is unloaded (eg: job change)
-function user_unload()
-
-end
---]]
-
---[[
--- Define sets and vars used by this job file.
-function init_gear_sets()
-		
-end
---]]
 
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for standard casting events.
@@ -172,23 +124,22 @@ function job_precast(spell, action, spellMap, eventArgs)
 	if spell.action_type == 'Magic' then
 		if spell.type == 'BardSong' then
 			check_target(spell, action, spellMap, eventArgs)
-			-- I don't think this does anything
-			--[[
 			if state.Buff['Troubadour'] and state.Buff['Nightingale'] then
 				get_casting_style(spell, action, spellMap, eventArgs)
 				eventArgs.handled = true
 			end
-			--]]
 		end
-		-- global intercept this
 		local spell_recasts = windower.ffxi.get_spell_recasts()
-		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Cure' then
-			if spell.en == 'Cure IV' then
-				cancel_spell()
-				send_command('input /ma "Cure III" ' .. spell.target.name)
-				eventArgs.cancel = true
-				return
-			end
+		if spell_recasts[spell.recast_id] > 0 and spell.en == "Horde Lullaby II" then
+			cancel_spell()
+			send_command('input /ma "Horde Lullaby" <t>')
+			eventArgs.cancel = true
+			return
+		elseif spell_recasts[spell.recast_id] > 0 and spell.en == "Foe Lullaby II" then
+			cancel_spell()
+			send_command('input /ma "Foe Lullaby" <t>')
+			eventArgs.cancel = true
+			return
 		end
 	end
 end
@@ -214,8 +165,6 @@ function job_midcast(spell, action, spellMap, eventArgs)
     end
 end
 
-
--- global intercept this 
 function job_post_midcast(spell, action, spellMap, eventArgs)
 	if spell.action_type == 'Magic' then
 		 if spellMap == 'Cure' or spellMap == 'Curaga' then
@@ -229,78 +178,28 @@ function job_post_midcast(spell, action, spellMap, eventArgs)
 	end
 end
 
--- global intercept this
 -- Set eventArgs.handled to true if we don't want automatic gear equipping to be done.
 function job_aftercast(spell, action, spellMap, eventArgs)
 	if state.Buff[spell.name] == false and not spell.interrupted then
 		state.Buff[spell.name] = true
     end
+	if spell.english:contains('Lullaby') and not spell.interrupted then
+        get_lullaby_duration(spell)
+    end
 	if spell.type == 'BardSong' and not spell.interrupted then
 		if state.Buff['Pianissimo'] == true then
 			state.Buff['Pianissimo'] = false
 		end
-    	if spell.english:contains('Lullaby') and not spell.interrupted then
-        	get_lullaby_duration(spell)
- 		end
-		-- Rather than turning off extra songs after every cast. It'll reset for more conveience
 		state.ExtraSongsMode:reset()
 	end
 	
 end
 
 -------------------------------------------------------------------------------------------------------------------
--- Job-specific hooks for non-casting events.
--------------------------------------------------------------------------------------------------------------------
-
-function job_handle_equipping_gear(playerStatus, eventArgs)
-	update_combat_form()
-	check_moving()
-	update()
-end
-
--- Handle notifications of general user state change.
-function job_state_change(field, newValue, oldValue)
-
-	if field == "PhysicalDefense" then
-		if state.PhysicalDefense.value == true then
-			state.DefenseMode.current = 'Physical'
-			state.DefenseMode:set('Physical')
-			state.MagicalDefense = M(false)
-		end
-	elseif field == "MagicalDefense" then
-		if state.MagicalDefense.value == true then
-			state.DefenseMode.current = 'Magical'
-			state.DefenseMode:set('Magical')
-			state.PhysicalDefense = M(false)
-		end
-	end
-	if field == "MagicalDefense" or field == "PhysicalDefense" then
-		if state.PhysicalDefense.value == false and state.MagicalDefense.value == false then
-			state.DefenseMode.current = 'None'
-			state.DefenseMode:set('None')
-		end
-    end
-	
-    if field == 'Offense Mode' then
-        if newValue ~= 'None' then
-			--if state.CombatForm == 'DW' then
--- I added this rule it works better.
-			if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
-				equip(sets.Locked_Main_Sub_DW)
-			else
-				equip(sets.Locked_Main_Sub)
-			end
-            disable('main','sub')
-        else
-            enable('main','sub')
-        end
-    end
-end
-
--------------------------------------------------------------------------------------------------------------------
 -- User code that supplements standard library decisions.
 -------------------------------------------------------------------------------------------------------------------
 
+--[[
 function job_buff_change(buff, gain)
 	if state.Buff[buff] ~= nil then
 		state.Buff[buff] = gain
@@ -312,57 +211,33 @@ function job_buff_change(buff, gain)
 		 send_command('timers create "'..buff..'" 480 down abilities/00121.png')
 	end
 end
+--]]
 
--- Custom spell mapping.
-function job_get_spell_map(spell,default_spell_map)
-    if spell.action_type == 'Magic' then
-        if spell.skill == 'Enfeebling Magic' then
-            if spell.type == 'WhiteMagic' then
-                return 'Mnd Enfeebles'
-            else
-                return 'Int Enfeebles'
-            end
-		end
-    end
-end
-
---[[
 -- Modify the default idle set after it was constructed.
 function customize_idle_set(idleSet)
 	
 	lockouts()
-	
+
 	if state.DefenseMode.current == 'None' then 
 		if player.mpp < 51 then
 			idleSet = set_combine(idleSet, sets.latent_refresh)
 		end
-		if state.Buff["Reive Mark"] then
-			idleSet = set_combine(idleSet, sets.buff.Reive)
-		end
 	end
-
--- I seperated these so they are always on
-		if state.CP.value == true then
-			idleSet = set_combine(idleSet, sets.CP)
-		end
-		if state.Auto_Kite.value == true then
+-- I seperated these so these sets are always on
+	if state.CP.value == true then
+		idleSet = set_combine(idleSet, sets.CP)
+	end
+	if state.Auto_Kite.value == true then
 -- I added Councilor's Garb Swap for when in Adoulin
-			if world.area:endswith('Adoulin') then
-				idleSet = set_combine(idleSet, sets.Adoulin)
-			else 
-				idleSet = set_combine(idleSet, sets.Kiting)
-			end
-		end	
-		if state.Buff['Doom'] then
-        	idleSet = set_combine(idleSet, sets.Buff['Doom'])
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
- 		end
-    
+		if world.area:endswith('Adoulin') then
+			idleSet = set_combine(idleSet, sets.Adoulin)
+		else 
+			idleSet = set_combine(idleSet, sets.Kiting)
+		end
+	end	
     return idleSet
 end
---]]
 
---[[
 function customize_melee_set(meleeSet)
 	
 	lockouts()
@@ -375,16 +250,11 @@ function customize_melee_set(meleeSet)
 		if state.CP.value == true then
 			meleeSet = set_combine(meleeSet, sets.CP)
 		end
-		if state.Buff['Doom'] then
-        	meleeSet = set_combine(meleeSet, sets.Buff['Doom'])
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
-    	end
 	--end
     return meleeSet
 end
---]]
 
---[[
+-- Gear Lock
 function lockouts()
 
 	if Tele_Ring:contains(player.equipment.ring1) and unlock_em == false then
@@ -462,20 +332,6 @@ function lockouts()
 		enable('Back')
 	end
 	
-	---------------------------------
-	-- waist locks
-	
-	if Waist_lock:contains(player.equipment.waist) then
-		disable('Waist')
-	elseif not Waist_lock:contains(player.equipment.waist) then
-		enable('Waist')
-	end
-	if Waist_lock:contains(player.equipment.waist) then
-		disable('Waist')
-	elseif not Waist_lock:contains(player.equipment.waist) then
-		enable('Waist')
-	end
-	
 end
 
 function reset_rings()
@@ -483,7 +339,6 @@ function reset_rings()
 		unlock_em = true
 	end
 end
---]]
 
 windower.raw_register_event('zone change',reset_rings)
 
@@ -492,7 +347,6 @@ function job_update(cmdParams, eventArgs)
 	handle_equipping_gear(player.status)
 end
 
---[[
 function check_moving()
 	if 
 --I disabled this so sets are always on
@@ -506,429 +360,9 @@ function check_moving()
 	end
 end
 
---]]
-
--- Function to display the current relevant user state when doing an update.
-function display_current_job_state(eventArgs)
-	
-    local msg = ('   [Melee'):color(Notification_color)
-    
-    if state.CombatForm.has_value then
-        msg = msg .. (' (' .. state.CombatForm.value .. ')'):color(text_color)
-    end
-    
-	if #classes.CustomMeleeGroups > 0 then
-        for i = 1,#classes.CustomMeleeGroups do
-			if classes.CustomMeleeGroups[i] ~= 'None' then
-				if i == 1 then
-					msg = msg .. (' ('):color(Notification_color)
-				end
-				msg = msg .. (classes.CustomMeleeGroups[i]):color(Notification_color)
-				if i < #classes.CustomMeleeGroups then
-					msg = msg .. (' + '):color(Notification_color)
-				end
-				if i == #classes.CustomMeleeGroups then
-					msg = msg .. (')'):color(Notification_color)
-				end
-			end
-        end
-    end
-	
-    msg = msg .. (': '):color(Notification_color)
-    
-	if state.DefenseMode.value == 'None' then
-		msg = msg .. (state.OffenseMode.value):color(text_color)
-	else
-		msg = msg ..('LOCKED: ' ):color(warning_text) .. (state.OffenseMode.value):color(text_color)
-	end
-	
-	msg = msg .. ('] [Casting: '):color(Notification_color) .. (state.CastingMode.value):color(text_color) .. ('] '):color(Notification_color)
-	
-	msg = msg .. (' [Idle: '):color(Notification_color) .. (state.IdleMode.value):color(text_color) .. ('] '):color(Notification_color)
-	
-	msg = msg .. (' [Song Potency: '):color(Notification_color) .. (state.SongPotencyMode.value):color(text_color) .. ('] '):color(Notification_color)
-	
-	msg = msg .. (' [Dummy Song: '):color(Notification_color) .. (state.ExtraSongsMode.value):color(text_color) .. ('] '):color(Notification_color)
-	
-	if state.Pianissimo.value == true then
-		msg = msg .. ('[Pianissimo all Songs'):color(Notification_color) .. ('] '):color(Notification_color)
-	end
-    if state.Kiting.value == true then
-        msg = msg .. ('[Kiting'):color(Notification_color) .. ('] '):color(Notification_color)
-    end
-	
-	if state.CP.value == true then
-        msg = msg .. ('[CP cape'):color(Notification_color) .. ('] '):color(Notification_color)
-    end
-	
-	if state.DefenseMode.value ~= 'None' then
-        msg = msg  .. ('\n')..('['):color(warning_text) .. ('Defense: '):color(warning_text) .. (state.DefenseMode.value .. ' (' .. state[state.DefenseMode.value .. 'DefenseMode'].value .. ')'):color(text_color)..('] '):color(warning_text)
-    end
-	
-	add_to_chat(122, msg)
-
-    eventArgs.handled = true
-	save_settings()
-end
-
 -------------------------------------------------------------------------------------------------------------------
 -- Utility functions specific to this job.
 -------------------------------------------------------------------------------------------------------------------
-function check_target(spell, action, spellMap, eventArgs)
-	if not (buffactive['Amnesia'] or buffactive['impairment']) and song_buffsSpellMap:contains(spellMap) or song_buffsSpellName:contains(spell.name) then 
-		if state.Pianissimo.value == true and (((spell.target.type == 'PLAYER' or spell.target.type == 'SELF') and not spell.target.charmed) or (spell.target.type == 'NPC' and spell.target.in_party)) then
-			if not state.Buff['Pianissimo'] then
-				cancel_spell()
-				send_command('Pianissimo')
-				send_command:schedule(1,'input /ma "'..spell.name.. '" ' .. spell.target.name)
-				eventArgs.cancel = true
-				return
-			end
-		else
-			if ((spell.target.type == 'PLAYER' and not spell.target.charmed) or (spell.target.type == 'NPC' and spell.target.in_party)) then
-				if not state.Buff['Pianissimo'] then
-					cancel_spell()
-					send_command('Pianissimo')
-					send_command:schedule(2,'input /ma "'..spell.name.. '" ' .. spell.target.name)
-					eventArgs.cancel = true
-					return
-				end
-			end
-		end
-	-- global intercept this
-	elseif (buffactive['Amnesia'] or buffactive['impairment']) then 
-		if spell.target.type == 'PLAYER' then
-			cancel_spell()
-			send_command('"'..spell.name..'" <me>')
-			add_to_chat(200,'***** Job Abilities not available. Redirecting spell to SELF *****')
-			eventArgs.cancel = true
-			return
-		end
-	end
-end
-
-function get_casting_style(spell, action, spellMap, eventArgs)
-	local equipSet = sets.midcast
-	
-	--classes.SkipSkillCheck = classes.NoSkillSpells:contains(spell.english)
-    -- Handle automatic selection of set based on spell class/name/map/skill/type.
-    equipSet = select_specific_set(equipSet, spell, spellMap)
-	if spell.type == 'BardSong' then
-		-- this is overkill. go to kinematics defaults
-		if set.contains(spell.targets, 'Enemy') then
-			if song_sleep_MaccSpellName:contains(spell.name) then
-				spellMap = "Macc-Lullaby" 
-			elseif song_sleepStringSkillSpellName:contains(spell.name) then
-				spellMap = "StringSkill-Lullaby" 
-			end
-			equipSet = equipSet['Debuff']
-			equipSet = select_specific_set(equipSet, spell, spellMap)
-			
-		else
-			if state.ExtraSongsMode.value == 'None' then
-				if state.SongPotencyMode.value == 'Empy_Boost' then
-					if equipSet['Buff'] then 
-						equipSet = equipSet['Buff']
-					end
-				elseif state.SongPotencyMode.value == 'Duration' then 
-					if equipSet['Extra Length'] then 
-						equipSet = equipSet['Extra Length']
-					elseif equipSet['Buff']['Extra Length'] then 
-						equipSet = equipSet['Buff']['Extra Length']
-					end
-				end
-				equipSet = select_specific_set(equipSet, spell, spellMap)
-			elseif state.ExtraSongsMode.value == 'Dummy' then
-				if equipSet['Dummy'] then 
-					equipSet = equipSet['Dummy']
-				end
-			end
-		end
-	end
-
-	if equipSet[state.CastingMode.current] then
-		equipSet = equipSet[state.CastingMode.current]
-	end
-	
-	equip(equipSet)
-end
-
--- Examine equipment to determine what our current TP weapon is.
-function update_combat_form()
-	--if DW == true then
--- I added this. This rule works better for DW
-    if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
-		state.CombatForm:set('DW')
-	elseif H2H == true then
-		state.CombatForm:set('H2H')
-	else
-		state.CombatForm:reset()
-	end
-end
-
-function job_self_command(cmdParams, eventArgs)
-
-   gearinfo(cmdParams, eventArgs)
-   
-   if cmdParams[1] == 'hide' then
-		if hide_window then
-			hide_window = false
-		else
-			hide_window = true
-		end
-		old_inform.hide_window = hide_window
-	end
-	
-	if cmdParams[1] == 'help' then
-	
-		local chat_purple = string.char(0x1F, 200)
-		local chat_grey = string.char(0x1F, 160)
-		local chat_red = string.char(0x1F, 167)
-		local chat_white = string.char(0x1F, 001)
-		local chat_green = string.char(0x1F, 214)
-		local chat_yellow = string.char(0x1F, 036)
-		local chat_d_blue = string.char(0x1F, 207)
-		local chat_pink = string.char(0x1E, 5)
-		local chat_l_blue = string.char(0x1E, 6)
-		
-	
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_white.. 	'                         ----------------------------------' )
-		windower.add_to_chat(6, chat_d_blue.. 	'                         Welcome to Sebs Gearswap help!' )
-		windower.add_to_chat(6, chat_white.. 	'                         ----------------------------------' )
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_d_blue.. 	'You may manually type these with \"\/\/gs c [function]\" eg. '.. chat_yellow ..' \"\/\/gs c update user\"')
-		windower.add_to_chat(6, chat_d_blue.. 	'If you wish to macro the functions please use \"\/con gs c [function]\" eg. '.. chat_yellow ..' \"\/con gs c update user\"')
-		windower.add_to_chat(6, chat_yellow.. 	'W-key'.. chat_d_blue ..' means Windows key')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_green.. 	'Key Binds available:')
-		windower.add_to_chat(6, chat_yellow.. 	'           \'F12\''..chat_l_blue  ..' = update user ' .. chat_white .. '  --  Will check and equip correct gear.')
-		windower.add_to_chat(6, chat_d_blue.. 	'Will also save the current location of the gearswap info text box to file')
-		windower.add_to_chat(6, chat_yellow..	'   \'Ctrl + F12\''..chat_l_blue  ..' = cycle CastingMode ' .. chat_white .. '   --  Cycles to resistant mode \(more Macc\).')
-		windower.add_to_chat(6, chat_yellow..	'    \'Alt + F12\''..chat_l_blue  ..' = cycle IdleMode ' .. chat_white .. '  --  Cycle through idle modes.')
-		windower.add_to_chat(6, chat_yellow..	'\'W-Key + F12\''..chat_l_blue  ..' = toggle kiting ' .. chat_white .. '  --  Locks movement speed gear on over any set')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow..	'   \'Ctrl + F11\''..chat_l_blue  ..' = cycle CP ' .. chat_white .. '  --  Makes you utilise CP cape')
-		windower.add_to_chat(6, chat_yellow..	'\'W-Key+ F11\''..chat_l_blue  ..' = cycle ExtraSongsMode ' .. chat_white .. '  --  use dummy spells or auto switch extra song instrument')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow.. 	'             \'[\''..chat_l_blue  ..' = toggle PhysicalDefense ' .. chat_white .. '  --  Locks PDT set on.')
-		windower.add_to_chat(6, chat_yellow..	'      \'Ctrl + [\''..chat_l_blue  ..' = cycle OffenseMode ' .. chat_white .. '   --  Cycles throught melee accuracy modes.')
-		windower.add_to_chat(6, chat_yellow..	'  \'W-Key + [\''..chat_l_blue  ..' = cycle HybridMode ' .. chat_white .. '  --  Cycles thought Hybrid modes \(usually just DT\)')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow..	'             \']\''..chat_l_blue  ..' = toggle MagicalDefense ' .. chat_white .. '  --  Locks MDT set on.')
-		windower.add_to_chat(6, chat_yellow..	'    \'Alt + \']\''..chat_l_blue  ..' = toggle Pianissimo ' .. chat_white .. '  --  toggle Pianissimo modes.')
-		windower.add_to_chat(6, chat_yellow..	'    \'Ctrl + \']\''..chat_l_blue  ..' = cycle SongPotencyMode ' .. chat_white .. '  --  full Empy, or song length bonus gear.')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_d_blue.. 	'If you need more help or run into problems, you can contact me via email at ' .. chat_yellow .. 'sebyg666@hotmail.com')
-		windower.add_to_chat(6, chat_d_blue.. 	'Alternatively if you have me on your skype list, just leave me a message there and ill get back to you.')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_green.. 	'Warning: Shameless plug follows.')
-		windower.add_to_chat(6, chat_d_blue.. 	'If You are a big fan of my lua\'s and you wish to support me, you are more then welcome to donate any amount of money')
-		windower.add_to_chat(6, chat_d_blue.. 	'via paypal at the above email adress. You may also tell other people you trust about my lua\'s and how to contact me,')
-		windower.add_to_chat(6, chat_d_blue.. 	'for help setting up, and finally you can also find me streaming live on twitch at '.. chat_yellow .. 'www.twitch.tv/Sebbyg')
-		windower.add_to_chat(6, ' ')
-	
-	end
-	
-end
-
-initialize = function(text, t)
-    local properties = L{}
-	
-    if state.OffenseMode then
-        properties:append('${OffenseMode|0}')
-    end
-	if state.CastingMode then
-        properties:append('${CastingMode|0}')
-    end
-	if state.IdleMode then
-        properties:append('${IdleMode}')
-    end
-	if state.SongPotencyMode then
-       properties:append('${SongPotencyMode}')
-    end
-	if state.ExtraSongsMode then
-        properties:append('${ExtraSongsMode}')
-    end
-	if state.Pianissimo then
-        properties:append('${Pianissimo}')
-    end
-	if state.Kiting then
-        properties:append('${Kiting}')
-    end
-	if state.CP then
-        properties:append('${CP}')
-    end
-	if state.DefenseMode then
-        properties:append('${DefenseMode}')
-    end
-	properties:append('${is_Moving}')
-    text:clear()
-    text:append(properties:concat(''))
-	update()
-end
-
-function update()
-	
-	local white = '\\cs(220,220,220)'
-	local blue = '\\cs(150,150,235)'
-	local red = '\\cs(255,0,0)'
-	local orange = '\\cs(232,138,13)'
-	local yellow = '\\cs(220,220,0)'
-	local green = '\\cs(0,225,0)'
-	local purple = '\\cs(213,43,196)'
-	
-	if not windower.ffxi.get_info().logged_in or not windower.ffxi.get_player() or zoning_bool or hide_window then
-        text_box:hide()
-        return
-    end
-
-	local inform = {}
-	local msg = ' [Melee'
-	if state.CombatForm.current == 'DW' then
-		msg = msg .. ' (DW)'
-	end
-	if #classes.CustomMeleeGroups > 0 then
-		for i = 1,#classes.CustomMeleeGroups do
-			if classes.CustomMeleeGroups[i] ~= 'None' then
-				if i == 1 then msg = msg .. ' (' end
-				msg = msg .. classes.CustomMeleeGroups[i]
-				if i < #classes.CustomMeleeGroups then msg = msg .. ' + ' end
-				if i == #classes.CustomMeleeGroups then msg = msg ..')' end
-			end
-		end
-	end
-	
-	msg = msg .. ': '
-	
-	if state.DefenseMode.value == 'None' then
-		msg = blue .. msg .. white .. state.OffenseMode.value .. blue..'] '
-	else
-		msg = red .. msg .. state.OffenseMode.value .. '] '
-	end
-	inform.OffenseMode = msg .. '\\cr'
-			
-	inform.CastingMode = (blue .. ('\n [Casting: '.. white .. state.CastingMode.value:lpad(' ', 2) .. blue .. '] ' )) .. '\\cr'
-	
-	--[[
-	if state.SongPotencyMode.value ~= 'None' then
-		inform.SongPotencyMode = (purple .. ('\n [Singing: '.. white .. state.SongPotencyMode.value:lpad(' ', 2) .. purple .. '] ' )) .. '\\cr'
-	else
-		inform.SongPotencyMode = ('')
-	end
-	--]]
-
-	if state.ExtraSongsMode.value ~= 'None' then
-		inform.ExtraSongsMode = (red .. ('\n [Extra Song: '.. yellow .. state.ExtraSongsMode.value:lpad(' ', 2) .. red .. '] ' )) .. '\\cr'
-	else
-		inform.ExtraSongsMode = ('')
-	end
-	
-	if state.Pianissimo.value == true then
-		inform.Pianissimo = (purple .. ('\n [Pianissimo] ' )) .. '\\cr'
-	elseif state.Pianissimo.value == false then
-		inform.Pianissimo = ('')
-	end
-	
-	if state.DefenseMode.value == 'None' then
-		inform.IdleMode = (blue .. ('\n [Idle: '.. white .. state.IdleMode.value:lpad(' ', 2) .. blue .. '] ' )) .. '\\cr'
-	else
-		inform.IdleMode = (red .. ('\n [Idle: '..state.IdleMode.value:lpad(' ', 2) .. '] ' )) .. '\\cr'
-	end
-		
-	if state.DefenseMode.value == 'None' then
-		if state.Kiting.value == true and state.CP.value == true then
-			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
-			inform.CP = (orange .. ('[CP Cape] ' )) .. '\\cr'
-		elseif state.Kiting.value == true and state.CP.value == false then
-			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
-			inform.CP = ('')
-		elseif state.Kiting.value == false and state.CP.value == true then
-			inform.Kiting = ('')
-			inform.CP = (orange .. ('\n [CP Cape] ' )) .. '\\cr'
-		elseif state.Kiting.value == false and state.CP.value == false then
-			inform.Kiting = ('')
-			inform.CP = ('')
-		end
-	else
-		if state.Kiting.value == true and state.CP.value == true then
-			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
-			inform.CP = (red .. ('[CP Cape] ' )) .. '\\cr'
-		elseif state.Kiting.value == true and state.CP.value == false then
-			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
-			inform.CP = ('')
-		elseif state.Kiting.value == false and state.CP.value == true then
-			inform.Kiting = ('')
-			inform.CP = (red .. ('\n [CP Cape] ' )) .. '\\cr'
-		elseif state.Kiting.value == false and state.CP.value == false then
-			inform.Kiting = ('')
-			inform.CP = ('')
-		end
-	end
-	
-	if state.DefenseMode.value ~= 'None' then
-		inform.DefenseMode = (red .. ('\n [' .. 'DEFENCE: ' .. state.DefenseMode.value .. white ..' (' ..state[state.DefenseMode.value .. 'DefenseMode'].value ..')'..red..']' )) .. '\\cr'
-	else
-		inform.DefenseMode = ('')
-	end
-	
-	if state.DefenseMode.value == 'None' then
-		if moving == true then
-			inform.is_Moving = (yellow .. ('\n [Moving]' )) .. '\\cr'
-		else
-			inform.is_Moving = ('')
-		end
-	end
-	
-	if not table.equals(old_inform, inform) then
-		text_box:update(inform)
-		text_box:show()
-		old_inform = inform
-	end
-end
-
-windower.register_event('unload', function()
-	text_box:destroy()
-	text_box = nil
-	
---[[
-	send_command('unbind ^`')
-    send_command('unbind !`')
-	send_command('unbind @`')
-	
-	send_command('unbind f7')
-	send_command('unbind ^f7')
-	send_command('unbind !f7')
-	send_command('unbind @f7')
-	
-	send_command('unbind f8')
-	send_command('unbind ^f8')
-	send_command('unbind !f8')
-	send_command('unbind @f8')
-	
-	send_command('unbind f9')
-	send_command('unbind ^f9')
-	send_command('unbind !f9')
-	send_command('unbind @f9')
-	
-	send_command('unbind f10')
-	send_command('unbind ^f10')
-	send_command('unbind !f10')
-	send_command('unbind @f10')
-	
-	send_command('unbind f11')
-	send_command('unbind ^f11')
-	send_command('unbind !f11')
-	send_command('unbind @f11')
-	
-	send_command('unbind f12')
-	send_command('unbind ^f12')
-	send_command('unbind !f12')
-	send_command('unbind @f12')
---]]
-	
-end)
-
 
 function get_lullaby_duration(spell)
     local self = windower.ffxi.get_player()
@@ -1017,6 +451,400 @@ function get_lullaby_duration(spell)
 end
 
 
+-------------------------------------------------------------------------------------------------------------------
+-- Job-specific hooks for non-casting events.
+-------------------------------------------------------------------------------------------------------------------
+
+function job_handle_equipping_gear(playerStatus, eventArgs)
+	update_combat_form()
+	check_moving()
+	update()
+end
+
+-- Handle notifications of general user state change.
+function job_state_change(field, newValue, oldValue)
+
+	if field == "PhysicalDefense" then
+		if state.PhysicalDefense.value == true then
+			state.DefenseMode.current = 'Physical'
+			state.DefenseMode:set('Physical')
+			state.MagicalDefense = M(false)
+		end
+	elseif field == "MagicalDefense" then
+		if state.MagicalDefense.value == true then
+			state.DefenseMode.current = 'Magical'
+			state.DefenseMode:set('Magical')
+			state.PhysicalDefense = M(false)
+		end
+	end
+	if field == "MagicalDefense" or field == "PhysicalDefense" then
+		if state.PhysicalDefense.value == false and state.MagicalDefense.value == false then
+			state.DefenseMode.current = 'None'
+			state.DefenseMode:set('None')
+		end
+    end
+	
+    if field == 'Offense Mode' then
+        if newValue ~= 'None' then
+			--if state.CombatForm == 'DW' then
+-- I added this rule it works better.
+			if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
+				equip(sets.Locked_Main_Sub_DW)
+			else
+				equip(sets.Locked_Main_Sub)
+			end
+            disable('main','sub')
+        else
+            enable('main','sub')
+        end
+    end
+end
+
+
+-- Function to display the current relevant user state when doing an update.
+function display_current_job_state(eventArgs)
+	
+    local msg = ('   [Melee'):color(Notification_color)
+    
+    if state.CombatForm.has_value then
+        msg = msg .. (' (' .. state.CombatForm.value .. ')'):color(text_color)
+    end
+    
+	if #classes.CustomMeleeGroups > 0 then
+        for i = 1,#classes.CustomMeleeGroups do
+			if classes.CustomMeleeGroups[i] ~= 'None' then
+				if i == 1 then
+					msg = msg .. (' ('):color(Notification_color)
+				end
+				msg = msg .. (classes.CustomMeleeGroups[i]):color(Notification_color)
+				if i < #classes.CustomMeleeGroups then
+					msg = msg .. (' + '):color(Notification_color)
+				end
+				if i == #classes.CustomMeleeGroups then
+					msg = msg .. (')'):color(Notification_color)
+				end
+			end
+        end
+    end
+	
+    msg = msg .. (': '):color(Notification_color)
+    
+	if state.DefenseMode.value == 'None' then
+		msg = msg .. (state.OffenseMode.value):color(text_color)
+	else
+		msg = msg ..('LOCKED: ' ):color(warning_text) .. (state.OffenseMode.value):color(text_color)
+	end
+
+	if state.HybridMode.value ~= 'Normal' then
+        msg = msg .. (' + '):color(text_color) .. (state.HybridMode.value):color(warning_text)
+    end
+	
+	msg = msg .. ('] [Casting: '):color(Notification_color) .. (state.CastingMode.value):color(text_color) .. ('] '):color(Notification_color)
+	
+	msg = msg .. (' [Idle: '):color(Notification_color) .. (state.IdleMode.value):color(text_color) .. ('] '):color(Notification_color)
+	
+	msg = msg .. (' [Extra Length: '):color(Notification_color) .. (state.SongPotencyMode.value):color(text_color) .. ('] '):color(Notification_color)
+	
+	msg = msg .. (' [Dummy Song: '):color(Notification_color) .. (state.ExtraSongsMode.value):color(text_color) .. ('] '):color(Notification_color)
+	
+	if state.Pianissimo.value == true then
+		msg = msg .. ('[Pianissimo all Songs'):color(Notification_color) .. ('] '):color(Notification_color)
+	end
+    if state.Kiting.value == true then
+        msg = msg .. ('[Kiting'):color(Notification_color) .. ('] '):color(Notification_color)
+    end
+	
+	if state.CP.value == true then
+        msg = msg .. ('[CP cape'):color(Notification_color) .. ('] '):color(Notification_color)
+    end
+	
+	if state.DefenseMode.value ~= 'None' then
+        msg = msg  .. ('\n')..('['):color(warning_text) .. ('Defense: '):color(warning_text) .. (state.DefenseMode.value .. ' (' .. state[state.DefenseMode.value .. 'DefenseMode'].value .. ')'):color(text_color)..('] '):color(warning_text)
+    end
+	
+	add_to_chat(122, msg)
+
+    eventArgs.handled = true
+	save_settings()
+end
+
+-------------------------------------------------------------------------------------------------------------------
+-- Utility functions specific to this job.
+-------------------------------------------------------------------------------------------------------------------
+function check_target(spell, action, spellMap, eventArgs)
+	if not (buffactive['Amnesia'] or buffactive['impairment']) and song_buffsSpellMap:contains(spellMap) or song_buffsSpellName:contains(spell.name) then 
+		if state.Pianissimo.value == true and (((spell.target.type == 'PLAYER' or spell.target.type == 'SELF') and not spell.target.charmed) or (spell.target.type == 'NPC' and spell.target.in_party)) then
+			if not state.Buff['Pianissimo'] then
+				cancel_spell()
+				send_command('Pianissimo')
+				send_command:schedule(1,'input /ma "'..spell.name.. '" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			end
+		else
+			if ((spell.target.type == 'PLAYER' and not spell.target.charmed) or (spell.target.type == 'NPC' and spell.target.in_party)) then
+				if not state.Buff['Pianissimo'] then
+					cancel_spell()
+					send_command('Pianissimo')
+					send_command:schedule(2,'input /ma "'..spell.name.. '" ' .. spell.target.name)
+					eventArgs.cancel = true
+					return
+				end
+			end
+		end
+	elseif (buffactive['Amnesia'] or buffactive['impairment']) then 
+		if spell.target.type == 'PLAYER' then
+			cancel_spell()
+			send_command('"'..spell.name..'" <me>')
+			add_to_chat(200,'***** Job Abilities not available. Redirecting spell to SELF *****')
+			eventArgs.cancel = true
+			return
+		end
+	end
+end
+
+function get_casting_style(spell, action, spellMap, eventArgs)
+	local equipSet = sets.midcast
+	
+	--classes.SkipSkillCheck = classes.NoSkillSpells:contains(spell.english)
+    -- Handle automatic selection of set based on spell class/name/map/skill/type.
+    equipSet = select_specific_set(equipSet, spell, spellMap)
+	if spell.type == 'BardSong' then
+		if set.contains(spell.targets, 'Enemy') then
+			if song_sleepSpellName :contains(spell.name) then
+				spellMap = "F-Lullaby" 
+			elseif song_sleepAoESpellName:contains(spell.name) then
+				spellMap = "H-Lullaby" 
+			end
+			equipSet = equipSet['Debuff']
+			equipSet = select_specific_set(equipSet, spell, spellMap)
+			
+		else
+			if state.ExtraSongsMode.value == 'None' then
+				if state.SongPotencyMode.value == 'Empy_Boost' then
+					if equipSet['Buff'] then 
+						equipSet = equipSet['Buff']
+					end
+				elseif state.SongPotencyMode.value == 'Duration' then 
+					if equipSet['Extra Length'] then 
+						equipSet = equipSet['Extra Length']
+					elseif equipSet['Buff']['Extra Length'] then 
+						equipSet = equipSet['Buff']['Extra Length']
+					end
+				end
+				equipSet = select_specific_set(equipSet, spell, spellMap)
+			elseif state.ExtraSongsMode.value == 'Dummy' then
+				if equipSet['Dummy'] then 
+					equipSet = equipSet['Dummy']
+				end
+			end
+		end
+	end
+
+	if equipSet[state.CastingMode.current] then
+		equipSet = equipSet[state.CastingMode.current]
+	end
+	
+	equip(equipSet)
+end
+
+-- Examine equipment to determine what our current TP weapon is.
+function update_combat_form()
+	--if DW == true then
+-- I added this. This rule works better for DW
+    if (player.sub_job == 'NIN' and player.sub_job_level > 9) or (player.sub_job == 'DNC' and player.sub_job_level > 19) then
+		state.CombatForm:set('DW')
+	elseif H2H == true then
+		state.CombatForm:set('H2H')
+	else
+		state.CombatForm:reset()
+	end
+end
+
+function job_self_command(cmdParams, eventArgs)
+
+   gearinfo(cmdParams, eventArgs)
+   
+   if cmdParams[1] == 'hide' then
+		if hide_window then
+			hide_window = false
+		else
+			hide_window = true
+		end
+		old_inform.hide_window = hide_window
+	end
+
+end
+
+initialize = function(text, t)
+    local properties = L{}
+	
+    if state.OffenseMode then
+        properties:append('${OffenseMode|0}')
+    end
+	if state.HybridMode then
+        properties:append('${HybridMode}')
+    end
+	if state.CastingMode then
+        properties:append('${CastingMode|0}')
+    end
+	if state.IdleMode then
+        properties:append('${IdleMode}')
+    end
+	if state.SongPotencyMode then
+       properties:append('${SongPotencyMode}')
+    end
+	if state.ExtraSongsMode then
+        properties:append('${ExtraSongsMode}')
+    end
+	if state.Pianissimo then
+        properties:append('${Pianissimo}')
+    end
+	if state.Kiting then
+        properties:append('${Kiting}')
+    end
+	if state.CP then
+        properties:append('${CP}')
+    end
+	if state.DefenseMode then
+        properties:append('${DefenseMode}')
+    end
+	properties:append('${is_Moving}')
+    text:clear()
+    text:append(properties:concat(''))
+	update()
+end
+
+function update()
+	
+	local white = '\\cs(220,220,220)'
+	local blue = '\\cs(150,150,235)'
+	local red = '\\cs(255,0,0)'
+	local orange = '\\cs(232,138,13)'
+	local yellow = '\\cs(220,220,0)'
+	local green = '\\cs(0,225,0)'
+	local purple = '\\cs(213,43,196)'
+	
+	if not windower.ffxi.get_info().logged_in or not windower.ffxi.get_player() or zoning_bool or hide_window then
+        text_box:hide()
+        return
+    end
+
+	local inform = {}
+	local msg = ' [Melee'
+	if state.CombatForm.current == 'DW' then
+		msg = msg .. ' (DW)'
+	end
+	if #classes.CustomMeleeGroups > 0 then
+		for i = 1,#classes.CustomMeleeGroups do
+			if classes.CustomMeleeGroups[i] ~= 'None' then
+				if i == 1 then msg = msg .. ' (' end
+				msg = msg .. classes.CustomMeleeGroups[i]
+				if i < #classes.CustomMeleeGroups then msg = msg .. ' + ' end
+				if i == #classes.CustomMeleeGroups then msg = msg ..')' end
+			end
+		end
+	end
+	
+	msg = msg .. ': '
+	
+	if state.DefenseMode.value == 'None' then
+		if state.HybridMode.value ~= 'Normal' then
+			msg = blue .. msg .. white .. state.OffenseMode.value .. blue .. ' + ' .. yellow .. state.HybridMode.value .. blue .. '] '
+		else
+			msg = blue .. msg .. white .. state.OffenseMode.value .. blue .. '] '
+		end
+	else
+		if state.HybridMode.value ~= 'Normal' then
+			msg = red .. msg .. state.OffenseMode.value .. ' + ' .. state.HybridMode.value .. '] '
+		else
+			msg = red .. msg .. state.OffenseMode.value .. '] '
+		end
+	end
+	inform.OffenseMode = msg .. '\\cr'
+			
+	inform.CastingMode = (blue .. ('\n [Casting: '.. white .. state.CastingMode.value:lpad(' ', 2) .. blue .. '] ' )) .. '\\cr'
+	
+	if state.SongPotencyMode.value ~= 'None' then
+		inform.SongPotencyMode = (purple .. ('\n [Singing: '.. white .. state.SongPotencyMode.value:lpad(' ', 2) .. purple .. '] ' )) .. '\\cr'
+	else
+		inform.SongPotencyMode = ('')
+	end
+	
+	if state.ExtraSongsMode.value ~= 'None' then
+		inform.ExtraSongsMode = (red .. ('\n [Extra Song: '.. yellow .. state.ExtraSongsMode.value:lpad(' ', 2) .. red .. '] ' )) .. '\\cr'
+	else
+		inform.ExtraSongsMode = ('')
+	end
+	
+	if state.Pianissimo.value == true then
+		inform.Pianissimo = (purple .. ('\n [Pianissimo] ' )) .. '\\cr'
+	elseif state.Pianissimo.value == false then
+		inform.Pianissimo = ('')
+	end
+	
+	if state.DefenseMode.value == 'None' then
+		inform.IdleMode = (blue .. ('\n [Idle: '.. white .. state.IdleMode.value:lpad(' ', 2) .. blue .. '] ' )) .. '\\cr'
+	else
+		inform.IdleMode = (red .. ('\n [Idle: '..state.IdleMode.value:lpad(' ', 2) .. '] ' )) .. '\\cr'
+	end
+		
+	if state.DefenseMode.value == 'None' then
+		if state.Kiting.value == true and state.CP.value == true then
+			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
+			inform.CP = (orange .. ('[CP Cape] ' )) .. '\\cr'
+		elseif state.Kiting.value == true and state.CP.value == false then
+			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
+			inform.CP = ('')
+		elseif state.Kiting.value == false and state.CP.value == true then
+			inform.Kiting = ('')
+			inform.CP = (orange .. ('\n [CP Cape] ' )) .. '\\cr'
+		elseif state.Kiting.value == false and state.CP.value == false then
+			inform.Kiting = ('')
+			inform.CP = ('')
+		end
+	else
+		if state.Kiting.value == true and state.CP.value == true then
+			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
+			inform.CP = (red .. ('[CP Cape] ' )) .. '\\cr'
+		elseif state.Kiting.value == true and state.CP.value == false then
+			inform.Kiting = (yellow .. ('\n [Kiting] ' )) .. '\\cr'
+			inform.CP = ('')
+		elseif state.Kiting.value == false and state.CP.value == true then
+			inform.Kiting = ('')
+			inform.CP = (red .. ('\n [CP Cape] ' )) .. '\\cr'
+		elseif state.Kiting.value == false and state.CP.value == false then
+			inform.Kiting = ('')
+			inform.CP = ('')
+		end
+	end
+	
+	if state.DefenseMode.value ~= 'None' then
+		inform.DefenseMode = (red .. ('\n [' .. 'DEFENCE: ' .. state.DefenseMode.value .. white ..' (' ..state[state.DefenseMode.value .. 'DefenseMode'].value ..')'..red..']' )) .. '\\cr'
+	else
+		inform.DefenseMode = ('')
+	end
+	
+	if state.DefenseMode.value == 'None' then
+		if moving == true then
+			inform.is_Moving = (yellow .. ('\n [Moving]' )) .. '\\cr'
+		else
+			inform.is_Moving = ('')
+		end
+	end
+	
+	if not table.equals(old_inform, inform) then
+		text_box:update(inform)
+		text_box:show()
+		old_inform = inform
+	end
+end
+
+windower.register_event('unload', function()
+	text_box:destroy()
+	text_box = nil
+end)
+
 windower.register_event('job change',function()
     send_command('gs r')
 end)
@@ -1028,9 +856,4 @@ end
 
 function set_lockstyle()
     send_command('wait 2; input /lockstyleset ' .. lockstyleset)
-	add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Lockstyle Set '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
 end
-
---these were disabled. On by default in Kinematics. 
-windower.raw_register_event('zone change',reset_timers)
-windower.raw_register_event('logout',reset_timers)

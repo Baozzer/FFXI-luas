@@ -192,16 +192,6 @@ function user_setup()
 	text_box:register_event('reload', initialize)
 	
 	initialize(text_box)
-	
-	local msg = ''
-	msg = ('You have loaded Seb\'s SMN lua. Please use '):color(text_color) .. ('\"\/\/GS c help\" '):color(Notification_color) .. ('for a full list of key bound functions. Enjoy!'):color(text_color)
-	add_to_chat(122, msg)
-end
-
-
--- Define sets and vars used by this job file.
-function init_gear_sets()
-	
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -435,28 +425,19 @@ function customize_idle_set(idleSet)
 		if player.mpp < 51 then
 			idleSet = set_combine(idleSet, sets.latent_refresh)
 		end
-		if state.Buff["Reive Mark"] then
-			idleSet = set_combine(idleSet, sets.buff.Reive)
-		end
 	end
-
 -- I seperated these so these sets are always on
-		if state.CP.value == true then
-			idleSet = set_combine(idleSet, sets.CP)
-		end
-		if state.Auto_Kite.value == true then
+	if state.CP.value == true then
+		idleSet = set_combine(idleSet, sets.CP)
+	end
+	if state.Auto_Kite.value == true then
 -- I added Councilor's Garb Swap for when in Adoulin
-			if world.area:endswith('Adoulin') then
-				idleSet = set_combine(idleSet, sets.Adoulin)
-			else 
-				idleSet = set_combine(idleSet, sets.Kiting)
-			end
-		end	
-		if state.Buff.doom then
-        	idleSet = set_combine(idleSet, sets.buff.Doom)
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
- 		end
-    
+		if world.area:endswith('Adoulin') then
+			idleSet = set_combine(idleSet, sets.Adoulin)
+		else 
+			idleSet = set_combine(idleSet, sets.Kiting)
+		end
+	end	
     return idleSet
 end
 
@@ -472,10 +453,6 @@ function customize_melee_set(meleeSet)
 		if state.CP.value == true then
 			meleeSet = set_combine(meleeSet, sets.CP)
 		end
-		if state.Buff.doom then
-        	meleeSet = set_combine(meleeSet, sets.buff.Doom)
-			add_to_chat(200,('__\\||//__***** '):color(Notification_color) .. (' Doomed '):color(warning_text) .. ('*****__\\||//__'):color(Notification_color) )
-    	end
 	--end
     return meleeSet
 end
@@ -680,53 +657,6 @@ function job_self_command(cmdParams, eventArgs)
 			hide_window = true
 		end
 		old_inform.hide_window = hide_window
-	end
-	
-	if cmdParams[1] == 'help' then
-	
-		local chat_purple = string.char(0x1F, 200)
-		local chat_grey = string.char(0x1F, 160)
-		local chat_red = string.char(0x1F, 167)
-		local chat_white = string.char(0x1F, 001)
-		local chat_green = string.char(0x1F, 214)
-		local chat_yellow = string.char(0x1F, 036)
-		local chat_d_blue = string.char(0x1F, 207)
-		local chat_pink = string.char(0x1E, 5)
-		local chat_l_blue = string.char(0x1E, 6)
-		
-	
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_white.. 	'                         ----------------------------------' )
-		windower.add_to_chat(6, chat_d_blue.. 	'                         Welcome to Sebs Gearswap help!' )
-		windower.add_to_chat(6, chat_white.. 	'                         ----------------------------------' )
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_d_blue.. 	'You may manually type these with \"\/\/gs c [function]\" eg. '.. chat_yellow ..' \"\/\/gs c update user\"')
-		windower.add_to_chat(6, chat_d_blue.. 	'If you wish to macro the functions please use \"\/con gs c [function]\" eg. '.. chat_yellow ..' \"\/con gs c update user\"')
-		windower.add_to_chat(6, chat_yellow.. 	'W-key'.. chat_d_blue ..' means Windows key')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_green.. 	'Key Binds available:')
-		windower.add_to_chat(6, chat_yellow.. 	'           \'F12\''..chat_l_blue  ..' = update user ' .. chat_white .. '  --  Will check and equip correct gear.')
-		windower.add_to_chat(6, chat_d_blue.. 	'Will also save the current location of the gearswap info text box to file')
-		windower.add_to_chat(6, chat_yellow..	'   \'Ctrl + F12\''..chat_l_blue  ..' = cycle CastingMode ' .. chat_white .. '   --  Cycles to resistant mode \(more Macc\).')
-		windower.add_to_chat(6, chat_yellow..	'    \'Alt + F12\''..chat_l_blue  ..' = cycle IdleMode ' .. chat_white .. '  --  Cycle through idle modes.')
-		windower.add_to_chat(6, chat_yellow..	'\'W-Key + F12\''..chat_l_blue  ..' = toggle kiting ' .. chat_white .. '  --  Locks movement speed gear on over any set')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow..	'   \'Ctrl + F11\''..chat_l_blue  ..' = cycle CP ' .. chat_white .. '  --  Makes you utilise CP cape')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow.. 	'             \'[\''..chat_l_blue  ..' = toggle PhysicalDefense ' .. chat_white .. '  --  Locks PDT set on.')
-		windower.add_to_chat(6, chat_yellow..	'      \'Ctrl + [\''..chat_l_blue  ..' = cycle OffenseMode ' .. chat_white .. '   --  Cycles throught melee accuracy modes.')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_yellow..	'             \']\''..chat_l_blue  ..' = toggle MagicalDefense ' .. chat_white .. '  --  Locks MDT set on.')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_d_blue.. 	'If you need more help or run into problems, you can contact me via email at ' .. chat_yellow .. 'sebyg666@hotmail.com')
-		windower.add_to_chat(6, chat_d_blue.. 	'Alternatively if you have me on your skype list, just leave me a message there and ill get back to you.')
-		windower.add_to_chat(6, ' ')
-		windower.add_to_chat(6, chat_green.. 	'Warning: Shameless plug follows.')
-		windower.add_to_chat(6, chat_d_blue.. 	'If You are a big fan of my lua\'s and you wish to support me, you are more then welcome to donate any amount of money')
-		windower.add_to_chat(6, chat_d_blue.. 	'via paypal at the above email adress. You may also tell other people you trust about my lua\'s and how to contact me,')
-		windower.add_to_chat(6, chat_d_blue.. 	'for help setting up, and finally you can also find me streaming live on twitch at '.. chat_yellow .. 'www.twitch.tv/Sebbyg')
-		windower.add_to_chat(6, ' ')
-	
 	end
 	
 end
@@ -1076,41 +1006,6 @@ end
 windower.register_event('unload', function()
 	text_box:destroy()
 	text_box = nil
-	
-	send_command('unbind ^`')
-    send_command('unbind !`')
-	send_command('unbind @`')
-	
-	send_command('unbind f7')
-	send_command('unbind ^f7')
-	send_command('unbind !f7')
-	send_command('unbind @f7')
-	
-	send_command('unbind f8')
-	send_command('unbind ^f8')
-	send_command('unbind !f8')
-	send_command('unbind @f8')
-	
-	send_command('unbind f9')
-	send_command('unbind ^f9')
-	send_command('unbind !f9')
-	send_command('unbind @f9')
-	
-	send_command('unbind f10')
-	send_command('unbind ^f10')
-	send_command('unbind !f10')
-	send_command('unbind @f10')
-	
-	send_command('unbind f11')
-	send_command('unbind ^f11')
-	send_command('unbind !f11')
-	send_command('unbind @f11')
-	
-	send_command('unbind f12')
-	send_command('unbind ^f12')
-	send_command('unbind !f12')
-	send_command('unbind @f12')
-	
 end)
 
 windower.register_event('job change',function()

@@ -36,11 +36,12 @@ function init_gear_sets()
 	
 	Rhapsode_back		={ name="Rhapsode's Cape", augments={'HP+19','Mag. Acc.+5','Enmity-8',}}
 	JSE_back_FC			={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10',}}
-	--you need a better one. stp
 	JSE_back_TP			={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dbl.Atk."+10',}}
-	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','CHR+10','Weapon skill damage +10%',}}
+	JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','CHR+10','Weapon skill damage +10%',}}
 	JSE_back_WS_DEX		={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	JSE_back_WS_STR		={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
+	--JSE_back_WS_Evis	={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Crit.hit rate+10',}}
+	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	
 	--------------------------------------
 	-- Gear for organizer to get
@@ -224,12 +225,11 @@ function init_gear_sets()
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
 		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Telch_Feet_Enh}
 	
-	-- Song equipment overide goes from Buff(Empy) -> Extra Length(+duration) -> +song
 	sets.midcast['Buff'] = {
 		main="Carnwenhan",sub="Genmei Shield",range="Gjallarhorn",
 		head=Empy_head,neck="Moonbow Whistle +1",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body=Empy_body,hands=Empy_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Empy_feet}
+		back=JSE_back_FC,waist="Witful Belt",legs=Empy_legs,feet=Empy_feet,}
 
 	-- Song Type Equipment
 	-- dont use ballad af legs messes up timers	
@@ -266,44 +266,35 @@ function init_gear_sets()
 	sets.midcast['Buff']['Extra Length']['Prelude']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})	
 	sets.midcast['Buff']['Extra Length']['Scherzo']	 					= set_combine(sets.midcast['Buff']['Extra Length'], {feet=Empy_feet,})
 	
-	-- Duration then FC then Macc
+	-- Ghorn
 	sets.midcast['Debuff'] = {
 		main="Carnwenhan",sub="Ammurapi Shield",range="Gjallarhorn",
 		--head=AF_head, dont have yet
 		head="Inyanga Tiara +2",neck="Moonbow Whistle +1",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body=Empy_body,hands="Inyan. Dastanas +2",ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs="Inyanga Shalwar +2",feet=AF_feet
-		}		
-	-- Macc
+		back=JSE_back_FC,waist="Witful Belt",legs="Inyanga Shalwar +2",feet=AF_feet,}		
 	sets.midcast['Debuff'].Resistant = set_combine(sets.midcast['Debuff'], {
-		neck="Null Loop",ear1="Digni. Earring",ear2="Regal Earring",
+		ear1="Digni. Earring",ear2="Regal Earring",
 		ring1="Stikini Ring",ring2="Stikini Ring",
-		waist="Null Belt",
-		})
+		waist="Null Belt",})
 		
-	-- Duration then FC then Macc
-	sets.midcast['Debuff']['Macc-Lullaby']  = set_combine(sets.midcast['Debuff'], {})
-	-- Macc
-	sets.midcast['Debuff']['Macc-Lullaby'].Resistant = set_combine(sets.midcast['Debuff']['Macc-Lullaby'], {
-		neck="Null Loop",ear1="Digni. Earring",ear2="Regal Earring",
+	-- Marsyas
+	sets.midcast['Debuff']['F-Lullaby']  = set_combine(sets.midcast['Debuff'], {
+		range="Marsyas",})
+	sets.midcast['Debuff']['F-Lullaby'].Resistant = set_combine(sets.midcast['Debuff']['F-Lullaby'], {
+		ear1="Digni. Earring",ear2="Regal Earring",
 		ring1="Stikini Ring",ring2="Stikini Ring",
-		waist="Null Belt",
-		})
+		waist="Null Belt",})
 
-	-- String Skill for range then Macc. Only For Horde II 486 skill
-
-	--sets.midcast['Horde Lullaby II'] = {}
-	sets.midcast['Debuff']['StringSkill-Lullaby'] = set_combine(sets.midcast['Debuff'], {
+	-- Daurdabla. Need 567 String
+	sets.midcast['Debuff']['H-Lullaby'] = set_combine(sets.midcast['Debuff'], {
 		range="Daurdabla",
 		--af head
         --ear1="Gersemi Earring",ear2="Darkside Earring",
-		waist=="Harfner's Sash",
-        })
-		-- 475 skill
-	-- Macc. Ghorn
-	sets.midcast['Debuff']['StringSkill-Lullaby'].Resistant	= set_combine(sets.midcast['Debuff']['StringSkill-Lullaby'], {
-		range="Gjallarhorn",
-		neck="Null Loop",ear1="Digni. Earring",ear2="Regal Earring",
+		waist=="Harfner's Sash",})
+		-- Total 475 skill
+	sets.midcast['Debuff']['H-Lullaby'].Resistant	= set_combine(sets.midcast['Debuff']['H-Lullaby'], {
+		ear1="Digni. Earring",ear2="Regal Earring",
 		ring1="Stikini Ring",ring2="Stikini Ring",
 		waist="Null Belt",
 		})
@@ -335,29 +326,13 @@ function init_gear_sets()
 
     sets.midcast.Utsusemi = sets.midcast.SpellInterrupt
 	
-	--[[
-	sets.midcast['Enfeebling Magic'] = {
-		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
-		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
-		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh,}
-	--]]
 
-	-- Addle, Slow, Paralyze, Frazzle, Distract. Don't see any INT enfeebs worthwhile to differiante the sets. 
-    sets.midcast['Mnd Enfeebles'] = {
+    sets.midcast['Enfeebling Magic'] = {
 		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
 		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
 		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet="Uk'uxkaj boots",}
-	sets.midcast['Mnd Enfeebles'].Resistant 	= set_combine(sets.midcast['Mnd Enfeebles'], {})
-
-	-- Others
-    sets.midcast['Int Enfeebles'] = {
-		main="Daybreak",sub="Ammurapi Shield",ammo="Pemphredo Tathlum",
-		head=Vanya_head,neck="Null Loop",ear1="Loquac. Earring",ear2="Enchntr. Earring +1",
-		body="Inyanga Jubbah +2",hands=Leyline_hands,ring1="Weather. Ring",ring2="Kishar Ring",
-		back=JSE_back_FC,waist="Witful Belt",legs=Chironic_legs_MAcc,feet=Telch_Feet_Enh,}
-	sets.midcast['Int Enfeebles'].Resistant 	= set_combine(sets.midcast['Int Enfeebles'], {})
+		back=JSE_back_FC,waist="Null Belt",legs=Chironic_legs_MAcc,feet="Uk'uxkaj boots",}
+	sets.midcast['Enfeebling Magic'].Resistant = set_combine(sets.midcast['Enfeebling Magic'],{})
 		
 	sets.midcast.Dispelga = set_combine(sets.midcast['Enfeebling Magic'], {
 		--waist="Shinjutsu-no-Obi +1" -- unity aug
@@ -405,15 +380,16 @@ function init_gear_sets()
 		ear2="Gifted Earring", -- 3 CMP
 		body="Vrikodara Jupon", -- 13% CP
 		hands="Inyan. Dastanas +2",
-		ring1="Haoma's Ring",
+		ring1="Naji's Loop", -- 1% | 1%ii
 		ring2="Haoma's Ring",
 		back="Solemnity Cape", -- 7% CP | 5 CMP
 		waist="Luminary Sash", -- 4 CMP
 		legs="Gyve Trousers", -- 10% CP
 		feet=Vanya_feet, -- 5% CP
         }
-		--- Totals 50% CP | 24 CMP | 0% CPII
-			
+		--- Totals 51% CP | 24 CMP | 1% CPII
+	
+	--30% cap
 	sets.midcast.CureSelf = set_combine(sets.midcast.Cure, {
 		neck="Phalaina Locket", -- 4%
 		ear2="Oneiros Earring", -- 5%
@@ -557,21 +533,16 @@ function init_gear_sets()
 		body="Inyanga Jubbah +2",hands="Inyan. Dastanas +2",ring1="Archon Ring",ring2="Defending Ring",
 		back=Rhapsode_back,waist="Slipor Sash",legs="Inyanga Shalwar +2",feet="Inyan. Crackows +2"}
 		-- 39 MDT | 30 PDT w/o weapons
-	
-	sets.kiting = {feet=Empy_feet}
 
-	--[[
-	sets.adoulin = {body="Councilor's Garb"}
+	sets.Kiting = {feet=Empy_feet}
+	sets.Adoulin = {body="Councilor's Garb"}
 	sets.CP = {back=CP_back}
 	sets.latent_refresh = {waist="Fucho-no-obi"}
-	sets.reive = {neck="Arciela's Grace +1"}
-	sets.doom = {
+	sets.buff.reive = {neck="Arciela's Grace +1"}
+	sets.buff.doom = {
 		neck="Nicander's Necklace",
 		waist="Gishdubar Sash",}
 	sets.warp = {ring1='Warp Ring'}
-	--]]
-
-	
 	--sets.crafting = {sub={name="Toreutic Ecu",priority=-1},head="Shaded Spectacles",body="Goldsmith's Smock",neck="Goldsmith's Torque",ring1="Orvail Ring",ring2="Craftmaster's Ring",}
 
     -- Engaged sets
@@ -586,19 +557,21 @@ function init_gear_sets()
 			main="Carnwenhan",sub="Genmei Shield",range=Linos_TP,
 			head="Aya. Zucchetto +2",neck="Ainia Collar",ear1="Cessance Earring",ear2="Telos Earring",
 			body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Petrov Ring",ring2="Ilabrat Ring",
-			back=JSE_back_TP,waist="Windbuffet Belt +1",legs="Querkening Brais",feet="Battlecast Gaiters"
-        }
+			back=JSE_back_TP,waist="Windbuffet Belt +1",legs="Querkening Brais",feet="Battlecast Gaiters",}
+	sets.engaged.DT = set_combine(sets.engaged,{neck="Null Loop",waist="Null Belt"})
 			
 	sets.engaged.Acc = set_combine(sets.engaged,{neck="Null Loop",waist="Null Belt"})
+	sets.engaged.Acc.DT = set_combine(sets.engaged,{neck="Null Loop",waist="Null Belt"})
 	
 	sets.engaged.DW = {
 			main="Kaja Sword",sub="Carnwenhan",range=Linos_TP,
 			head="Aya. Zucchetto +2",neck="Ainia Collar",ear1="Eabani Earring",ear2="Telos Earring",
 			body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Petrov Ring",ring2="Ilabrat Ring",
-			back=JSE_back_TP,waist="Reiki Yotai",legs="Querkening Brais",feet="Battlecast Gaiters"
-			}
-			
+			back=JSE_back_TP,waist="Reiki Yotai",legs="Querkening Brais",feet="Battlecast Gaiters"}
+	sets.engaged.DW.DT = set_combine(sets.engaged.DW,{neck="Null Loop",waist="Null Belt"})
+
 	sets.engaged.DW.Acc = set_combine(sets.engaged.DW,{neck="Null Loop",waist="Null Belt"})
+	sets.engaged.DW.Acc.DT = set_combine(sets.engaged.DW,{neck="Null Loop",waist="Null Belt"})
 
 	
 	sets.Locked_Main_Sub = {main="Carnwenhan",sub="Genmei Shield"}

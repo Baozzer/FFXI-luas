@@ -59,7 +59,7 @@ function init_gear_sets()
 		--ear1="Ludurr Earring",--ear2="C. Palug Earring",
 		head="Baayami Hat",neck="Incanter's Torque",ear1="Smn. Earring",ear2="Andoaa Earring",
 		body="Baayami Robe",hands="Baayami Cuffs",ring1="Evoker's Ring",ring2="Zodiac Ring",
-		back="Conveyance Cape",waist="Kobo Obi",legs="Baayami Slops",feet=Empy_feet,}
+		back="Conveyance Cape",waist="Ligeia Sash",legs="Baayami Slops",feet=Empy_feet,}
 
     sets.precast.JA['Mana Cede'] = {hands=Empy_hands}
 
