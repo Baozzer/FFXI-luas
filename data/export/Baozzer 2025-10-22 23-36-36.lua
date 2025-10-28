@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Daybreak",
+    sub="Ammurapi Shield",
+    range={ name="Nibiru Harp", augments={'Mag. Evasion+20','Phys. dmg. taken -3','Magic dmg. taken -3',}},
+    head="Inyanga Tiara +2",
+    body="Inyanga Jubbah +2",
+    hands="Inyan. Dastanas +2",
+    legs="Inyanga Shalwar +2",
+    feet="Inyan. Crackows +2",
+    neck="Warder's Charm +1",
+    waist="Carrier's Sash",
+    left_ear="Hearty Earring",
+    right_ear="Sanare Earring",
+    left_ring="Purity Ring",
+    right_ring="Vengeful Ring",
+    back="Felicitas Cape +1",
+}

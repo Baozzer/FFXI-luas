@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Carnwenhan",
+    sub="Ammurapi Shield",
+    range="Daurdabla",
+    head="Inyanga Tiara +2",
+    body="Fili Hongreline +1",
+    hands="Inyan. Dastanas +2",
+    legs={ name="Chironic Hose", augments={'Mag. Acc.+18 "Mag.Atk.Bns."+18','"Fast Cast"+2','MND+7','Mag. Acc.+13',}},
+    feet="Brioso Slippers +3",
+    neck="Mnbw. Whistle +1",
+    waist="Luminary Sash",
+    left_ear="Digni. Earring",
+    right_ear="Regal Earring",
+    left_ring="Stikini Ring",
+    right_ring="Stikini Ring",
+    back={ name="Intarabus's Cape", augments={'CHR+20','Mag. Acc+20 /Mag. Dmg.+20','Mag. Acc.+10','"Fast Cast"+10',}},
+}

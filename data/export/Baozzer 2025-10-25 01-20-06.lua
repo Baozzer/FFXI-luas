@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Mafic Cudgel",
+    sub="Genmei Shield",
+    range={ name="Linos", augments={'Accuracy+15','Weapon skill damage +3%','DEX+8',}},
+    head="Aya. Zucchetto +2",
+    body="Ayanmo Corazza +2",
+    hands="Aya. Manopolas +2",
+    legs="Aya. Cosciales +2",
+    feet={ name="Lustratio Leggings", augments={'HP+50','STR+10','DEX+10',}},
+    neck="Caro Necklace",
+    waist="Prosilio Belt +1",
+    left_ear="Moonshade Earring",
+    right_ear="Ishvara Earring",
+    left_ring="Ifrit Ring +1",
+    right_ring="Shukuyu Ring",
+    back={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','DEX+10','Weapon skill damage +10%',}},
+}

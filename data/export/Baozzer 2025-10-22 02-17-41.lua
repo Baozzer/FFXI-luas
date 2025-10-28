@@ -1,0 +1,17 @@
+sets.exported = {
+    main="Daybreak",
+    sub="Ammurapi Shield",
+    ammo="Vanir Battery",
+    head="Inyanga Tiara +2",
+    body="Inyanga Jubbah +2",
+    hands="Inyan. Dastanas +2",
+    legs="Inyanga Shalwar +2",
+    feet="Inyan. Crackows +2",
+    neck="Warder's Charm +1",
+    waist="Slipor Sash",
+    left_ear="Sanare Earring",
+    right_ear="Zennaroi Earring",
+    left_ring="Archon Ring",
+    right_ring="Defending Ring",
+    back={ name="Rhapsode's Cape", augments={'HP+19','Mag. Acc.+5','Enmity-8',}},
+}

@@ -535,7 +535,6 @@ function init_gear_sets()
 	sets.Adoulin = {body="Councilor's Garb"}
 	sets.CP = {back=CP_back}
 	sets.latent_refresh = {waist="Fucho-no-obi"}
-	sets.warp = {ring1='Warp Ring'}
 	--sets.crafting = {sub={name="Toreutic Ecu",priority=-1},head="Shaded Spectacles",body="Goldsmith's Smock",neck="Goldsmith's Torque",ring1="Orvail Ring",ring2="Craftmaster's Ring",}
 
     -- Engaged sets

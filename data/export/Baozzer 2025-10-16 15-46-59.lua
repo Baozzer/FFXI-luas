@@ -1,0 +1,16 @@
+sets.exported = {
+    main="Carnwenhan",
+    sub="Genmei Shield",
+    range="Oneiros Harp",
+    body="Respite Cloak",
+    hands={ name="Chironic Gloves", augments={'Accuracy+7','Haste+1','"Refresh"+2','Accuracy+19 Attack+19',}},
+    legs="Assid. Pants +1",
+    feet="Fili Cothurnes +1",
+    neck="Sanctity Necklace",
+    waist="Flume Belt",
+    left_ear="Hearty Earring",
+    right_ear="Infused Earring",
+    left_ring="Sheltered Ring",
+    right_ring="Paguroidea Ring",
+    back={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Accuracy+10','"Dbl.Atk."+10',}},
+}

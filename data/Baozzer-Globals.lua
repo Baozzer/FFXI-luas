@@ -99,6 +99,9 @@ function define_global_sets()
 		--ring2
 		waist="Gishdubar Sash",}
 	sets.notmoonshade = {ear1="",}
+	sets.warp = {
+		ring1="Dim. Ring (Dem)",
+		ring2="Warp Ring",}
 end
 
 

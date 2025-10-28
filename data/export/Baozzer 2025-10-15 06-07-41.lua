@@ -1,0 +1,15 @@
+sets.exported = {
+    main="Prelatic Pole",
+    range="Oneiros Harp",
+    body="Respite Cloak",
+    hands={ name="Chironic Gloves", augments={'Accuracy+7','Haste+1','"Refresh"+2','Accuracy+19 Attack+19',}},
+    legs="Assid. Pants +1",
+    feet="Fili Cothurnes +1",
+    neck="Sanctity Necklace",
+    waist="Flume Belt",
+    left_ear="Hearty Earring",
+    right_ear="Infused Earring",
+    left_ring="Sheltered Ring",
+    right_ring="Paguroidea Ring",
+    back="Kumbira Cape",
+}
