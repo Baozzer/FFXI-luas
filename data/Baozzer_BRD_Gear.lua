@@ -41,7 +41,6 @@ function init_gear_sets()
 	JSE_back_WS_DEX		={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	JSE_back_WS_STR		={ name="Intarabus's Cape", augments={'STR+20','Accuracy+20 Attack+20','STR+10','Weapon skill damage +10%',}}
 	--JSE_back_WS_Evis	={ name="Intarabus's Cape", augments={'DEX+20','Accuracy+20 Attack+20','Crit.hit rate+10',}}
-	--JSE_back_WS_CHR		={ name="Intarabus's Cape", augments={'CHR+20','Accuracy+20 Attack+20','Weapon skill damage +10%',}}
 	
 	--------------------------------------
 	-- Gear for organizer to get
@@ -154,21 +153,33 @@ function init_gear_sets()
 	-- Default set for any weaponskill that isn't any more specifically defined
 	sets.precast.WS = {
 		range=Linos_WS,
-		head="Aya. Zucchetto +2",neck="Fotia Gorget",ear1="Moonshade Earring",ear2="Ishvara Earring",
-		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Rajas Ring",ring2="Ilabrat Ring",
-		back=JSE_back_WS_STR,waist="Fotia Belt",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2",}
-   
+		head="Aya. Zucchetto +2",neck="Caro Necklace",ear1="Moonshade Earring",ear2="Ishvara Earring",
+		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Petrov Ring",ring2="Ilabrat Ring",
+		back=JSE_back_WS_STR,waist="Prosilio Belt +1",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2",}
+		   
 	-- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
-	sets.precast.WS['Evisceration'] = set_combine(sets.precast.WS, {})
-
-	sets.precast.WS['Exenterator'] = set_combine(sets.precast.WS, {})
 	
-	-- DEX-
+	-- DEX/CHR
+	sets.precast.WS['Dancing Edge'] = set_combine(sets.precast.WS, {
+		neck="Fotia Gorget",
+		waist="Fotia Belt",})
+
+	-- Crit > DEX
+	sets.precast.WS['Evisceration'] = set_combine(sets.precast.WS, {
+		neck="Fotia Gorget",
+		waist="Fotia Belt",})
+	
+	-- AGI
+	sets.precast.WS['Exenterator'] = set_combine(sets.precast.WS, {
+		neck="Fotia Gorget",
+		waist="Fotia Belt",})
+	
+	-- DEX
 	sets.precast.WS["Rudra's Storm"] = {
 		range=Linos_WS,
 		head="Aya. Zucchetto +2",neck="Fotia Gorget",ear1="Moonshade Earring",ear2="Ishvara Earring",
 		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ramuh Ring +1",ring2="Ilabrat Ring",
-		back=JSE_back_WS_STR,waist="Fotia Belt",legs="Aya. Cosciales +2",feet=Lustratio_feet,}
+		back=JSE_back_WS_DEX,waist="Fotia Belt",legs="Aya. Cosciales +2",feet=Lustratio_feet,}
 
 	--CHR > WSD
 	sets.precast.WS['Mordant Rime'] = {
@@ -190,6 +201,13 @@ function init_gear_sets()
 		head="Aya. Zucchetto +2",neck="Caro Necklace",ear1="Moonshade Earring",ear2="Ishvara Earring",
 		body="Ayanmo Corazza +2",hands="Ayanmo Manopolas +2",ring1="Ifrit Ring +1",ring2="Shukuyu Ring",
 		back=JSE_back_WS_STR,waist="Prosilio Belt +1",legs="Aya. Cosciales +2",feet=Lustratio_feet}
+
+	-- MAB > INT/STR
+    sets.precast.WS['Burning Blade'] =  {
+		range=Linos_WS,
+		head="Inyanga Tiara +2",neck="Sanctity Necklace",ear1="Moonshade Earring",ear2="Friomisi Earring",
+		body="Inyanga Jubbah +2",hands=Chironic_hands_MAB,ring1="Shiva Ring +1",ring2="Shiva Ring +1",
+		back=JSE_back_WS_STR,waist="Eschan Stone",legs=Chironic_legs_MAcc,feet=Chironic_feet_MAB,}
     
     
     -- Midcast Sets

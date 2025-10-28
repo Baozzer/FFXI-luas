@@ -141,6 +141,19 @@ function job_precast(spell, action, spellMap, eventArgs)
 			eventArgs.cancel = true
 			return
 		end
+	-- Auto swap moonshade to something else. 
+	elseif spell.action_type == 'WeaponSkill' then
+		-- turn this into a map. 
+		if spell.en ~= 'NoMoonshadeWS' then
+			if player.tp > 2750 then
+				equipSet = set_combine(equipSet,{
+					ear1="Ishvara Earring"})
+			elseif player.equipment.main == "Aeneas" and player.tp > 2250 then
+				equipSet = set_combine(equipSet,{
+					ear1="Ishvara Earring"})
+			else
+				equipSet = set_combine(equipSet,{})
+			end
 	end
 end
 

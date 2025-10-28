@@ -27,19 +27,7 @@ Notification_color = 200
 text_color = 160
 warning_text = 167
 
--- Map for auto Fotia Gorget and Fotia Belt
-fTPweaponskills = S{
-	"Jishnu's Radiance",
-	'Decimation','Rampage','Ruinator',
-	'Hexa Strike','Realmrazer',
-	'Dancing Edge','Evisceration','Extenterator','Pyrrhic Kleos',
-	'Resolution',
-	"Ascetic's Fury",'Asuran Fist','Backhand Blow','Combo','Dragon Kick','Howling Fist','One Inch Punch','Raging Fists','Shijin Spiral','Shoulder Tackle','Spinning Attack','Stringing Plummel','Tornado Kick','Victory Smite',
-	'Blade: Jin', 'Blade: Ku', 'Blade: Shun',
-	'Last Stand',
-	'Stardiver',
-	'Entropy',
-	'Chant du Cygne','Requiescat','Swift Blade','Vorpal Blade',}
+
 
 -------------------------------------------------------------------------------------------------------------------
 -- Global Augmented Gear
@@ -445,17 +433,26 @@ end
 
 -- Global intercept on precast.
 function user_precast(spell, action, spellMap, eventArgs)
-	-- Auto Echo Drop When Silenced
-	if spell.action_type == 'Magic' and buffactive.silence then
-		cancel_spell()
-		send_command('input /item "Echo Drops" <me>')
-		add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Echo Drops] ******')
-		return
-	-- Auto Spell Tier Degradation. Recast
-	elseif spell.action_type == 'Magic' then
+	
+	-- Magic Global Intercepts
+	if spell.action_type == 'Magic' then
+		-- Auto Echo Drop when Silenced
+		if buffactive.silence then
+			cancel_spell()
+			send_command('input /item "Echo Drops" <me>')
+			add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Echo Drops] ******')
+			eventArgs.cancel = true
+			return
+		end
+		-- Auto Spell Tier Degradation. Recast
 		local spell_recasts = windower.ffxi.get_spell_recasts()
 		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Utsusemi' then
-			if spell.en == "Utsusemi: Ni" then
+			if spell.en == "Utsusemi: San" then
+				cancel_spell()
+				send_command('input /ma "Utsusemi: Ni" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			elseif spell.en == "Utsusemi: Ni" then
 				cancel_spell()
 				send_command('input /ma "Utsusemi: Ichi" ' .. spell.target.name)
 				eventArgs.cancel = true
@@ -469,9 +466,24 @@ function user_precast(spell, action, spellMap, eventArgs)
 				return
 			end
 		end
-	-- Add Auto Spell Tier Degration. MP cost
-	end
+		-- Auto Spell Tier Degradation. MP
+		if spell.english:ifind("Cure") and player.mp<actualCost(spell.mp_cost) then
+			degrade_spell(spell,Cure_Spells)
+		elseif spell.english:ifind("Curaga") and player.mp<actualCost(spell.mp_cost) then
+			degrade_spell(spell,Curaga_Spells)
+		end
 
+	-- JA Global Intercepts
+	elseif spell.action_type == 'Ability'
+		-- Auto Remedy when Paralyzed
+		if buffactive.paralyze then
+			cancel_spell()
+			send_command('input /item "Remedy" <me>')
+			add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Remedy] ******')
+			eventArgs.cancel = true
+			return
+		end
+	end
 	-- Add nonmoonshade earring TP > 2750
 	-- Add Fotia Gorget and Belt for repeating fTP. WS
 end
@@ -506,6 +518,32 @@ function user_customize_melee_set(meleeSet)
 end
 
 
+-------------------------------------------------------------------------------------------------------------------
+-- Global additional Functions
+-------------------------------------------------------------------------------------------------------------------
+function actualCost(originalCost)
+	if buffactive["Penury"] then
+		return originalCost*.5
+	elseif buffactive["Light Arts"] then
+		return originalCost*.9
+	else
+		return originalCost
+	end
+end
+
+function degrade_spell(spell,degrade_array)
+	spell_index = table.find(degrade_array,spell.name)
+	if spell_index > 1 then
+		new_spell = degrade_array[spell_index - 1]
+		change_spell(new_spell,spell.target.raw)
+		add_to_chat(8,spell.name..' Canceled: ['..player.mp..'/'..player.max_mp..'MP::'..player.mpp..'%] Casting '..new_spell..' instead.')
+	end
+end
+
+function change_spell(spell_name,target)
+	cancel_spell()
+	send_command('//'..spell_name..' '..target)
+end
 -------------------------------------------------------------------------------------------------------------------
 -- Global GearInfo
 -------------------------------------------------------------------------------------------------------------------

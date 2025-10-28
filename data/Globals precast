@@ -1,0 +1,75 @@
+-- Global intercept on precast.
+function user_precast(spell, action, spellMap, eventArgs)
+	
+	-- Magic Global Intercepts
+	if spell.action_type == 'Magic' then
+		-- Auto Echo Drop when Silenced
+		if buffactive.silence then
+			cancel_spell()
+			send_command('input /item "Echo Drops" <me>')
+			add_to_chat(8, '****** ['..spell.name..' CANCELED - Using Echo Drops] ******')
+			eventArgs.cancel = true
+			return
+		end
+		-- Auto Spell Tier Degradation. Recast
+		local spell_recasts = windower.ffxi.get_spell_recasts()
+		if spell_recasts[spell.recast_id] > 0 and spellMap == 'Utsusemi' then
+			if spell.en == "Utsusemi: San" then
+				cancel_spell()
+				send_command('input /ma "Utsusemi: Ni" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			elseif spell.en == "Utsusemi: Ni" then
+				cancel_spell()
+				send_command('input /ma "Utsusemi: Ichi" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			end
+		elseif spell_recasts[spell.recast_id] > 0 and spellMap == 'Cure' then
+			if spell.en == 'Cure IV' then
+				cancel_spell()
+				send_command('input /ma "Cure III" ' .. spell.target.name)
+				eventArgs.cancel = true
+				return
+			end
+        end
+
+        -- Auto Spell Tier Degradation. MP
+		if spell.english:ifind("Cure") and player.mp<actualCost(spell.mp_cost) then
+			degrade_spell(spell,Cure_Spells)
+		elseif spell.english:ifind("Curaga") and player.mp<actualCost(spell.mp_cost) then
+			degrade_spell(spell,Curaga_Spells)
+		end
+    end
+end
+
+-------------------------------------------------------------------------------------------------------------------
+-- Global additional Functions
+-------------------------------------------------------------------------------------------------------------------
+-- Cure Degradation --
+	Cure_Spells = {"Cure","Cure II","Cure III","Cure IV"} 
+	Curaga_Spells = {"Curaga","Curaga II"}
+
+function actualCost(originalCost)
+	if buffactive["Penury"] then
+		return originalCost*.5
+	elseif buffactive["Light Arts"] then
+		return originalCost*.9
+	else
+		return originalCost
+	end
+end
+
+function degrade_spell(spell,degrade_array)
+	spell_index = table.find(degrade_array,spell.name)
+	if spell_index > 1 then
+		new_spell = degrade_array[spell_index - 1]
+		change_spell(new_spell,spell.target.raw)
+		add_to_chat(8,spell.name..' Canceled: ['..player.mp..'/'..player.max_mp..'MP::'..player.mpp..'%] Casting '..new_spell..' instead.')
+	end
+end
+
+function change_spell(spell_name,target)
+	cancel_spell()
+	send_command('//'..spell_name..' '..target)
+end
