@@ -48,6 +48,7 @@ function init_gear_sets()
 	organizer_items = {
 			i="Aeneas",
 			i="Malevolence",
+			i="Kali",
 			}
 	--------------------------------------
     -- Start defining the sets
@@ -541,7 +542,7 @@ function init_gear_sets()
 		back="Solemnity Cape",waist="Flume Belt",legs="Aya. Cosciales +2",feet="Aya. Gambieras +2"}
 		-- 41 DT | 50 PDT w/o weapon
 
-	-- Assume Shell V -29%, 31% MDT > Mdef > PDT
+	-- Assume Shell V -29%, 21% MDT > Mdef > PDT
 	sets.defense.MDT = {
 		main="Mafic Cudgel",sub="Genmei Shield",range=empty,ammo="Vanir Battery",
 		head="Inyanga Tiara +2",neck="Warder's Charm +1",ear1="Zennaroi Earring",ear2="Sanare Earring",
@@ -574,7 +575,7 @@ function init_gear_sets()
 	sets.engaged.Acc.DT = set_combine(sets.engaged,{neck="Null Loop",waist="Null Belt"})
 	
 	sets.engaged.DW = {
-			main="Kaja Sword",sub="Carnwenhan",range=Linos_TP,
+			main="Naegling",sub="Carnwenhan",range=Linos_TP,
 			head="Aya. Zucchetto +2",neck="Ainia Collar",ear1="Eabani Earring",ear2="Telos Earring",
 			body="Ayanmo Corazza +2",hands=Chironic_hands_TP,ring1="Petrov Ring",ring2="Ilabrat Ring",
 			back=JSE_back_TP,waist="Reiki Yotai",legs="Querkening Brais",feet="Battlecast Gaiters"}
@@ -585,7 +586,7 @@ function init_gear_sets()
 
 	
 	sets.Locked_Main_Sub = {main="Carnwenhan",sub="Genmei Shield"}
-	sets.Locked_Main_Sub_DW = {main="Kaja Sword",sub="Carnwenhan"}
+	sets.Locked_Main_Sub_DW = {main="Naegling",sub="Carnwenhan"}
 		
 end
  

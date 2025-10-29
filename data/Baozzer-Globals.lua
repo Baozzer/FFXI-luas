@@ -238,9 +238,12 @@ function global_on_load()
     	send_command('bind ^s input /ma "Horde Lullaby II" <stnpc>')
 	elseif player.main_job:upper() == 'BLM' then
     	send_command('bind ^s input /ma "Sleepga II" <stnpc>')
+	elseif player.main_job:upper() == 'BlU' then
+    	send_command('bind ^` input /ma "Anvil Lightning" <t>')
 	else
     	send_command('bind ^z input /ma "Dispel" <stnpc>')  --*** "Undo"
     	send_command('bind ^s input /ma "Sleepga" <stnpc>')
+    	send_command('bind ^` input /ma "Stun" <t>')
 	end
 	
 
@@ -474,7 +477,7 @@ function user_precast(spell, action, spellMap, eventArgs)
 		end
 
 	-- JA Global Intercepts
-	elseif spell.action_type == 'Ability'
+	elseif spell.action_type == 'Ability' then
 		-- Auto Remedy when Paralyzed
 		if buffactive.paralyze then
 			cancel_spell()

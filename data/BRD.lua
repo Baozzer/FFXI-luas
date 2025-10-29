@@ -148,12 +148,13 @@ function job_precast(spell, action, spellMap, eventArgs)
 			if player.tp > 2750 then
 				equipSet = set_combine(equipSet,{
 					ear1="Ishvara Earring"})
-			elseif player.equipment.main == "Aeneas" and player.tp > 2250 then
+			elseif player.equipment.main or player.equipment.range == "Aeonic_Weapon" and player.tp > 2250 then
 				equipSet = set_combine(equipSet,{
 					ear1="Ishvara Earring"})
 			else
 				equipSet = set_combine(equipSet,{})
 			end
+		end
 	end
 end
 
